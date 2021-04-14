@@ -1,0 +1,11 @@
+{
+  "name": "WechatBot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "qrcode-terminal": "^0.12.0",
+    "wechaty": "^0.60.3",
+    "wechaty-puppet-wechat": "^0.28.1"
+  }
+}
