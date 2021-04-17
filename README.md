@@ -5,7 +5,7 @@ wechaty 是目前最成熟的微信机器人SDK，而且由于UOS的微信客户
 wechaty-getting-started https://github.com/wechaty/wechaty-getting-started      
 微信小秘书 https://github.com/gengchen528/wechat-assistant  
 
-**后端管理 使用 Vue-Element-Admin**
+**后端管理 使用 Vue-Element-Admin**     
 Web控制面板，免得自己来开发一套 https://github.com/gengchen528/wechaty-web-panel            
 看了一下，web面板没有开源，还是要自己来开源一套。看界面用的是 vue-element-admin，可以自己来用一套。      
 然后这个详细的权限控制我还不熟，就不用多复杂的权限控制，菜单权限直接写死好了。  
@@ -13,15 +13,15 @@ Web控制面板，免得自己来开发一套 https://github.com/gengchen528/wec
 用 node.js express 来写服务，来写接口。     
 
 
-**微信个人号消息发送频率限制**
+**微信个人号消息发送频率限制**      
 尽量使用延时函数，防止被检测出类似机器人行为操作导致被微信团队禁止登录Web版本风险，避免被检测出机器人特征。    
 需要给出一个消息队列来，所有要发的消息全部入消息队列，然后消息按频率出列，避免被封禁。  
 
 一小时内的发送量被限制了    
 
-微信发送信息频率上限？ #149 https://github.com/Urinx/WeixinBot/issues/149   
+微信发送信息频率上限？ #149 https://github.com/Urinx/WeixinBot/issues/149       
 
-**wechaty的有趣插件**   
+**wechaty的有趣插件**       
 Using Plugin with Wechaty https://wechaty.js.org/docs/tutorials/using-plugin-with-wechaty       
 RoomConnector	rooms together with 1:N, M:1, and M:N modes     
 FriendshipAccepter	friendship automatically, and say/do something for greeting.        
@@ -31,17 +31,17 @@ MessageAwaiter	for a particular message using await syntax
 Using Vorpal with Wechaty 【聊天模式的命令行】 https://wechaty.js.org/docs/tutorials/using-vorpal-with-wechaty      
 
 # 需求及开发任务
-**最紧迫的功能**
-需要开发的功能有，获取群ID并且绑定社区分馆ID        
-公告推送功能，推送设置推送公告给指定的群        
+**最紧迫的功能**        
+需要开发的功能有，获取群ID并且绑定社区分馆ID            
+公告推送功能，推送设置推送公告给指定的群            
 分馆相关信息推送给相关分馆的群。        
 
 
-**微信Bot api**
-利用 wechaty 提供的SDK来开发REST API，来供其他服务调用。    
-wechaty 本身是支持 gRPC 的，而官方也把 gRPC 生态系统应用了，开发了 openapi 包。 
+**微信Bot api**     
+利用 wechaty 提供的SDK来开发REST API，来供其他服务调用。        
+wechaty 本身是支持 gRPC 的，而官方也把 gRPC 生态系统应用了，开发了 openapi 包。     
 Wechaty gRPC Service https://github.com/wechaty/grpc        
-Wechaty REST API Server with OpenAPI https://github.com/wechaty/openapi      
+Wechaty REST API Server with OpenAPI https://github.com/wechaty/openapi         
 
 看看 appid appsecret 这个是怎么生成怎么搞的，我也来一套。   
 私聊关键词恢复，关键词查询      
@@ -55,9 +55,8 @@ Wechaty REST API Server with OpenAPI https://github.com/wechaty/openapi
 E云API https://www.wkteam.cn/   
 PostMan在线测试：https://documenter.getpostman.com/view/1268847/SzKQxKf5?version=latest     
 
-**管理后台开发**
+**管理后台开发**        
 web管理页面，管理微信bot，调用微信bot的api。    
-忽然发现一个问题，就是api是跟bot一起的，admin目录只是一个前端。 
 * bot登陆页面，查看登陆状态，登陆后记录登陆时间（直接存缓存就行了），记录登陆记录   
 * 好友列表及群列表查看，能够查看头像（需要缓存头像），能够查看ID，方便或许精准推送。    
 * 关键词回复，触发关键词时将会回复，群里需要@能触发 
