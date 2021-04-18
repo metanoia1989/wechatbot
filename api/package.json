@@ -4,9 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "mcanvas": "^2.0.8",
     "qrcode-terminal": "^0.12.0",
     "wechaty": "^0.60.3",
     "wechaty-openapi": "^0.1.0",
     "wechaty-puppet-wechat": "^0.28.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.4"
   }
 }
