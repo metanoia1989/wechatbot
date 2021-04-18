@@ -19,16 +19,35 @@ class Bot {
   
   /**
    * 单例模式，保证实例化一次
+   * 代理模式，直接通过instance访问bot，bot未登录会报错  
    * @returns this
    */
   static getInstance() {
     if (!this.instance) {
-      this.instance = new Bot()
+      this.instance = new Proxy(new Bot(), {
+        get (target, prop, receiver) {
+          if (!(prop in target) && (prop in target.bot)) {
+            // 不在Bot中的方法，则是向this.bot请求，检测 bot 是否登录
+            if (target.bot.logonoff()) {
+              // 访问的是函数，需要重新绑定this
+              if (typeof target.bot[prop] === 'function') {
+                return new Proxy(target.bot[prop], {
+                  apply(target, thisArg, args) {
+                    target.apply(thisArg.bot, args)
+                  }
+                })
+              }
+              return target.bot[prop]
+            } else {
+              throw new Error("小助手未登录，无法调用！")
+            }
+          } 
+          return target[prop]
+        }
+      })
     }
     return this.instance
   }
-
-  
 
   //*************************************
   // 以下是 bot 的事件监听函数

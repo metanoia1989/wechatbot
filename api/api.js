@@ -10,7 +10,7 @@ const app_port = process.env.APP_PORT ? parseInt(process.env.APP_PORT) : 4545
 
 app.get('/', async (req, res, next) => {
     try {
-        const roomList = await Bot.getInstance().bot.Room.findAll()
+        const roomList = await Bot.getInstance().Room.findAll()
         res.send(JSON.stringify(roomList));
     } catch (error) {
         return next(error)
