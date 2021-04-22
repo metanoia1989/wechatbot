@@ -31,13 +31,13 @@ MessageAwaiter	for a particular message using await syntax
 Using Vorpal with Wechaty 【聊天模式的命令行】 https://wechaty.js.org/docs/tutorials/using-vorpal-with-wechaty      
 
 # 需求及开发任务
-**最紧迫的功能**        
+## 最紧迫的功能        
 需要开发的功能有，获取群ID并且绑定社区分馆ID            
 公告推送功能，推送设置推送公告给指定的群            
 分馆相关信息推送给相关分馆的群。        
 
 
-**微信Bot api**     
+## 微信Bot api    
 利用 wechaty 提供的SDK来开发REST API，来供其他服务调用。        
 wechaty 本身是支持 gRPC 的，而官方也把 gRPC 生态系统应用了，开发了 openapi 包。     
 Wechaty gRPC Service https://github.com/wechaty/grpc        
@@ -55,7 +55,7 @@ Wechaty REST API Server with OpenAPI https://github.com/wechaty/openapi
 E云API https://www.wkteam.cn/   
 PostMan在线测试：https://documenter.getpostman.com/view/1268847/SzKQxKf5?version=latest     
 
-**管理后台开发**        
+管理后台开发        
 web管理页面，管理微信bot，调用微信bot的api。    
 * bot登陆页面，查看登陆状态，登陆后记录登陆时间（直接存缓存就行了），记录登陆记录   
 * 好友列表及群列表查看，能够查看头像（需要缓存头像），能够查看ID，方便或许精准推送。    
