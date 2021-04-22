@@ -45,3 +45,5 @@ Practical Node.js, 1st and 2nd Editions [Apress] 📓  https://github.com/azat-c
 大前端技术笔记 https://github.com/biaochenxuying/blog       
 📗🌐 🚢 Comprehensive and exhaustive JavaScript & Node.js testing best practices (March 2021)  https://github.com/goldbergyoni/javascript-testing-best-practices        
 ✅ The Node.js best practices list (March 2021) https://github.com/goldbergyoni/nodebestpractices   
+Express 例子和文章 https://github.com/wabg/awesome-express      
+Learn to Use the New Router in ExpressJS 4.0 https://scotch.io/tutorials/learn-to-use-the-new-router-in-expressjs-4     
