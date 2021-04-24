@@ -6,7 +6,12 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-const app_port = process.env.APP_PORT ? parseInt(process.env.APP_PORT) : 4545
+
+const prefix = '/api/'
+const admin = require('./routes/admin')
+
+app.use(`${prefix}/admin`, admin)
+
 
 app.get('/', async (req, res, next) => {
     try {
@@ -18,6 +23,7 @@ app.get('/', async (req, res, next) => {
 });
 
 function start_app_server() {
+    const app_port = process.env.APP_PORT ? parseInt(process.env.APP_PORT) : 4545
     app.listen(app_port, () => {
         console.info(`Listening on http://localhost:${app_port}`)
     });

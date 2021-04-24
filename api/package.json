@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "mcanvas": "^2.0.8",
+    "custom-env": "^2.0.1",
+    "express": "^4.17.1",
     "qrcode-terminal": "^0.12.0",
     "wechaty": "^0.60.3",
     "wechaty-openapi": "^0.1.0",
