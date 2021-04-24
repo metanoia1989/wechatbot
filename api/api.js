@@ -1,10 +1,12 @@
-const express = require('express')
 const Bot = require('./bot')
+const express = require('express')
+const expressValidator = require('express-validator')
 
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(expressValidator())
 
 
 const prefix = '/api/'
