@@ -6,16 +6,16 @@ const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(expressValidator())
-
 
 const prefix = '/api/'
 const admin = require('./routes/admin')
+const logger = require('./util/logger')
 
 app.use(`${prefix}/admin`, admin)
 
 
 app.get('/', async (req, res, next) => {
+    logger.info("测试哈哈哈")
     try {
         const roomList = await Bot.getInstance().Room.findAll()
         res.send(JSON.stringify(roomList));
