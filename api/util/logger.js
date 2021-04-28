@@ -3,15 +3,25 @@ const pino = require('pino')
 const path = require('path')
 const { getToday } = require('./datetime')
 
-const filename = path.join(__dirname, "..", `/logs/${getToday().trim()}.log`)  
-if (!fs.existsSync(filename)) {
-  fs.closeSync(fs.openSync(filename, 'w'))
+
+class Logger {
+  constructor() {
+      if (!Logger.instance) {
+          const filename = path.join(__dirname, "..", `/logs/${getToday().trim()}.log`)  
+          if (!fs.existsSync(filename)) {
+            fs.closeSync(fs.openSync(filename, 'w'))
+          }
+          Logger.instance = pino(pino.destination({
+            dest: filename, // omit for stdout
+            minLength: 4096, // Buffer before writing
+            sync: false // Asynchronous logging
+          }))
+      }
+  }
+
+  getInstance() {
+      return Logger.instance;
+  }
 }
 
-const logger = pino(pino.destination({
-  dest: filename, // omit for stdout
-  minLength: 4096, // Buffer before writing
-  sync: false // Asynchronous logging
-}))
-
-module.exports = logger
+module.exports = Logger;
