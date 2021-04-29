@@ -137,7 +137,7 @@ function parseBody(content) {
  * MD5加密
  * @return {string}
  */
-MD5 = function (str) {
+function MD5(str) {
   return Crypto.createHash('md5').update(str).digest('hex')
 }
 
@@ -226,4 +226,5 @@ module.exports= {
     throttle,
     parseBody,
     rndNum,
+    MD5,
 }
