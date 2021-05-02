@@ -1,6 +1,6 @@
 const { body, validationResult } = require('express-validator')
 const { User, UserInfo } = require('../models/user')
-const { res_data } = require('../util/server')
+const { res_data, MD5 } = require('../util/server')
 
 exports.validate = {
     userLogin: [
@@ -28,13 +28,13 @@ exports.login = function (req, res, next) {
             email: username,
         },
         include: UserInfo
-    }).then(res => {
-        if (!res) {
+    }).then(item=> {
+        if (!item) {
             throw new Error("用户不存在！")
         }
 
-        const { salt, pwd, UserInfo: userinfo } = res
-        if (MD5(salt + String(password)) != password) {
+        const { salt, pwd, UserInfo: userinfo } = item 
+        if (MD5(salt + String(password)) != pwd) {
             throw new Error("账号密码错误！")
         }
         if (!userinfo.isadmin) {

@@ -47,7 +47,7 @@ UserInfo.prototype.generateJWT = function() {
   var today = new Date();
   var exp = new Date(today);
   exp.setDate(today.getDate() + 60);
-
+  console.log(secret)
   return jwt.sign({
     id: this.userid,
     username: this.username,
@@ -89,8 +89,12 @@ const User = db.define('User', {
 })
 
 
-User.hasOne(UserInfo)
+User.hasOne(UserInfo, {
+  targetName: 'userid',
+  foreignKey: 'userid',
+})
 UserInfo.belongsTo(User, {
+  targetName: 'userid',
   foreignKey: 'userid'
 })
 
