@@ -44,3 +44,7 @@ exports.login = function (req, res, next) {
         return res.json(res_data(userinfo.toAuthJSON())) 
     }).catch(next)
 }
+
+exports.me = function (req, res, next) {
+    return res.json(res_data(req.payload)) 
+}
