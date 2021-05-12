@@ -1,4 +1,5 @@
-const Qrterminal = require('qrcode-terminal')
+const Qrterminal = require('qrcode-terminal');
+const { set } = require('../util/memoryCache');
 // const { throttle } = require('../util/server')
 // const { setQrCode } = require('../proxy/aibotk')
 
@@ -16,6 +17,7 @@ async function onScan(qrcode, status) {
     encodeURIComponent(qrcode),
   ].join('');
   console.log(qrcodeImageUrl);
+  set("qrcodeSrc", qrcodeImageUrl); 
 }
 
 module.exports = onScan

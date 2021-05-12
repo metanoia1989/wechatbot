@@ -2,6 +2,10 @@
 // const { getConfig, sendRobotInfo, sendError, putqn, setQrCode, updatePanelVersion } = require('../proxy/aibotk')
 // const { addUser } = require('../common/userDb')
 // const { initAllSchedule } = require('../task')
+
+const { set } = require("../util/memoryCache");
+const { MD5 } = require("../util/server");
+
 /**
  * 登录成功监听事件
  * @param {*} user 登录用户
@@ -13,14 +17,13 @@ async function onLogin(user) {
   // ...定时任务 后台定时的公告等等，一些功能可以参考付费的微管家    
   // 开启一个http服务，写一个相应的接口，发送个人消息、发送群体消息
   // 然后PHP那边来推送消息      
-  // await updatePanelVersion()
-  // await setQrCode('', 4)
-  // await sendError('')
-  // await getConfig() // 获取配置文件
-  // const userInfo = {
-  //   ...user.payload,
-  //   robotId: user.payload.weixin || MD5(user.name()),
-  // }
+  set("qrcodeSrc", ""); 
+  const userInfo = {
+    ...user.payload,
+    robotId: user.payload.weixin || MD5(user.name()),
+  }
+
+  // await initAllSchedule(this) // 初始化任务
   // await addUser(userInfo) // 全局存储登录用户信息
   // const file = await user.avatar()
   // const base = await file.toBase64()

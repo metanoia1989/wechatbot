@@ -4,6 +4,7 @@
     
 const Crypto = require('crypto')
 const fs = require('fs')
+const { avatar_dir, static_dir } = require('../config')
     
 /**
  * 构造响应体
@@ -215,6 +216,19 @@ function getFormatQuery(apiKey, apiSecret, params = {}) {
   return query
 }
 
+/**
+ * 下载用户头像
+ * @param {Contact} user 
+ */
+async function downloadAvatar(contact) {
+  // Save avatar to local file like `1-name.jpg`
+  const file = await contact.avatar()
+  const name = avatar_dir + file.name
+  const path = `${static_dir}/${name}` 
+  await file.toFile(name, true)  
+  return path   
+}
+
 module.exports= {
     res_data,
     randomRange,
@@ -227,4 +241,5 @@ module.exports= {
     parseBody,
     rndNum,
     MD5,
+    downloadAvatar,
 }
