@@ -1,6 +1,6 @@
 -- 数据库设计
 
--- 用户表
+-- 联系人表
 CREATE TABLE `ts_wechat_contact` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
     `ident` VARCHAR(255) NOT NULL COMMENT '标识ID',
@@ -21,4 +21,30 @@ CREATE TABLE `ts_wechat_contact` (
 )
 ENGINE=MyISAM
 COLLATE='utf8_general_ci'
-COMMENT='微信联系人表'
+COMMENT='微信联系人表';
+
+
+-- 群组表
+CREATE TABLE `ts_wechat_room` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `ident` VARCHAR(255) NOT NULL COMMENT '标识ID',
+    `name` VARCHAR(191) NOT NULL DEFAULT '' COMMENT '群组名' COLLATE 'utf8mb4_general_ci',
+    `owner` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否拥有此群',
+    `manage` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否是管理员',
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `ident` (`ident`)
+)
+ENGINE=MyISAM
+COLLATE='utf8_general_ci'
+COMMENT='微信群组表';
+
+
+-- 联系人 群组关联表    
+CREATE TABLE `ts_wechat_room` (
+    `room_ident` VARCHAR(255) NOT NULL COMMENT '群组',
+    `contact_ident` VARCHAR(255) NOT NULL COMMENT '联系人标识ID',
+    UNIQUE INDEX `relative` (`room_ident`, `contact_ident`)
+)
+ENGINE=InnoDB
+COLLATE='utf8_general_ci'
+COMMENT='微信群组联系人关联表';

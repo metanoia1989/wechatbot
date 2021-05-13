@@ -1,0 +1,79 @@
+[
+    {
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "@81686eab6169ba42b6cd46fde8fa3bd6c1bceedb91c9e9f3e67e0db53f3f9df1",
+        "payload": {
+            "address": "",
+            "alias": "",
+            "avatar": "/cgi-bin/mmwebwx-bin/webwxgeticon?seq=725057069&username=@81686eab6169ba42b6cd46fde8fa3bd6c1bceedb91c9e9f3e67e0db53f3f9df1&skey=@crypt_6999ed15_f9e67d282d1acffb66e61dbccfab227f",
+            "city": "Huanggang",
+            "friend": true,
+            "gender": 1,
+            "id": "@81686eab6169ba42b6cd46fde8fa3bd6c1bceedb91c9e9f3e67e0db53f3f9df1",
+            "name": "Adam Smith",
+            "province": "Hubei",
+            "signature": "我要成为一流的人才。",
+            "star": false,
+            "weixin": ""
+        }
+    },
+    {
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "@43485c2aba6a5218883a10c10ca011ed",
+        "payload": {
+            "address": "",
+            "alias": "",
+            "avatar": "/cgi-bin/mmwebwx-bin/webwxgeticon?seq=719237318&username=@43485c2aba6a5218883a10c10ca011ed&skey=@crypt_6999ed15_f9e67d282d1acffb66e61dbccfab227f",
+            "city": "Xiamen",
+            "friend": true,
+            "gender": 2,
+            "id": "@43485c2aba6a5218883a10c10ca011ed",
+            "name": "百思不得姐",
+            "province": "Fujian",
+            "signature": "凡事最好不要太指望人，指望太多难免会失望，失望一多，就生怨怼",
+            "star": false,
+            "weixin": ""
+        }
+    },
+    {
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "@2ae5bdec88868dddb6214d5b4753ce16577c2bc99395e9b123adcd0d4752f1f5",
+        "payload": {
+            "address": "",
+            "alias": "",
+            "avatar": "/cgi-bin/mmwebwx-bin/webwxgeticon?seq=724446049&username=@2ae5bdec88868dddb6214d5b4753ce16577c2bc99395e9b123adcd0d4752f1f5&skey=@crypt_6999ed15_f9e67d282d1acffb66e61dbccfab227f",
+            "city": "",
+            "friend": true,
+            "gender": 1,
+            "id": "@2ae5bdec88868dddb6214d5b4753ce16577c2bc99395e9b123adcd0d4752f1f5",
+            "name": "宾果",
+            "province": "Grozny",
+            "signature": "",
+            "star": false,
+            "weixin": ""
+        }
+    },
+    {
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "@18e184c505c3191d13447bb2083c0a3d",
+        "payload": {
+            "address": "",
+            "alias": "",
+            "avatar": "/cgi-bin/mmwebwx-bin/webwxgeticon?seq=647422807&username=@18e184c505c3191d13447bb2083c0a3d&skey=@crypt_6999ed15_f9e67d282d1acffb66e61dbccfab227f",
+            "city": "Xiamen",
+            "friend": true,
+            "gender": 0,
+            "id": "@18e184c505c3191d13447bb2083c0a3d",
+            "name": "菜鸟教程",
+            "province": "Fujian",
+            "signature": "学的不仅是技术，更是梦想！",
+            "star": false,
+            "type": 2,
+            "weixin": ""
+        }
+    }
+]
