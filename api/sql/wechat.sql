@@ -3,7 +3,7 @@
 -- 联系人表
 CREATE TABLE `ts_wechat_contact` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `ident` VARCHAR(255) NOT NULL COMMENT '标识ID',
+    `contact_ident` VARCHAR(255) NOT NULL COMMENT '标识ID',
     `weixin` VARCHAR(255) COMMENT '微信号',
     `self` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否是自己',
     `friend` TINYINT(1) NOT NULL DEFAULT 2 COMMENT '是否是好友 0 no 1 yes 2 unknown',
@@ -27,7 +27,7 @@ COMMENT='微信联系人表';
 -- 群组表
 CREATE TABLE `ts_wechat_room` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `ident` VARCHAR(255) NOT NULL COMMENT '标识ID',
+    `room_ident` VARCHAR(255) NOT NULL COMMENT '标识ID',
     `name` VARCHAR(191) NOT NULL DEFAULT '' COMMENT '群组名' COLLATE 'utf8mb4_general_ci',
     `owner` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否拥有此群',
     `manage` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否是管理员',
