@@ -5,6 +5,22 @@ const { formatDate, getDay, MD5, groupArray, delay } = require('../lib')
 const { FileBox } = require('wechaty')
 
 /**
+ * 配置项 Mock
+ */
+function allConfig() {
+    var roomJoinKeywords = [];
+    var eventKeywords = [];
+    var autoReply = true;
+
+    return {
+        roomJoinKeywords,        
+        eventKeywords,
+        autoReply,
+    };    
+}
+
+
+/**
  * 获取每日新闻内容
  * @param {*} sortId 新闻资讯分类Id
  * @param {*} endWord 结尾备注
@@ -244,4 +260,5 @@ module.exports = {
   roomSay,
   addRoomWelcomeSay,
   updateContactAndRoom,
+  allConfig,
 }

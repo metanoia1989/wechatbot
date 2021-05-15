@@ -1,0 +1,77 @@
+{
+    "普通消息": {
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "8571942973415508188",
+        "payload": {
+            "filename": "8571942973415508188.1",
+            "fromId": "@1e591e4924ef7ee8f660c48df97851e0b300843711c9a0678e35cdc79e71e9df",
+            "id": "8571942973415508188",
+            "mentionIdList": [],
+            "text": "手动阀手动阀",
+            "timestamp": 1621094231,
+            "type": 7,
+            "toId": "@fa8bae92d145ac40ad6a810e39e21d8502884b241ec60aeeafb60449d8265ede"
+        }
+    },
+    "图片消息": {
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "2690443211995119594",
+        "payload": {
+            "filename": "2690443211995119594.jpg",
+            "fromId": "@1e591e4924ef7ee8f660c48df97851e0b300843711c9a0678e35cdc79e71e9df",
+            "id": "2690443211995119594",
+            "mentionIdList": [],
+            "text": "@80afd21723e7405dba45ad9e6defe66ec6c28c829a6bfca2b007afaa685829049358ea80eaf655b448da5735223bc83ee786e3520c0b685695b78b7d3c144b5027c4dd214d8a5b6db1a5db485c05dfd58df7947b56dfc4a6ffbefe2216c0f8836dfe600e440abdcab8ce43235239dde650a797adbce30581ae5b8a4474368eb92bdffc2d13d0bb0b121fb0290d4d8e2d773529abe58c70faf60b404d61a72e5edb38a507fa0a6d86251409f3a80930d43036dea076697cf154e86ee710d7a9140f01e6089161475b2d359577626168f1e8dfac15be90108e3430e8e5820be61d422306eb5b36222004eafe04866947c7a662fec8e70673e7765dc8510df1cc64f95bea89f94260aa863b3294ea1529720305f3c474b14cb0a0c33062d43ff61e43a5635dfb1e8cb08f3e57da6b74daa305c19d31e33d406e2d729163993a48ac29fce5e47d55ba2091076bae8c68541703afa9339af184dd96635fa5b92332988f57b4beb379d1f836ef78d369132d2a5f7f9ceeba39bd9d5a6496945c02f641e41af9021ea9ee7aa54c4c15757733cb195526fdda24a247c91db5f8d20abca57b68fa6444d56ce387eaf03e02a0855a0d5486c70042749cca762802e5f9c53262ca45b258881ed0a2bc903e8f3aff022696c800aa2865eb39d11188900f91bfb56f14bbea3316a0a796e165f121e5f402ca01a22a06e1f12fc88f9a30be09e1578678d23187c97f37cf483b4933c11f04f4c4014d2c65b026808d4c5dd7454660d53bc743790514bd13afcac52965524d92e033c2ca025ad6c9d8067e19153e0e54da20667bb5e60841de121085fefb8dab7f5b44542bbdb079439204da8f16abd78787f5f184cc9a780e3db30622976184472adbe8b187bf4b034602c112f7921d69cb7bd9643337e32972e52fd3c030c9680c606274897a828c4932d0939a18b7dac488cfa7e9e2c7d65449b915546e2b86d1cd9c0f6b3da51e2d6df14ce17b58e16289111411726ae8bd05bfe4a9a330e28188bfe27a8359d00e5eaeb3b3c6fade29ff1af36c50811144395bdbc7a4db0bed8d149c7e34582036ac0ffc7baf35fc8f1c01255f857d85fb21ff0699f2715baa075ebf32d9b52d5c065329d51821922424b0096966662cb716a025e4a7c7a60943814d13b0b560317baf8ae462c79c8848bbedb8b061ecc8781e6943f986cbf0b2d49573b95382ca5877b80675673324f389a768774bf85d38bdfaca391794f2cd5206e60611774e0c1dd044",
+            "timestamp": 1621094556,
+            "type": 6,
+            "toId": "@fa8bae92d145ac40ad6a810e39e21d8502884b241ec60aeeafb60449d8265ede"
+        }
+    },
+    "位置消息": {
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "2375902050541016245",
+        "payload": {
+            "filename":"2375902050541016245.1",
+            "fromId":"@1e591e4924ef7ee8f660c48df97851e0b300843711c9a0678e35cdc79e71e9df",
+            "id":"2375902050541016245",
+            "mentionIdList":[],
+            "text":"广东省广州市番禺区植村西约北街27号:<br/>/cgi-bin/mmwebwx-bin/webwxgetpubliclinkimg?url=xxx&msgid=2375902050541016245&pictype=location",
+            "timestamp":1621094556,
+            "type":1,
+            "toId":"@fa8bae92d145ac40ad6a810e39e21d8502884b241ec60aeeafb60449d8265ede"
+        }
+    },
+    "语音消息": {
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "6586282265282062254",
+        "payload": {
+            "filename": "6586282265282062254.mp3",
+            "fromId":"@1e591e4924ef7ee8f660c48df97851e0b300843711c9a0678e35cdc79e71e9df",
+            "id":"6586282265282062254",
+            "mentionIdList":[],
+            "text":"@b362f4b8fc36da91133ad7c5978717e47e933a8361d18123da6bdf495eb1debe4bcb2469e81f651eac6e8c17ce9693f5e729b3d105f3e2a63e1c37ee203677eabf231757992ada5c5dcb39bce1236aac3f766471c4d80b4994463251c67be6397dbf4c5a94a84fda09f769e15ce5b7278c5ccb15e32749f4828b71d850fcf67cc15d8e441c1c80f0788413e8dd52ae2572892b4c03530398b9c1470fea19fcf5392b37581ee37eac7f9ace9ad84c921f16b53db1daf657b218c551f69516ed4f0940ef4668d23396478f16101f76e6bb6f136135101fdcc2fa740c938ad759463847e380157ddc445f14ea9cad9d9db3115f11884c4591c0ea632f6ba402051d",
+            "timestamp":1621094769,
+            "type":2,
+            "toId":"@fa8bae92d145ac40ad6a810e39e21d8502884b241ec60aeeafb60449d8265ede"
+        }
+    },    
+    "名片消息": {
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "660644025446369155",
+        "payload": {
+            "filename":"660644025446369155.42",
+            "fromId":"@1e591e4924ef7ee8f660c48df97851e0b300843711c9a0678e35cdc79e71e9df",
+            "id":"660644025446369155",
+            "mentionIdList":[], 
+            "text":"&lt;?xml version=\"1.0\"?&gt;<br/>&lt;msg bigheadimgurl=\"http://wx.qlogo.cn/mmhead/ver_1/gWeVibA7amLYotjHBDFT1KNgTsuUicqmevH7HMI6ppbP1KSFVAFBSXDCRziadxNiaib8pZBcG8ZlTp0lBGic2ZGjlxGg/0\" smallheadimgurl=\"http://wx.qlogo.cn/mmhead/ver_1/gWeVibA7amLYotjHBDFT1KNgTsuUicqmevH7HMI6ppbP1KSFVAFBSXDCRziadxNiaib8pZBcG8ZlTp0lBGic2ZGjlxGg/132\" username=\"v3_020b3826fd0301000000000023040979ca1631000000501ea9a3dba12f95f6b60a0536a1adb68640af4ada8eef7c776256ed7e65a7a7845a2ed97324c7de76b3dd4f98490921d3d6cefa624a464fcac7d457052dc63144500e20ec18adcb1a163c740d@stranger\" nickname=\"规则火\"  shortpy=\"GZH\" alias=\"\" imagestatus=\"3\" scene=\"17\" province=\"\" city=\"\" sign=\"\" sex=\"1\" certflag=\"0\" certinfo=\"\" brandIconUrl=\"\" brandHomeUrl=\"\" brandSubscriptConfigUrl=\"\" brandFlags=\"0\" regionCode=\"\" antispamticket=\"v4_000b708f0b04000001000000000014fd0ec313a9050aa4a7ebf19f601000000050ded0b020927e3c97896a09d47e6e9eee9186abf875a5c31d6c51ad15bb745d1953cf8d7581f2983a1f6a9e162dd106ec27da5251c8ae170ca0ba8e9e3a32df374e2fdc617650cfbf16f53e1ec8b4efe348b71a49e8fe0d3a14922c587fb7d9efe351cefd125c5676ea7f88674ad82a5e5dff7e198b029fbd7c5f4bac8d2ec855c2f60b7417a64bcba1ec886eea5cb82da68ca1dd890a7873146c3958ca8cc0129344a7610272cb9206e29645efd004e9ff9dda0dc257d0db90a14460d0994d87918ee0a9411fa232214fba856ba9a42846013b0dafcdedec9177b22910142fe6b2e4cd11e31f20129b95600cdedb65c6eec5cf4620673d7d7ef9625b913341ff86bedf4f796f5eb5@stranger\" /&gt;<br/>",
+            "timestamp": 1621094769,
+            "type": 7,
+            "toId": "@fa8bae92d145ac40ad6a810e39e21d8502884b241ec60aeeafb60449d8265ede"
+        }
+    }
+}

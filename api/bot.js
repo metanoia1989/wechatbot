@@ -60,11 +60,18 @@ class Bot {
   }
 
   // 接收消息
-  async onMessage(message) {
-      log.info('小助手', message.toString())
+  async onMessage(msg) {
+      console.log("接收到了消息：", JSON.stringify(msg));
 
-      if (message.text() === 'ding') {
-          await message.say('dong')
+      const room = msg.room() // 是否为群消息
+      const msgSelf = msg.self() // 是否自己发给自己的消息
+      if (msgSelf) {
+        console.log("收到自己的消息")
+      }
+      if (room) {
+        console.log("收到群组的消息")
+      } else {
+        console.log("收到其他人的消息")
       }
   }
 

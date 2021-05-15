@@ -1,6 +1,6 @@
-const { contactSay, roomSay } = require('../common')
-const { getContactTextReply, getRoomTextReply } = require('../common/reply')
-const { delay } = require('../lib/index')
+const { contactSay, roomSay } = require('../service')
+const { getContactTextReply, getRoomTextReply } = require('../service')
+const { delay } = require('../util/server')
 
 /**
  * 根据消息类型过滤私聊消息事件
@@ -104,6 +104,7 @@ async function dispatchRoomFilterByMsgType(that, room, msg) {
 }
 
 async function onMessage(msg) {
+  console.log("接收到了消息：", JSON.stringify(msg));
   const room = msg.room() // 是否为群消息
   const msgSelf = msg.self() // 是否自己发给自己的消息
   if (msgSelf) return

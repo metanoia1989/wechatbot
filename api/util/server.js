@@ -242,4 +242,5 @@ module.exports= {
     rndNum,
     MD5,
     downloadAvatar,
+    delay,
 }

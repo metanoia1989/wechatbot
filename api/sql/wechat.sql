@@ -17,7 +17,7 @@ CREATE TABLE `ts_wechat_contact` (
     `avatar` VARCHAR(255) COMMENT '头像',
     `type` ENUM('unknown', 'personal', 'official') NOT NULL DEFAULT 'unknown' COMMENT '联系人类型',
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `ident` (`ident`)
+    UNIQUE INDEX `contact_ident` (`contact_ident`)
 )
 ENGINE=MyISAM
 COLLATE='utf8_general_ci'
@@ -32,7 +32,7 @@ CREATE TABLE `ts_wechat_room` (
     `owner` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否拥有此群',
     `manage` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否是管理员',
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `ident` (`ident`)
+    UNIQUE INDEX `room_ident` (`room_ident`)
 )
 ENGINE=MyISAM
 COLLATE='utf8_general_ci'

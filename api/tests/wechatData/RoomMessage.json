@@ -1,0 +1,50 @@
+{
+    "群直播": {
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "1536333898367740575",
+        "payload": {
+            "filename": "Adam Smith's Live Stream.1",
+            "fromId": "@1e591e4924ef7ee8f660c48df97851e0b300843711c9a0678e35cdc79e71e9df",
+            "id": "1536333898367740575",
+            "mentionIdList": [],
+            "text": "[收到一条网页版微信暂不支持的消息类型，请在手机上查看]",
+            "timestamp": 1621095286,
+            "type": 7,
+            "roomId": "@@af8d275dbdc2907545c84e688c267e23c3b83423bb8bd4ebfbd48d67bf3e6c88",
+            "toId": "@fa8bae92d145ac40ad6a810e39e21d8502884b241ec60aeeafb60449d8265ede"
+        }
+    },
+    "普通消息": {
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "4031363717348320474",
+        "payload": {
+            "filename": "4031363717348320474.1",
+            "fromId": "@1e591e4924ef7ee8f660c48df97851e0b300843711c9a0678e35cdc79e71e9df",
+            "id": "4031363717348320474",
+            "mentionIdList": [],
+            "text": "水电费阿斯蒂芬",
+            "timestamp": 1621095286,
+            "type": 7,
+            "roomId": "@@af8d275dbdc2907545c84e688c267e23c3b83423bb8bd4ebfbd48d67bf3e6c88",
+            "toId": "@fa8bae92d145ac40ad6a810e39e21d8502884b241ec60aeeafb60449d8265ede"
+        }
+    },
+    "曾力的动图": {
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "8897372625977372076",
+        "payload": {
+            "filename": "8897372625977372076.gif",
+            "fromId": "@6e5d67a5ba7f4550186d1f0db7e71291ec6a57e622d77bb2069dd48848e68520",
+            "id": "8897372625977372076",
+            "mentionIdList": [],
+            "text": "&lt;msg&gt;&lt;emoji fromusername = \"xxx\" tousername = \"xxx\" type=\"2\" idbuffer=\"media:0_0\" md5=\"176a188fdd4f6b6ef779f8f38fd737d6\" len = \"64658\" productid=\"\" androidmd5=\"176a188fdd4f6b6ef779f8f38fd737d6\" androidlen=\"64658\" s60v3md5 = \"176a188fdd4f6b6ef779f8f38fd737d6\" s60v3len=\"64658\" s60v5md5 = \"176a188fdd4f6b6ef779f8f38fd737d6\" s60v5len=\"64658\" cdnurl = \"http://emoji.qpic.cn/wx_emoji/6sSLA9Om1WPBviaB9sp3PEAorWvt9jlpeMXvhNVZcuCMicxqSlabJU0iamkZWbMVqHm/\" designerid = \"\" thumburl = \"\" encrypturl = \"http://emoji.qpic.cn/wx_emoji/6sSLA9Om1WPBviaB9sp3PEAorWvt9jlpeMXvhNVZcuCONSIpahQzHnG4EqWHOHyAU/\" aeskey= \"84f8e4322793eb8cabd1f8213167ff04\" externurl = \"http://emoji.qpic.cn/wx_emoji/6sSLA9Om1WPBviaB9sp3PEAorWvt9jlpeMXvhNVZcuCOBm94lq6JtC3ibibD1HtoT8s/\" externmd5 = \"d201494520c8a672ec4ecf1976d8a157\" width= \"361\" height= \"45\" tpurl= \"\" tpauthkey= \"\" attachedtext= \"\" attachedtextcolor= \"\" lensid= \"\" emojiattr= \"\" linkid= \"\" &gt;&lt;/emoji&gt; &lt;/msg&gt;",
+            "timestamp": 1621095601,
+            "type": 6,
+            "roomId": "@@af8d275dbdc2907545c84e688c267e23c3b83423bb8bd4ebfbd48d67bf3e6c88",
+            "toId": "@fa8bae92d145ac40ad6a810e39e21d8502884b241ec60aeeafb60449d8265ede"
+        }
+    } 
+}
