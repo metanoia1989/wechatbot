@@ -1,5 +1,5 @@
 const { contactSay, roomSay } = require('../service')
-const { getContactTextReply, getRoomTextReply } = require('../service')
+const { getContactTextReply, getRoomTextReply } = require('../service/reply')
 const { delay } = require('../util/server')
 
 /**

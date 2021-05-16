@@ -1,7 +1,8 @@
 const { getNews, getOne, getTXweather, getSweetWord } = require('../proxy/api')
 const { sendFriend, sendRoom, asyncData } = require('../proxy/aibotk')
-const { getUser } = require('../common/userDb')
-const { formatDate, getDay, MD5, groupArray, delay } = require('../lib')
+// const { getUser } = require('../common/userDb')
+const { MD5, groupArray, delay } = require('../util/server')
+const { formatDate, getDay } = require("../util/datetime")
 const { FileBox } = require('wechaty')
 
 /**

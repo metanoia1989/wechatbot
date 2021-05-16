@@ -11,7 +11,7 @@ class Bot {
     this.bot.on('scan', require("./handlers/on-scan"));
     this.bot.on('login', require("./handlers/on-login"));
     this.bot.on('logout', require("./handlers/on-logout"));
-    this.bot.on('message', this.onMessage);
+    this.bot.on('message', require("./handlers/on-message"));
     this.bot.start()
       .then(this.onStart)
       .catch((e) => log.error(e));

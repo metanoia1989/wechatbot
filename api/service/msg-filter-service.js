@@ -1,4 +1,4 @@
-const { allConfig } = require('../common/configDb')
+const { allConfig } = require('./index')
 const msgFilter = require('./msg-filters')
 const WEIXINOFFICIAL = ['朋友推荐消息', '微信支付', '微信运动', '微信团队', 'recommendation message'] // 微信官方账户，针对此账户不做任何回复
 const DELETEFRIEND = '开启了朋友验证' // 被人删除后，防止重复回复
