@@ -1,7 +1,8 @@
 const dispatch = require('./event-dispatch-service')
 const { setSchedule, updateSchedule } = require('../proxy/aibotk')
-const { contentDistinguish, setLocalSchedule, isRealDate } = require('../lib')
-const { addRoom } = require('../common/index')
+const { addRoom } = require('../service/index')
+const { setLocalSchedule, contentDistinguish } = require("../util/schedule")
+const { isRealDate } = require("../util/datetime")
 
 function emptyMsg() {
   let msgArr = [] // 返回的消息列表

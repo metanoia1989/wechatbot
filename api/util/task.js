@@ -1,7 +1,8 @@
-const { setLocalSchedule, delay, cancelAllSchedule, roomSay } = require('../lib')
-const { allConfig } = require('../common/configDb')
+
+const { setLocalSchedule, cancelAllSchedule } = require('./schedule')
+const { delay } = require("./server")
+const { roomSay, allConfig, getEveryDayContent  } = require("../service")
 const { getScheduleList, updateSchedule } = require('../proxy/aibotk')
-const { getEveryDayRoomContent, getEveryDayContent } = require('../common')
 
 /**
  * 群定时任务，针对群

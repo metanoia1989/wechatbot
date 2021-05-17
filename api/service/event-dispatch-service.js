@@ -1,8 +1,8 @@
 const api = require('../proxy/api')
 const { getConfig, getRoomPhotoConfig } = require('../proxy/aibotk')
-const { getConstellation, msgArr, getAllSchedule, generateRoomImg, getRoomAvatar, generateAvatar } = require('..')
-const { initTaskLocalSchedule } = require('../task/index')
-const { updateContactAndRoom } = require('../common/index')
+const { getConstellation, msgArr, getAllSchedule, generateRoomImg, getRoomAvatar, generateAvatar } = require('../util/lib')
+const { initTaskLocalSchedule } = require('../util/task')
+const { updateContactAndRoom } = require('./index')
 const { log } = require('wechaty')
 
 /**
