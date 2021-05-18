@@ -16,7 +16,7 @@ const WechatContact = db.define('WechatContact', {
         type: DataTypes.STRING,
     },
     self: {
-        type: DataTypes.BOOLEAN, 
+        type: DataTypes.INTEGER, 
         defaultValue: 0,
     },
     friend: {
@@ -40,7 +40,7 @@ const WechatContact = db.define('WechatContact', {
         defaultValue: 2,
     },
     star: {
-        type: DataTypes.BOOLEAN, 
+        type: DataTypes.INTEGER, 
         defaultValue: 0,
     },
     province: {
@@ -54,8 +54,9 @@ const WechatContact = db.define('WechatContact', {
     },
     type: {
         type: DataTypes.ENUM, 
-        values: ['unknown', 'personal', 'official'],
-        defaultValue: 'unknown',
+        // values: ['unknown', 'personal', 'official'],
+        values: [0, 1, 2],
+        defaultValue: 2,
     },
 }, {
     tableName: 'wechat_contact',
@@ -68,6 +69,10 @@ const WechatContact = db.define('WechatContact', {
         }
     ],
 })
+
+WechatContact.prototype.types = [
+    'unknown','personal','official'
+]
 
 const WechatRoom = db.define('WechatRoom', {
     id: {
@@ -84,11 +89,11 @@ const WechatRoom = db.define('WechatRoom', {
         defaultValue: '',
     },
     owner: {
-        type: DataTypes.BOOLEAN, 
+        type: DataTypes.INTEGER, 
         defaultValue: 0,
     },
     manage: {
-        type: DataTypes.BOOLEAN, 
+        type: DataTypes.INTEGER, 
         defaultValue: 0,
     },
 }, {
