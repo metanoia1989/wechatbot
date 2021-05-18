@@ -46,6 +46,7 @@ async function dispatchFriendFilterByMsgType(that, msg) {
         console.log(`发消息人${await contact.name()}:发了一个视频`)
         break
       default:
+        console.log(`发消息人${await contact.name()}:发了一个无法识别的消息类型`)
         break
     }
   } catch (error) {

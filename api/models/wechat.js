@@ -5,8 +5,8 @@ const db = new DB().getInstance()
 const WechatContact = db.define('WechatContact', {
     id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         primaryKey: true,
+        autoIncrement: true,
     },   
     contact_ident: {
         type: DataTypes.STRING,
@@ -21,7 +21,7 @@ const WechatContact = db.define('WechatContact', {
     },
     friend: {
         type: DataTypes.ENUM, 
-        value: [0, 1, 2], // 0 no 1 yes 2 unknown
+        values: [0, 1, 2], // 0 no 1 yes 2 unknown
         defaultValue: 2,
     },
     name: {
@@ -36,7 +36,7 @@ const WechatContact = db.define('WechatContact', {
     },
     gender: {
         type: DataTypes.ENUM, 
-        value: [0, 1, 2], // 0 no 1 yes 2 unknown
+        values: [0, 1, 2], // 0 no 1 yes 2 unknown
         defaultValue: 2,
     },
     star: {
@@ -54,7 +54,7 @@ const WechatContact = db.define('WechatContact', {
     },
     type: {
         type: DataTypes.ENUM, 
-        value: ['unknown', 'personal', 'official'],
+        values: ['unknown', 'personal', 'official'],
         defaultValue: 'unknown',
     },
 }, {
@@ -69,10 +69,10 @@ const WechatContact = db.define('WechatContact', {
     ],
 })
 
-const WechatRoom = db.define('WechatContact', {
+const WechatRoom = db.define('WechatRoom', {
     id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
     },   
     room_ident: {
@@ -92,7 +92,7 @@ const WechatRoom = db.define('WechatContact', {
         defaultValue: 0,
     },
 }, {
-    tableName: 'wechat_contact',
+    tableName: 'wechat_room',
     timestamps: false,
     indexes: [
         {
@@ -103,8 +103,59 @@ const WechatRoom = db.define('WechatContact', {
     ],
 })
 
+const WechatRoomContact = db.define('WechatRoomContact', {
+    room_ident: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    contact_ident: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+}, {
+    tableName: 'wechat_room_contact',
+    timestamps: false,
+})
+WechatRoomContact.removeAttribute('id');
+
+const WechatMessage = db.define('WechatMessage', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },   
+    room_ident: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    filename: {
+        type: DataTypes.STRING,
+        defaultValue: '',
+    },
+    fromId: {
+        type: DataTypes.STRING,
+        defaultValue: '',
+    },
+    roomId: {
+        type: DataTypes.STRING,
+    },
+    toId: {
+        type: DataTypes.STRING,
+    },
+    content: {
+        type: DataTypes.TEXT,
+    },
+    type: {
+        type: DataTypes.INTEGER,
+    },
+    created_at: {
+        type: DataTypes.DATE,
+    },
+})
+
 module.exports = {
     WechatContact,
     WechatRoom,
-
+    WechatRoomContact,
+    WechatMessage
 }

@@ -1,10 +1,11 @@
 // const { delay, MD5 } = require('../lib')
 // const { getConfig, sendRobotInfo, sendError, putqn, setQrCode, updatePanelVersion } = require('../proxy/aibotk')
 // const { addUser } = require('../common/userDb')
-// const { initAllSchedule } = require('../task')
+const { initAllSchedule } = require('../util/task')
 
 const { set } = require("../util/memoryCache");
-const { MD5 } = require("../util/server");
+const { MD5, delay } = require("../util/server");
+const { initAllSyncData } = require('../service/syncData');
 
 /**
  * 登录成功监听事件
@@ -22,8 +23,9 @@ async function onLogin(user) {
     ...user.payload,
     robotId: user.payload.weixin || MD5(user.name()),
   }
-
-  // await initAllSchedule(this) // 初始化任务
+  await delay(3000)
+  // 同步群组信息和联系人信息
+  await initAllSyncData(this) 
   // await addUser(userInfo) // 全局存储登录用户信息
   // const file = await user.avatar()
   // const base = await file.toBase64()
