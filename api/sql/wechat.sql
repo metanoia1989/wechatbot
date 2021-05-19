@@ -88,3 +88,16 @@ CREATE TABLE `ts_wechat_message` (
 ENGINE=MyISAM
 COLLATE='utf8_general_ci'
 COMMENT='微信群组表';
+
+--- 微澜分馆与群组关联表，群组表也必须是InnoDB引擎，否则将会建表失败。 
+CREATE TABLE `ts_wechat_to_group` (
+    `groupid` INT(10) NOT NULL COMMENT '微澜分馆ID', 
+    `room_ident` VARCHAR(255) NOT NULL COMMENT '微信群组标识', 
+    UNIQUE INDEX `group_to_room` (`groupid`, `room_ident`),
+    CONSTRAINT `fk_group`
+    FOREIGN KEY (`groupid`) 
+        REFERENCES `ts_group`(`groupid`) ON DELETE CASCADE
+)
+ENGINE=InnoDB
+COLLATE='utf8_general_ci'
+COMMENT='微澜分馆与微信群组关联表';

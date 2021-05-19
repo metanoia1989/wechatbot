@@ -15,8 +15,21 @@ exports.contactList = async (req, res, next) => {
 }
 
 exports.roomList = async (req, res, next) => {
-    var items = await Bot.getInstance().Room.findAll();
+    var param = {}
+    if (req.query.id) {
+        param.id = req.query.id 
+    }
+    var items = await Bot.getInstance().Room.findAll(param);
     return res.json(res_data(items)) 
+}
+
+exports.roomFind = async (req, res, next) => {
+    var param = {}
+    if (req.query.id) {
+        param.id = req.query.id 
+    }
+    var item = await Bot.getInstance().Room.find(param);
+    return res.json(res_data(item)) 
 }
 
 exports.roomOwner = async (req, res, next) => {
