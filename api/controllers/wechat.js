@@ -9,6 +9,9 @@ exports.self = async (req, res, next) => {
     return res.json(res_data(user.payload)) 
 }
 
+//************************************************************
+// 测试微信信息 Start
+//************************************************************
 exports.contactList = async (req, res, next) => {
     var contacts = await Bot.getInstance().Contact.findAll();
     return res.json(res_data(contacts)) 
@@ -61,3 +64,8 @@ exports.roomMemberAll = async (req, res, next) => {
     console.log(await item.topic())
     return res.json(res_data(await item.memberAll())) 
 }
+//************************************************************
+// 测试微信信息 End
+//************************************************************
+    
+

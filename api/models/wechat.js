@@ -109,7 +109,7 @@ const WechatRoom = db.define('WechatRoom', {
 })
 
 const WechatRoomContact = db.define('WechatRoomContact', {
-    room_ident: {
+    room_ident:{
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -158,9 +158,27 @@ const WechatMessage = db.define('WechatMessage', {
     },
 })
 
+// 群组和微信群关联表
+const WechatToGroup = db.define('WechatToGroup', {
+    groupid:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    room_ident: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+}, {
+    tableName: 'wechat_to_group',
+    timestamps: false,
+})
+WechatToGroup.removeAttribute('id');
+
+
 module.exports = {
     WechatContact,
     WechatRoom,
     WechatRoomContact,
-    WechatMessage
+    WechatMessage,
+    WechatToGroup,
 }

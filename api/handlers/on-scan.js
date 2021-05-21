@@ -1,5 +1,6 @@
 const Qrterminal = require('qrcode-terminal');
 const { set } = require('../util/memoryCache');
+const { log, ScanStatus } = require('wechaty');
 // const { throttle } = require('../util/server')
 // const { setQrCode } = require('../proxy/aibotk')
 
@@ -9,15 +10,19 @@ const { set } = require('../util/memoryCache');
  * @param {*} status 
  */
 async function onScan(qrcode, status) {
-  Qrterminal.generate(qrcode)
-  console.log('扫描状态', status)
-  // throttle(setQrCode(qrcode, status), 30000)
-  const qrcodeImageUrl = [
-    'https://wechaty.js.org/qrcode/',
-    encodeURIComponent(qrcode),
-  ].join('');
-  console.log(qrcodeImageUrl);
-  set("qrcodeSrc", qrcodeImageUrl); 
+  if (status === ScanStatus.Waiting && qrcode) {
+    const qrcodeImageUrl = [
+        'https://wechaty.js.org/qrcode/',
+        encodeURIComponent(qrcode),
+    ].join('')
+    console.log(qrcodeImageUrl);
+    set("qrcodeSrc", qrcodeImageUrl); 
+
+    log.info("TestBot", `onScan: ${ScanStatus[status]}(${status}) - ${qrcodeImageUrl}`);
+    Qrterminal.generate(qrcode, { small: true })  // show qrcode on console
+  } else {
+      log.info("TestBot", `onScan: ${ScanStatus[status]}(${status})`);
+  }
 }
 
 module.exports = onScan

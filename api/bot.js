@@ -1,5 +1,5 @@
 const { Wechaty, log } = require('wechaty');
-
+const { PuppetPadlocal } = require("wechaty-puppet-padlocal");
 
 class Bot {
 
@@ -7,7 +7,10 @@ class Bot {
     if (this.instance) {
       return this.instance
     }
-    this.bot = new Wechaty({ name });
+    const puppet = new PuppetPadlocal({
+      token: process.env.PADLOCAL_TOKEN
+    })
+    this.bot = new Wechaty({ name,  puppet });
     this.bot.on('scan', require("./handlers/on-scan"));
     this.bot.on('login', require("./handlers/on-login"));
     this.bot.on('logout', require("./handlers/on-logout"));
