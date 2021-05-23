@@ -5,6 +5,26 @@ wechaty 是目前最成熟的微信机器人SDK，而且由于UOS的微信客户
 wechaty-getting-started https://github.com/wechaty/wechaty-getting-started      
 微信小秘书 https://github.com/gengchen528/wechat-assistant  
 
+# 安装部署
+bot 部署，进入 api 目录
+```sh
+$ cd api
+$ docker build -t bot .
+$ cp .example.env .env # 然后修改相应的配置项
+DB_HOSTNAME=host.docker.internal  # 这一样来访问host的数据库
+$ docker run \
+    --privileged \
+    -p 8999:8999 \
+    -d \
+    -v $(pwd):/bot \
+    --name bot \
+    --add-host host.docker.internal:host-gateway \
+    bot
+$ docker logs -f bot # 查看日志即可扫码
+```
+
+
+# 问题说明
 **后端管理 使用 Vue-Element-Admin**     
 Web控制面板，免得自己来开发一套 https://github.com/gengchen528/wechaty-web-panel            
 看了一下，web面板没有开源，还是要自己来开源一套。看界面用的是 vue-element-admin，可以自己来用一套。      
