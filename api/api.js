@@ -18,7 +18,6 @@ app.use(express.static(__dirname + '/public'));
 app.use(require('./routes'))
 
 app.get('/', async (req, res, next) => {
-    logger.info("测试哈哈哈")
     try {
         const roomList = await Bot.getInstance().Room.findAll()
         res.send(JSON.stringify(roomList));

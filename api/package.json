@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "GPL3",
+  "scripts": {
+    "start": "index.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
