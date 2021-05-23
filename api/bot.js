@@ -7,10 +7,11 @@ class Bot {
     if (this.instance) {
       return this.instance
     }
-    const puppet = new PuppetPadlocal({
-      token: process.env.PADLOCAL_TOKEN
-    })
-    this.bot = new Wechaty({ name,  puppet });
+    // const puppet = new PuppetPadlocal({
+    //   token: process.env.PADLOCAL_TOKEN
+    // })
+    // this.bot = new Wechaty({ name,  puppet });
+    this.bot = new Wechaty({ name });
     this.bot.on('scan', require("./handlers/on-scan"));
     this.bot.on('login', require("./handlers/on-login"));
     this.bot.on('logout', require("./handlers/on-logout"));

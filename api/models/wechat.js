@@ -174,6 +174,56 @@ const WechatToGroup = db.define('WechatToGroup', {
 })
 WechatToGroup.removeAttribute('id');
 
+// 微信群名称表
+const WechatRoomNames = db.define('WecahtRoomNames', {
+    room_name_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },   
+    room_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },   
+}, {
+    tableName: 'wechat_room_names',
+    timestamps: false,
+    indexes: [
+        {
+            name: 'room_name',
+            unique: true,
+            fields: ['room_name']
+        }
+    ],
+})
+WechatRoomNames.removeAttribute('id');
+
+const WechatRoomToGroup = db.define('WechatRoomToGroup', {
+    groupid: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },   
+    groupid: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },   
+}, {
+    tableName: 'wechat_room_to_group',
+    timestamps: false,
+    indexes: [
+        {
+            name: 'unique_ident',
+            unique: true,
+            fields: ['groupid', 'room_name_id']
+        }
+    ],
+});
+WechatRoomToGroup.removeAttribute('id');
+
+WechatRoomNames.hasMany(WechatRoomToGroup, {
+    foreignKey: 'room_name_id'
+})
+WechatRoomToGroup.belongsTo(WechatRoomNames)
 
 module.exports = {
     WechatContact,
@@ -181,4 +231,7 @@ module.exports = {
     WechatRoomContact,
     WechatMessage,
     WechatToGroup,
+
+    WechatRoomNames,
+    WechatRoomToGroup
 }

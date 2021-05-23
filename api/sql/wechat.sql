@@ -79,7 +79,7 @@ CREATE TABLE `ts_wechat_message` (
     `fromId` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '消息发送人ID', 
     `roomId` VARCHAR(255) COMMENT '所在群组ID，好友消息此字段为空', 
     `toId` VARCHAR(255)  COMMENT '消息发送的目标，如果为群组消息，则目标为群主ID', 
-    `content` TEXT COMMENT '消息内容',
+    `content` TEXT COMMENT '消息内容' COLLATE 'utf8mb4_general_ci',
     `type` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '消息类型 0 未知 6 图片 7 文本',
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '消息发送时间',
     PRIMARY KEY (`id`),
@@ -101,3 +101,33 @@ CREATE TABLE `ts_wechat_to_group` (
 ENGINE=InnoDB
 COLLATE='utf8_general_ci'
 COMMENT='微澜分馆与微信群组关联表';
+
+-------------------------------------------------------------------------- 
+-------------------------------------------------------------------------- 
+-- Web 协议的群组ID 和 联系人ID会变，瞬间上面的表设计都没啥卵用了
+-- 设计两张表，微澜的微信群表【人工手动维护】，微信群与微澜分馆关联表【也是人力维护】
+-- 然后发送消息可以通过群名，可以通过微澜分馆ID 
+-------------------------------------------------------------------------- 
+-------------------------------------------------------------------------- 
+CREATE TABLE `ts_wechat_room_names` (
+    `room_name_id` INT(10) NOT NULL AUTO_INCREMENT COMMENT '微信群ID', 
+    `room_name` VARCHAR(191) NOT NULL COMMENT '微信群名称，必须保证唯一' COLLATE 'utf8mb4_general_ci',
+    PRIMARY KEY (`room_name_id`),
+    UNIQUE INDEX `room_name` (`room_name`)
+)
+ENGINE=InnoDB
+COLLATE='utf8_general_ci'
+COMMENT='微澜的微信群组名称表 给Web协议使用';
+
+
+CREATE TABLE `ts_wechat_room_to_group` (
+    `groupid` INT(10) NOT NULL COMMENT '微澜分馆ID', 
+    `room_name_id` INT(10) NOT NULL COMMENT '微澜微信群的ID', 
+    UNIQUE INDEX `unique_ident` (`groupid`, `room_name_id`)
+    CONSTRAINT `fk_wechat_name`
+    FOREIGN KEY (`room_name_id`) 
+        REFERENCES `ts_wechat_room_names`(`room_name_id`) ON DELETE CASCADE
+)
+ENGINE=InnoDB
+COLLATE='utf8_general_ci'
+COMMENT='微澜分馆与微信群关联表 给Web协议使用';
