@@ -123,7 +123,7 @@ COMMENT='微澜的微信群组名称表 给Web协议使用';
 CREATE TABLE `ts_wechat_room_to_group` (
     `groupid` INT(10) NOT NULL COMMENT '微澜分馆ID', 
     `room_name_id` INT(10) NOT NULL COMMENT '微澜微信群的ID', 
-    UNIQUE INDEX `unique_ident` (`groupid`, `room_name_id`)
+    UNIQUE INDEX `unique_ident` (`groupid`, `room_name_id`),
     CONSTRAINT `fk_wechat_name`
     FOREIGN KEY (`room_name_id`) 
         REFERENCES `ts_wechat_room_names`(`room_name_id`) ON DELETE CASCADE
