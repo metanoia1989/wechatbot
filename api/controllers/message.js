@@ -66,7 +66,7 @@ exports.sendMsgToGroup = async (req, res, next) => {
             return res.json(res_data(null, -1, "群组不存在！")) 
         }
         console.log("发送消息给：", room.topic())
-        await room.say(getToday() + ": " + req.body.content)
+        await room.say(req.body.content)
         await delay(1000)
     });
     return res.json(res_data())
