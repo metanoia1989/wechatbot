@@ -44,7 +44,7 @@ exports.sendMsgToRoom = async (req, res, next) => {
         // 发送给所有匹配的微信群
         var rooms = await Bot.getInstance().Room.findAll(param);
     } else {
-        var room = await Bot.getInstance().Room.findl(param)
+        var room = await Bot.getInstance().Room.find(param)
         var rooms = room ? [room] : [];
     }
     if (rooms.length == 0) {
