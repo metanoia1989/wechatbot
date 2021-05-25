@@ -33,7 +33,7 @@ exports.sendMsgToRoom = async (req, res, next) => {
     var topic = req.body.group_name 
     if (typeof req.body.name_type != 'undefined' && req.body.name_type == 1) {
         // 名称为正则表达式
-        topic = new RegExp(`topic`, g) 
+        topic = new RegExp(`topic`, 'g') 
     }
     var param = { topic: topic }
     var room = await Bot.getInstance().Room.find(param);
