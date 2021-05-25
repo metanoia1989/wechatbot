@@ -30,7 +30,12 @@ exports.sendMsgToRoom = async (req, res, next) => {
     if (!errors.isEmpty()) {
         return res.json(res_data(null, -1, errors.errors[0].msg)) 
     }
-    var param = { topic: req.body.group_name }
+    var topic = req.body.group_name 
+    if (typeof req.body.name_type != 'undefined' && req.body.name_type == 1) {
+        // 名称为正则表达式
+        topic = new RegExp(`topic`, g) 
+    }
+    var param = { topic: topic }
     var room = await Bot.getInstance().Room.find(param);
     if (!room) {
         return res.json(res_data(null, -1, "群组不存在！")) 
