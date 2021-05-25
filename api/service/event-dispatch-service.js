@@ -130,7 +130,7 @@ async function dispatchAiBot(bot, msg, name, id) {
       res = ''
       break
   }
-  res = "分发给不同的机器人处理信息"
+  res = "#此功能开发中#"
   return res
 }
 

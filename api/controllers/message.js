@@ -50,7 +50,7 @@ exports.sendMsgToRoom = async (req, res, next) => {
     if (rooms.length == 0) {
         return res.json(res_data(null, -1, "群组不存在！")) 
     }
-    rooms.forEach(room => {
+    rooms.forEach(async room => {
         await room.say(req.body.content)
         delay(1000)
     })
