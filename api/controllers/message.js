@@ -22,6 +22,9 @@ exports.validate = {
  * 接收微信群组ID，发送消息给群 
  *
  * @param {*} req 
+ *            group_name 群组名
+ *            name_type 0 字符串 1 正则表达式
+ *            send_all 0 单个群 1 所有匹配到的
  * @param {*} res 
  * @param {*} next 
  */
@@ -36,11 +39,22 @@ exports.sendMsgToRoom = async (req, res, next) => {
         topic = new RegExp(`${req.body.group_name}`) 
     }
     var param = { topic: topic }
-    var room = await Bot.getInstance().Room.find(param);
-    if (!room) {
+
+    if (typeof req.body.send_all != 'undefined' && req.body.send_all == 1) {
+        // 发送给所有匹配的微信群
+        var rooms = await Bot.getInstance().Room.findAll(param);
+    } else {
+        var room = await Bot.getInstance().Room.findl(param)
+        var rooms = room ? [room] : [];
+    }
+    if (rooms.length == 0) {
         return res.json(res_data(null, -1, "群组不存在！")) 
     }
-    await room.say(req.body.content)
+    rooms.forEach(room => {
+        await room.say(req.body.content)
+        delay(1000)
+    })
+
     return res.json(res_data())
 }
 
