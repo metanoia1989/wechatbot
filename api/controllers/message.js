@@ -6,6 +6,7 @@ const { body, validationResult } = require('express-validator')
 const { res_data, delay } = require('../util/server');
 const { wechatRoomToGroup, WechatRoomNames, WechatRoomToGroup } = require('../models/wechat');
 const { getToday } = require('../util/datetime');
+const { pushJob } = require('../util/queue');
 
 exports.validate = {
     sendMsgToRoom: [
@@ -50,10 +51,15 @@ exports.sendMsgToRoom = async (req, res, next) => {
     if (rooms.length == 0) {
         return res.json(res_data(null, -1, "群组不存在！")) 
     }
-    rooms.forEach(async room => {
-        await room.say(req.body.content)
-        delay(1000)
+    console.log("测试0：", (new Date()).toLocaleString())
+    rooms.forEach(room => {
+        console.log(room.topic())
+        var cb = async () => {
+            await room.say(req.body.content)
+        }
+        pushJob(cb)
     })
+    console.log("测试3：", (new Date()).toLocaleString())
 
     return res.json(res_data())
 }
@@ -85,8 +91,11 @@ exports.sendMsgToGroup = async (req, res, next) => {
             return res.json(res_data(null, -1, "群组不存在！")) 
         }
         console.log("发送消息给：", room.topic())
-        await room.say(req.body.content)
-        await delay(1000)
+        
+        var cb = async () => {
+            await room.say(req.body.content)
+        }
+        pushJob(cb)
     });
     return res.json(res_data())
 }

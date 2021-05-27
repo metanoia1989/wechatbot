@@ -4,6 +4,7 @@ const { sendFriend, sendRoom, asyncData } = require('../proxy/aibotk')
 const { MD5, groupArray, delay } = require('../util/server')
 const { formatDate, getDay } = require("../util/datetime")
 const { FileBox } = require('wechaty')
+const { pushJob } = require('../util/queue')
 
 /**
  * 配置项 Mock
@@ -150,12 +151,16 @@ async function addRoomWelcomeSay(room, roomName, contactName, msg) {
   if (msg.type === 1 && msg.content !== '') {
     // 文字
     console.log('回复内容', msg.content)
-    await room.say(`${roomName}：欢迎新朋友 @${contactName}，<br>${msg.content}`)
+    await pushJob(async () => {
+      await room.say(`${roomName}：欢迎新朋友 @${contactName}，<br>${msg.content}`)
+    })
   } else if (msg.type === 2 && msg.url !== '') {
     // url文件
     let obj = FileBox.fromUrl(msg.url)
     console.log('回复内容', obj)
-    await room.say(obj)
+    await pushJob(async () => {
+      await room.say(obj)
+    })
   }
 }
 
@@ -169,20 +174,25 @@ async function roomSay(room, contact, msg) {
   if (msg.type === 1 && msg.content !== '') {
     // 文字
     console.log('回复内容', msg.content)
-    contact ? await room.say(msg.content, contact) : await room.say(msg.content)
+
+    await pushJob(async () => {
+      contact ? await room.say(msg.content, contact) : await room.say(msg.content)
+    })
   } else if (msg.type === 2 && msg.url !== '') {
     // url文件
     let obj = FileBox.fromUrl(msg.url)
     console.log('回复内容', obj)
     contact ? await room.say('', contact) : ''
-    await delay(500)
-    await room.say(obj)
+    await pushJob(async () => {
+      await room.say(obj)
+    })
   } else if (msg.type === 3 && msg.url !== '') {
     // bse64文件
     let obj = FileBox.fromDataURL(msg.url, 'room-avatar.jpg')
     contact ? await room.say('', contact) : ''
-    await delay(500)
-    await room.say(obj)
+    await pushJob(async () => {
+      await room.say(obj)
+    })
   }
 }
 
@@ -196,20 +206,27 @@ async function contactSay(contact, msg, isRoom = false) {
   if (msg.type === 1 && msg.content !== '') {
     // 文字
     console.log('回复内容', msg.content)
-    await contact.say(msg.content)
+    await pushJob(async () => {
+      await contact.say(msg.content)
+    })
   } else if (msg.type === 2 && msg.url !== '') {
     // url文件
     let obj = FileBox.fromUrl(msg.url)
     console.log('回复内容', obj)
     if (isRoom) {
-      await contact.say(`@${contact.name()}`)
-      await delay(500)
+      await pushJob(async () => {
+        await contact.say(`@${contact.name()}`)
+      })
     }
-    await contact.say(obj)
+    await pushJob(async () => {
+      await contact.say(obj)
+    })
   } else if (msg.type === 3 && msg.url !== '') {
     // bse64文件
     let obj = FileBox.fromDataURL(msg.url, 'user-avatar.jpg')
-    await contact.say(obj)
+    await pushJob(async () => {
+      await contact.say(obj)
+    })
   }
 }
 
@@ -223,7 +240,6 @@ async function addRoom(that, contact, roomName, replys) {
   if (room) {
     try {
       for (const item of replys) {
-        await delay(2000)
         contactSay(contact, item)
       }
       await room.add(contact)

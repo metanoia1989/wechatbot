@@ -54,8 +54,9 @@ async function setEveryDayTask(that, item, name) {
         async () => {
           let content = await getEveryDayContent(item.memorialDay, item.city, item.endWord)
           console.log('每日说任务开始工作,发送内容：', content)
-          await delay(10000)
-          await contact.say(content)
+          await pushJob(async () => {
+            await contact.say(content)
+          })
         },
         name
       )
@@ -78,7 +79,9 @@ async function setScheduleTask(that, item, name) {
       try {
         let contact = await that.Contact.find({ name: item.subscribe })
         console.log(`${item.subscribe}的专属提醒开启啦！`)
-        await contact.say(item.content)
+        await pushJob(async () => {
+          await contact.say(item.content)
+        })
         if (!item.isLoop) {
           await updateSchedule(item.id)
         }

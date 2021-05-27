@@ -229,6 +229,15 @@ async function downloadAvatar(contact) {
   return path   
 }
 
+/**
+ * 检测函数是否是 async
+ * @param {Function} func 
+ * @returns 
+ */
+function isAsync(func) {
+  return func.constructor.name === "AsyncFunction";
+}
+
 module.exports= {
     res_data,
     randomRange,
@@ -243,4 +252,5 @@ module.exports= {
     MD5,
     downloadAvatar,
     delay,
+    isAsync
 }

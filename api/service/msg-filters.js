@@ -57,7 +57,9 @@ async function addSchedule(that, obj) {
     let id = scheduleObj.id
     setLocalSchedule(Rule1, async () => {
       console.log('你的专属提醒开启啦！')
-      await contact.say(content)
+      await pushJob(async () => {
+        await contact.say(content)
+      })
       if (!scheduleObj.isLoop) {
         updateSchedule(id)
       }
