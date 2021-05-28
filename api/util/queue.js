@@ -43,8 +43,9 @@ module.exports = {
     pushJob: async (job) => {
         queue.enqueue(job)
         // 天才的编码哈哈，根据队列长度来设定延时时间，来控制出列速度
-        if (queue.length > 0) {
-            await delay(1000 * (queue.length - 1)) 
+        var delayTime = queue.length > 0 ? 1000 * (queue.length - 1) : 0
+        if (delayTime) {
+            await delay(delayTime) 
         }
         emitter.emit("newJob")
     },
