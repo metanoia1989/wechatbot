@@ -47,6 +47,8 @@ module.exports = {
         console.log("收到消息，延时时间 ", delayTime)
         if (delayTime) {
             await delay(delayTime) 
+        } else {
+            await delay(500) // 必须延时，不然秒入列 秒出列
         }
         emitter.emit("newJob")
     },
