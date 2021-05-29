@@ -10,5 +10,12 @@ const db = new DB().getInstance()
 const Bot = require('./bot')
 const start_app_server = require('./api')
 
+// 处理未捕获的Promise异常，一般是wechaty库的原因
+process.on('unhandledRejection', error => {
+    console.error('unhandledRejection', error);
+    delete Bot.getInstance()
+    Bot.getInstance()
+});
+
 Bot.getInstance()
 start_app_server()
