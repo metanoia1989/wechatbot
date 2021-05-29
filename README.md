@@ -38,3 +38,9 @@ $ docker logs -f bot # 查看日志即可扫码
 * [ ] openapi 文档生成，参考 wechaty的openapi.yml文件怎么写。   
 * [ ] 定时任务功能  
 * [ ] 关键词回复，触发关键词时将会回复，群里需要@能触发 
+
+
+# 微信bot库及项目   
+* ItChat https://github.com/luvletter2333/ItChat      
+* LeaveXChat 使用 Telegram Bot 收发 WeChat  https://github.com/UnsignedInt8/leavexchat-bot       
+* 智能微秘书客户端 https://github.com/leochen-g/wechat-assistant-pro        
