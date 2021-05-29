@@ -14,7 +14,9 @@ class Bot {
     this.bot = new Wechaty({ 
       name ,
       puppetOptions: {
-        args: ['--disable-dev-shm-usage']
+        launchOptions: {
+          args: ['--disable-dev-shm-usage']
+        }
       }
     });
     this.bot.on('scan', require("./handlers/on-scan"));
