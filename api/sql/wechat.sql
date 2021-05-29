@@ -131,3 +131,34 @@ CREATE TABLE `ts_wechat_room_to_group` (
 ENGINE=InnoDB
 COLLATE='utf8_general_ci'
 COMMENT='微澜分馆与微信群关联表 给Web协议使用';
+
+CREATE TABLE `ts_wechat_room_welcome` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`group_name` VARCHAR(100) NOT NULL COMMENT '群名',
+	`content` TEXT NULL COMMENT '欢迎语内容' COLLATE 'utf8mb4_general_ci',
+	`img_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '欢迎语图片', 
+	`link_title` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '链接标题' COLLATE 'utf8mb4_general_ci',
+	`link_desc` VARCHAR(199) NOT NULL DEFAULT '' COMMENT '链接描述' COLLATE 'utf8mb4_general_ci', 
+	`link_img` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '链接图片', 
+	`link_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '链接地址', 
+	`status` TINYINT(3) NULL DEFAULT '1' COMMENT '状态，1启用，0禁用',
+	PRIMARY KEY (`id`),
+    UNIQUE INDEX `group_name` (`group_name`)
+)
+COMMENT='群欢迎语'
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+
+INSERT INTO `ts_wechat_room_welcome` 
+(`group_name`, `content`, `link_title`, `link_desc`, `link_img`, `link_url`)
+VALUES 
+('默认欢迎语', 
+'欢迎新伙伴@{{username}}加入本馆，让我们携手为小读者打开一片新天地。
+进群后请修改群昵称，与你报名所使用的称呼一致。
+下面是本馆新馆员务必了解的一些信息，请点开链接查看，按照页面提示做相应操作。
+如果有什么问题，欢迎在群内提问。', 
+'候任馆员必读', 
+'作为本馆馆员务必了解的信息都在这个页面一网打尽啦，一定要打开看一看！',
+'http://park.sanzhi.org.cn/cache/slide/0/0/748/1.png',
+'http://park.sanzhi.org.cn/index.php?app=article&ac=show&id=1203'
+);

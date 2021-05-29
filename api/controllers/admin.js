@@ -19,7 +19,7 @@ exports.validate = {
 exports.login = function (req, res, next) {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.json(res_data(null, -1, errors.toString())) 
+        return res.json(res_data(null, -1, errors.errors[0].msg)) 
     }
 
     const { username, password } = req.body

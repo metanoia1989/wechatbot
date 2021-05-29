@@ -174,6 +174,11 @@ const WechatToGroup = db.define('WechatToGroup', {
 })
 WechatToGroup.removeAttribute('id');
 
+
+//******************************************************************* 
+// 使用web协议的相关数据表 START 
+//******************************************************************* 
+
 // 微信群名称表
 const WechatRoomNames = db.define('WecahtRoomNames', {
     room_name_id: {
@@ -225,6 +230,54 @@ WechatRoomNames.hasMany(WechatRoomToGroup, {
 })
 WechatRoomToGroup.belongsTo(WechatRoomNames)
 
+
+//******************************************************************* 
+// 使用web协议的相关数据表 End
+//******************************************************************* 
+
+// 群欢迎语
+const WechatRoomWelcome = db.define('WechatRoomWelcome', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },   
+    group_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },   
+    content: {
+        type: DataTypes.TEXT,
+    },   
+    img_url: {
+        type: DataTypes.STRING,
+    },   
+    link_title: {
+        type: DataTypes.STRING,
+    },   
+    link_desc: {
+        type: DataTypes.STRING,
+    },   
+    link_img: {
+        type: DataTypes.STRING,
+    },   
+    status: {
+        type: DataTypes.TINYINT,
+        allowNull: false,
+        defaultValue: 1,
+    },   
+},{
+    tableName: 'wechat_room_welcome',
+    timestamps: false,
+    indexes: [
+        {
+            name: 'group_name',
+            unique: true,
+            fields: ['group_name']
+        }
+    ],
+});
+
 module.exports = {
     WechatContact,
     WechatRoom,
@@ -233,5 +286,7 @@ module.exports = {
     WechatToGroup,
 
     WechatRoomNames,
-    WechatRoomToGroup
+    WechatRoomToGroup,
+    
+    WechatRoomWelcome,
 }

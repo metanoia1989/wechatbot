@@ -13,8 +13,9 @@ const { avatar_dir, static_dir } = require('../config')
  * @param {string} msg 
  * @returns 
  */
-function res_data(data = null, code = 0, msg = "") {
-    let res = { data, code, msg }
+function res_data(data = null, code = 0, msg = "success") {
+    let res = { code, msg }
+    if (data) res.data = data
     return res
 }
 
