@@ -26,10 +26,10 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          Cancel
+          取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          Confirm
+          确认
         </el-button>
       </div>
     </el-dialog>
@@ -39,6 +39,20 @@
 <script>
 export default {
   name: 'KeywordForm',
+  props: {
+    /**
+     * save:添加、update:编辑(action_id)
+     */
+    action: {
+      type: Object,
+      default: () => {
+        return {
+          type: 'save',
+          id: ''
+        }
+      }
+    }
+  },
   data() {
     return {
       tableKey: 0,
