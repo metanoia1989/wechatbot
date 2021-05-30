@@ -11,6 +11,7 @@ const Bot = require('./bot')
 const start_app_server = require('./api')
 
 const restartProcess = () => {
+    const spawn = require('child_process').spawn;
     spawn(process.argv[1], process.argv.slice(2), {
       detached: true, 
       stdio: ['ignore', out, err]

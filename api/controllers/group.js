@@ -19,10 +19,13 @@ const welcomeOption = [
     body('status').optional({ nullable: true }).isIn([0, 1]),
 ]
 exports.validate = {
+    findWelcome: [
+        query('id').exists().isInt().withMessage('ID必须为正整数！'),
+    ],
     listWelcome: [
         query('id').optional({ nullable: true }).isInt().withMessage('ID必须为正整数！'),
         query('page').optional({ nullable: true }).isInt().withMessage('页数必须为正整数！'),
-        query('size').optional({ nullable: true }).isInt().withMessage('每页条数必须为正整数！'),
+        query('limit').optional({ nullable: true }).isInt().withMessage('每页条数必须为正整数！'),
         query('keyword').optional({ nullable: true }).notEmpty(),
     ],
     saveWelcome: [
@@ -66,14 +69,40 @@ exports.listWelcome = async (req, res, next) => {
             [Op.substring]: req.query.keyword
         }
     }
-
     
     try {
-        let limit = req.query.size ? parseInt(req.query.size) : 10;
+        let limit = req.query.limit ? parseInt(req.query.limit) : 10;
         let page = req.query.page ? parseInt(req.query.page) : 1;
         let offset = (page - 1) * limit;
-        var data = await WechatRoomWelcome.findAll({
+        var items = await WechatRoomWelcome.findAll({
             where, limit, offset
+        })
+        var total = await WechatRoomWelcome.count({ where })
+        var data = { items, total }
+    } catch (error) {
+        return res.json(res_data(null, -1, error.toString())) 
+    }
+
+    return res.json(res_data(data))
+}
+
+/**
+ *  欢迎语详情
+ *
+ * @param {*} req 
+ *            group_name 群组名
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.findWelcome = async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.json(res_data(null, -1, errors.errors[0].msg)) 
+    }
+    
+    try {
+        var data = await WechatRoomWelcome.findOne({
+            where: { id: req.query.id }
         })
     } catch (error) {
         return res.json(res_data(null, -1, error.toString())) 
@@ -81,6 +110,7 @@ exports.listWelcome = async (req, res, next) => {
 
     return res.json(res_data(data))
 }
+
 
 /**
  * 添加群欢迎语

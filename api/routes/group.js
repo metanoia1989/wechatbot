@@ -6,6 +6,9 @@ const auth = require('../util/auth')
 router.get('/listWelcome', auth.required, 
     groupController.validate.listWelcome, 
     groupController.listWelcome)
+router.get('/findWelcome', auth.required, 
+    groupController.validate.findWelcome, 
+    groupController.findWelcome)
 router.post('/saveWelcome', auth.required, 
     groupController.validate.saveWelcome, 
     groupController.saveWelcome)

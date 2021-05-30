@@ -48,3 +48,7 @@ exports.login = function (req, res, next) {
 exports.me = function (req, res, next) {
     return res.json(res_data(req.payload)) 
 }
+
+exports.logout = function (req, res, next) {
+    return res.json(res_data()) 
+}

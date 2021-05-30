@@ -252,6 +252,9 @@ const WechatRoomWelcome = db.define('WechatRoomWelcome', {
     img_url: {
         type: DataTypes.STRING,
     },   
+    link_url: {
+        type: DataTypes.STRING,
+    },   
     link_title: {
         type: DataTypes.STRING,
     },   
