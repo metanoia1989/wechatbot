@@ -28,7 +28,7 @@ exports.loginStatus = async (req, res, next) => {
 }
 
 /**
- * 获取登录二维码
+ * 获取登录二维码，25秒刷新一次 
  *
  * @param {*} req 
  * @param {*} res 

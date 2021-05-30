@@ -63,3 +63,21 @@ div:focus {
 .app-container {
   padding: 20px;
 }
+
+// 固定提示气泡的宽度
+.fix-width-tooltip {
+  width: 250px;
+}
+
+// 列表页上方描述
+.explain {
+  margin-bottom: 40px;
+  
+  .list {
+    color: rgba(0,0,0,.65);
+    line-height: 1.7;
+  }
+}
+.error-color {
+  color: red!important;
+}
