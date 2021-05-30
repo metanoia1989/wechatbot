@@ -1,6 +1,8 @@
 // 获取 wechat 相关的信息
 const Bot = require('../bot');
+const { get } = require('../util/memoryCache');
 const { res_data, downloadAvatar } = require('../util/server');
+const QRcode = require('qrcode')
 
 exports.self = async (req, res, next) => {
     var user = Bot.getInstance().bot.userSelf();
@@ -8,6 +10,39 @@ exports.self = async (req, res, next) => {
     downloadAvatar(user)
     return res.json(res_data(user.payload)) 
 }
+
+//************************************************************
+// 机器人登录管理 Start
+//************************************************************
+
+/**
+ * 机器人登录状态
+ *
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.loginStatus = async (req, res, next) => {
+    var status = await Bot.getInstance().bot.logonoff()
+    return res.json(res_data({ status })) 
+}
+
+/**
+ * 获取登录二维码
+ *
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.qrcode = async (req, res, next) => {
+    var qrcode = get("qrcode")
+    var url = await QRcode.toDataURL(qrcode)
+    return res.json(res_data({ url })) 
+}
+    
+//************************************************************
+// 机器人登录管理 End
+//************************************************************
 
 //************************************************************
 // 测试微信信息 Start

@@ -189,6 +189,9 @@ exports.deleteWelcome = async (req, res, next) => {
     if (!errors.isEmpty()) {
         return res.json(res_data(null, -1, errors.errors[0].msg)) 
     }
+    if (req.body.id && req.body.id == 1) {
+        return res.json(res_data(null, -1, "默认欢迎语不允许删除")) 
+    }
     
     var where = {}
     if (typeof req.body.id != "undefined") {

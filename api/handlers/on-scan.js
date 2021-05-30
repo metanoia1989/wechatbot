@@ -16,7 +16,7 @@ async function onScan(qrcode, status) {
         encodeURIComponent(qrcode),
     ].join('')
     console.log(qrcodeImageUrl);
-    set("qrcodeSrc", qrcodeImageUrl); 
+    set("qrcode", qrcode); 
 
     log.info("TestBot", `onScan: ${ScanStatus[status]}(${status}) - ${qrcodeImageUrl}`);
     Qrterminal.generate(qrcode, { small: true })  // show qrcode on console

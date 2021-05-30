@@ -1,6 +1,7 @@
 // 加载环境变量
 require('dotenv').config({ path: __dirname+'/.env' })
 
+
 // 加载日志类 数据库类
 const { Logger, DB } = require('./util')
 const logger = new Logger().getInstance()
@@ -11,7 +12,12 @@ const Bot = require('./bot')
 const start_app_server = require('./api')
 
 const restartProcess = () => {
+    const fs = require("fs")
+    const path = require('path')
     const spawn = require('child_process').spawn;
+    const logfile =  path.join(__dirname, '/logs/process_to_the_log_file.log')
+    const out = fs.openSync(logfile, 'a');
+    const err = fs.openSync(logfile, 'a');
     spawn(process.argv[1], process.argv.slice(2), {
       detached: true, 
       stdio: ['ignore', out, err]

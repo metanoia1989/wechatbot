@@ -38,8 +38,6 @@ class Bot {
       this.instance = new Proxy(new Bot(), {
         get (target, prop, receiver) {
           if (!(prop in target) && (prop in target.bot)) {
-            // 不在Bot中的方法，则是向this.bot请求，检测 bot 是否登录
-            if (target.bot.logonoff()) {
               // 访问的是函数，需要重新绑定this
               if (typeof target.bot[prop] === 'function') {
                 return new Proxy(target.bot[prop], {
@@ -49,9 +47,12 @@ class Bot {
                 })
               }
               return target.bot[prop]
-            } else {
-              throw new Error("小助手未登录，无法调用！")
-            }
+
+            // // 不在Bot中的方法，则是向this.bot请求，检测 bot 是否登录
+            // if (target.bot.logonoff()) {
+            // } else {
+            //   throw new Error("小助手未登录，无法调用！")
+            // }
           } 
           return target[prop]
         }
