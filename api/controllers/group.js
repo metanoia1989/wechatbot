@@ -12,11 +12,11 @@ const { Op } = require('sequelize');
 const welcomeOption = [
     body('content').optional({ nullable: true }).isLength({ min: 5 }).withMessage('欢迎语必须大于5个字符！'),
     body('img_url').optional({ nullable: true }),
-    body('link_title').optional({ nullable: true }).isLength({ max: 50, min: 5}),
-    body('link_desc').optional({ nullable: true }).isLength({ max: 99, min: 5}),
+    body('link_title').optional({ nullable: true }),
+    body('link_desc').optional({ nullable: true }),
     body('link_img').optional({ nullable: true }),
     body('link_url').optional({ nullable: true }),
-    body('status').optional({ nullable: true }).isIn([0, 1]),
+    body('status').optional({ nullable: true }).isIn([0, 1, true, false]),
 ]
 exports.validate = {
     findWelcome: [
@@ -137,13 +137,9 @@ exports.findWelcome = async (req, res, next) => {
  * @param {*} next 
  */
 exports.saveWelcome = async (req, res, next) => {
-    if (req.body.status) {
-        req.body = processWelcome(req.body, false)
-    }
-
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.json(res_data(null, -1, errors.errors[0].msg)) 
+        return res.json(res_data(errors, -1, errors.errors[0].msg)) 
     }
     
     var group_name = req.body.group_name
@@ -157,6 +153,9 @@ exports.saveWelcome = async (req, res, next) => {
     }
     
     try {
+        if (req.body.status) {
+            req.body = processWelcome(req.body, false)
+        }
         await WechatRoomWelcome.create(req.body)
     } catch (error) {
         return res.json(res_data(null, -1, error.toString())) 
@@ -174,13 +173,9 @@ exports.saveWelcome = async (req, res, next) => {
  * @param {*} next 
  */
 exports.updateWelcome = async (req, res, next) => {
-    if (req.body.status) {
-        req.body = processWelcome(req.body, false)
-    }
-
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.json(res_data(null, -1, errors.errors[0].msg)) 
+        return res.json(res_data(errors, -1, errors.errors[0].msg)) 
     }
     
     var where = {}
@@ -192,6 +187,9 @@ exports.updateWelcome = async (req, res, next) => {
         delete req.body.group_name
     }
     try {
+        if (req.body.status) {
+            req.body = processWelcome(req.body, false)
+        }
         await WechatRoomWelcome.update({ ...req.body }, { where })
     } catch (error) {
         return res.json(res_data(null, -1, error.toString())) 

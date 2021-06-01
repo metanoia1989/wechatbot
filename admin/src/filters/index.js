@@ -68,6 +68,7 @@ export function uppercaseFirst(string) {
 }
 
 export function strSlice(string, length) {
+  if (!string) return ''
   let end = string.length > length ? "..." : ""
   return string.slice(0, length) + end
 }

@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="explain">
-      <h2>群欢迎语</h2>
-      <p class="list">群员入群后，如果没有设置欢迎语，将会发送默认欢迎语。默认欢迎语不允许删除。</p>
-      <p class="list">
+      <div class="title">群欢迎语</div>
+      <p class="">群员入群后，如果没有设置欢迎语，将会发送默认欢迎语。默认欢迎语不允许删除。</p>
+      <p class="">
         <span class="nickname" v-pre>{{username}}</span> 将会被替换为入群的成员昵称
       </p>
     </div>
@@ -131,7 +131,7 @@ export default {
       },
       createActionInfo: { type: 'create' },
       isCreate: false, // 是创建
-      tableHeight: document.documentElement.clientHeight - 380, // 表的高度
+      tableHeight: document.documentElement.clientHeight - 320, // 表的高度
     }
   },
   created() {
@@ -142,7 +142,7 @@ export default {
     /** 控制table的高度 */
     window.onresize = function() {
       var offsetHei = document.documentElement.clientHeight
-      var removeHeight = 380
+      var removeHeight = 320
       self.tableHeight = offsetHei - removeHeight
     }
   },
@@ -189,21 +189,34 @@ export default {
     handleCreate() {
       this.createActionInfo = { type: 'create' }
       this.isCreate = true
-      console.log("测试这个值是多少呢？", this.isCreate) 
     },
     handleUpdate(row) {
       this.createActionInfo = { type: 'update', id: row.id }
+      this.isCreate = true
     },
     handleDelete(row, index) {
-      deleteWelcome(row.id).then(() => {
-        this.$notify({
-          title: '成功',
-          message: '删除成功！',
-          type: 'success',
-          duration: 2000
+        this.$confirm('确定要删除这些数据吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
-        this.list.splice(index, 1)
-      })
+          .then(() => {
+            deleteWelcome(row.id).then(() => {
+              this.$notify({
+                title: '成功',
+                message: '删除成功！',
+                type: 'success',
+                duration: 2000
+              })
+              this.list.splice(index, 1)
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消操作'
+            })
+          })
     },
   }
 }
@@ -222,6 +235,13 @@ export default {
     font-size: 30px;
     line-height: 46px;
   }
+}
+.title {
+  font-size: 25px;
+  font-weight: bolder;
+}
+.explain {
+  margin-bottom: 5px;
 }
 .filter-container {
     padding-bottom: 10px;

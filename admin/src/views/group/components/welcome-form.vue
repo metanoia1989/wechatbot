@@ -31,6 +31,9 @@
             <el-form-item label="链接描述" prop="link_desc">
               <el-input v-model="temp.link_desc" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入链接描述" />
             </el-form-item>
+            <el-form-item label="链接图片" prop="link_img">
+              <el-input v-model="temp.link_img" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入链接图片地址" />
+            </el-form-item>
             <el-form-item label="链接地址" prop="link_url">
               <el-input v-model="temp.link_url" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入链接描述" />
             </el-form-item>
@@ -92,6 +95,7 @@ export default {
         img_url: undefined,
         link_title: undefined,
         link_desc: undefined,
+        link_img: undefined,
         link_url: undefined,
         status: true,
       },
@@ -99,7 +103,7 @@ export default {
     }
   },
   created() {   
-
+    this.getWelcome()
   },
   methods: {
     getWelcome() {
