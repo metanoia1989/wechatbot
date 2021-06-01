@@ -49,7 +49,7 @@
       <el-table-column label="图片" min-width="50px" align="left">
         <template slot-scope="{row}"> 
           <el-avatar shape="square" :size="100" fit="fill" :src="row.img_url" v-if="row.img_url"></el-avatar>
-          <span class="not-img">未设置</span>
+          <span class="not-img" v-else>未设置</span>
         </template>
       </el-table-column>
       <el-table-column label="链接" min-width="180px" align="left">
