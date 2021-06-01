@@ -136,7 +136,6 @@ export default {
   },
   created() {
     this.getList()
-    console.log("测试") 
   },
   mounted() {
     var self = this
