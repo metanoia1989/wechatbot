@@ -71,11 +71,11 @@ service.interceptors.response.use(
     } else {
       return res
     }
-  },
+  },  
   error => {
-    console.log('err' + error) // for debug
+    console.log(`%c 🌹 err`,  'fot-size:20px;background-color: #EA7E5C;color:#fff;', error, error.response) // for debug
     Message({
-      message: error.message,
+      message: error.response.data.msg || error.message,
       type: 'error',
       duration: 5 * 1000
     })
