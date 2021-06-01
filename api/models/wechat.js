@@ -281,6 +281,21 @@ const WechatRoomWelcome = db.define('WechatRoomWelcome', {
     ],
 });
 
+WechatRoomWelcome.prototype.getWelCome = async function(group_name) {
+  var item = await this.findOne({
+      where: { 
+        group_name: {
+          [Op.in]: [roomName, '默认欢迎语']
+        },
+        status: 1, 
+      },
+      order: [
+        ['id', 'DESC']
+      ]
+  })
+  return item
+};
+
 module.exports = {
     WechatContact,
     WechatRoom,

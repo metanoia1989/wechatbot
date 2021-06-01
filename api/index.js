@@ -29,7 +29,7 @@ const restartProcess = () => {
 process.on('unhandledRejection', error => {
     console.error('unhandledRejection', error);
     console.error("出现异常了，进行进程重启，后面需要单独写个进程来接收消息")
-    restartProcess()
+    // restartProcess()
 });
 
 Bot.getInstance()
