@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize')
 const { DB } = require('../util')
 const db = new DB().getInstance()
+const { Op } = require('sequelize');
 
 const WechatContact = db.define('WechatContact', {
     id: {
@@ -281,11 +282,11 @@ const WechatRoomWelcome = db.define('WechatRoomWelcome', {
     ],
 });
 
-WechatRoomWelcome.prototype.getWelCome = async function(group_name) {
+WechatRoomWelcome.getWelcome = async function(group_name) {
   var item = await this.findOne({
       where: { 
         group_name: {
-          [Op.in]: [roomName, '默认欢迎语']
+          [Op.in]: [group_name, '默认欢迎语']
         },
         status: 1, 
       },
