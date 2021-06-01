@@ -40,6 +40,20 @@ Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 
+
+/** 事件传递 */
+import VueBus from 'vue-bus'
+Vue.use(VueBus)
+
+/** 常用flex组件 */
+import {
+  Flexbox,
+  FlexboxItem
+} from '@/components/flexbox'
+Vue.component('flexbox', Flexbox)
+Vue.component('flexbox-item', FlexboxItem)
+
+
 Vue.config.productionTip = false
 
 new Vue({

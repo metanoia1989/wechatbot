@@ -115,3 +115,17 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+
+/** 获取最大 z-index 的值 */
+import {
+  PopupManager
+} from 'element-ui/lib/utils/popup'
+export function getMaxIndex() {
+  return PopupManager.nextZIndex()
+}
+
+
+export function color_log(...msg) {
+  console.log('%c 🌹 调试信息 🦄',  'font-size:20px;background-color: #EA7E5C;color:#fff;', ...msg);
+}

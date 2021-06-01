@@ -2,6 +2,7 @@ import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import { color_log } from '.'
 
 // create an axios instance
 const service = axios.create({
@@ -73,7 +74,7 @@ service.interceptors.response.use(
     }
   },  
   error => {
-    console.log(`%c 🌹 err`,  'fot-size:20px;background-color: #EA7E5C;color:#fff;', error, error.response) // for debug
+    color_log(error, error.response)
     Message({
       message: error.response.data.msg || error.message,
       type: 'error',

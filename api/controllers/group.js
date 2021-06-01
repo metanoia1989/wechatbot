@@ -48,6 +48,20 @@ exports.validate = {
 }
 
 /**
+ * 处理欢迎语
+ * @param {Welcome} item 
+ * @param {boolean} show 是否是展示
+ */
+function processWelcome(item, show = true) {
+    if (show) {
+        item.status = item.status ? true : false;
+    } else {
+        item.status = item.status ? 1 : 0 ;
+    }
+    return item
+}
+
+/**
  * 群欢迎语列表
  *
  * @param {*} req 
@@ -77,6 +91,7 @@ exports.listWelcome = async (req, res, next) => {
         var items = await WechatRoomWelcome.findAll({
             where, limit, offset
         })
+        items = items.map(processWelcome)
         var total = await WechatRoomWelcome.count({ where })
         var data = { items, total }
     } catch (error) {
@@ -104,6 +119,7 @@ exports.findWelcome = async (req, res, next) => {
         var data = await WechatRoomWelcome.findOne({
             where: { id: req.query.id }
         })
+        if (data) data = processWelcome(data)
     } catch (error) {
         return res.json(res_data(null, -1, error.toString())) 
     }
@@ -121,6 +137,10 @@ exports.findWelcome = async (req, res, next) => {
  * @param {*} next 
  */
 exports.saveWelcome = async (req, res, next) => {
+    if (req.body.status) {
+        req.body = processWelcome(req.body, false)
+    }
+
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return res.json(res_data(null, -1, errors.errors[0].msg)) 
@@ -154,6 +174,10 @@ exports.saveWelcome = async (req, res, next) => {
  * @param {*} next 
  */
 exports.updateWelcome = async (req, res, next) => {
+    if (req.body.status) {
+        req.body = processWelcome(req.body, false)
+    }
+
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return res.json(res_data(null, -1, errors.errors[0].msg)) 

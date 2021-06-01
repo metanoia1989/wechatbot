@@ -23,6 +23,7 @@
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
+      :height="tableHeight"
       border
       fit
       highlight-current-row
@@ -51,7 +52,7 @@
           <span class="not-img">未设置</span>
         </template>
       </el-table-column>
-      <el-table-column label="链接" min-width="200px" align="left">
+      <el-table-column label="链接" min-width="180px" align="left">
         <template slot-scope="{row}"> 
           <a class="link-box" target="_blank" :href="row.link_url" v-if="row.link_url">
             <el-avatar class="link-img" :size="100" shape="square" fit="fill" :src="row.link_img"></el-avatar>
@@ -73,7 +74,7 @@
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="动作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="动作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
@@ -87,6 +88,12 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
     <!-- 欢迎语列表页 END -->
 
+    <welcome-form
+      v-if="isCreate"
+      :action="createActionInfo"
+      @save-success="createSaveSuccess"
+      @hiden-view="hideView"
+    />
   </div>
 </template>
   
@@ -95,15 +102,11 @@ import { mapGetters } from 'vuex'
 import { fetchWelcomeList, updateWelcome, deleteWelcome } from '@/api/group'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import WelcomeForm from './components/welcome-form'
 
 export default {
   name: 'GroupWelcome',
-  computed: {
-    ...mapGetters([
-      'name'
-    ])
-  },
-  components: { Pagination },
+  components: { WelcomeForm, Pagination },
   directives: { waves },
   filters: {
     statusFilter(status) {
@@ -126,20 +129,23 @@ export default {
         limit: 20,
         keyword: undefined,
       },
-      temp: {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 1,
-      },
-      
+      createActionInfo: { type: 'create' },
+      isCreate: false, // 是创建
+      tableHeight: document.documentElement.clientHeight - 380, // 表的高度
     }
   },
   created() {
     this.getList()
+    console.log("测试") 
+  },
+  mounted() {
+    var self = this
+    /** 控制table的高度 */
+    window.onresize = function() {
+      var offsetHei = document.documentElement.clientHeight
+      var removeHeight = 380
+      self.tableHeight = offsetHei - removeHeight
+    }
   },
   methods: {
     getList() {
@@ -175,33 +181,19 @@ export default {
         })
       })
     },
-    resetTemp() {
-      this.temp = {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
-      }
+    createSaveSuccess() {
+      this.getList()
+    },
+    hideView() {
+      this.isCreate = false
     },
     handleCreate() {
-      this.resetTemp()
-      // this.dialogStatus = 'create'
-      // this.dialogFormVisible = true
-      // this.$nextTick(() => {
-      //   this.$refs['dataForm'].clearValidate()
-      // })
+      this.createActionInfo = { type: 'create' }
+      this.isCreate = true
+      console.log("测试这个值是多少呢？", this.isCreate) 
     },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+      this.createActionInfo = { type: 'update', id: row.id }
     },
     handleDelete(row, index) {
       deleteWelcome(row.id).then(() => {
@@ -219,6 +211,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.app-container {
+  padding-bottom: 0;
+}
+.pagination-container {
+  padding-bottom: 0;
+}
 .container {
   .title-container {
     margin: 30px;
