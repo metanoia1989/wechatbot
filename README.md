@@ -24,6 +24,15 @@ $ docker run \
 $ docker logs -f bot # 查看日志即可扫码
 ```
 
+后台管理部署
+```sh
+$ cd admin
+$ yarn install
+$ yarn run build:prod
+# 将 dist 下的文件部署到网站 /bot-admin 目录下
+# 访问 http://xxxxxx/bot-admin  
+```
+
 # 开发事项
 目前 bot-api 开发了消息发送的功能，后台管理进度为零。   
 
@@ -39,6 +48,12 @@ $ docker logs -f bot # 查看日志即可扫码
 * [ ] 定时任务功能  
 * [ ] 关键词回复，触发关键词时将会回复，群里需要@能触发 
 
+# 注意事项
+当前使用的web协议，已知的问题有：
+1. 好友ID和群ID会随着登录变化
+2. 无法发送图文消息
+3. 发送消息@群好友是无效的
+4. 发送图片有限制，好像超过100张，无法发送
 
 # 微信bot库及项目   
 * ItChat https://github.com/luvletter2333/ItChat      
