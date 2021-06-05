@@ -83,19 +83,22 @@ exports.sendMsgToGroup = async (req, res, next) => {
             where: { groupid: req.body.groupid }
         }
     })
-
-    room_names.forEach(async ({ room_name })=> {
-        var param = { topic: room_name }
-        var room = await Bot.getInstance().Room.find(param);
-        if (!room) {
-            return res.json(res_data(null, -1, "群组不存在！")) 
+    for (const key in room_names) {
+        if (Object.hasOwnProperty.call(room_names, key)) {
+            const { room_name } = room_names[key];
+            var param = { topic: room_name }
+            var room = await Bot.getInstance().Room.find(param);
+            if (!room) {
+                finish = true
+                return res.json(res_data(null, -1, `群组${room_name}不存在！`))
+            }
+            console.log("发送消息给：", room.topic())
+            
+            var cb = async () => {
+                await room.say(req.body.content)
+            }
+            pushJob(cb)
         }
-        console.log("发送消息给：", room.topic())
-        
-        var cb = async () => {
-            await room.say(req.body.content)
-        }
-        pushJob(cb)
-    });
+    }
     return res.json(res_data())
 }

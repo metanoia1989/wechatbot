@@ -1,6 +1,6 @@
 const { Wechaty, log } = require('wechaty');
 const { PuppetPadlocal } = require("wechaty-puppet-padlocal");
-
+const  { PuppetSimplePad } = require("wechaty-puppet-simplepad")
 class Bot {
 
   constructor(name = 'wechat-puppet-wechat') {
@@ -10,14 +10,18 @@ class Bot {
     // const puppet = new PuppetPadlocal({
     //   token: process.env.PADLOCAL_TOKEN
     // })
+    const puppet = new PuppetSimplePad({
+      token: process.env.SIMPLEPAD_TOKEN
+    })
     // this.bot = new Wechaty({ name,  puppet });
     this.bot = new Wechaty({ 
-      name ,
-      puppetOptions: {
-        launchOptions: {
-          args: ['--disable-dev-shm-usage']
-        }
-      }
+      name,
+      puppet,
+      // puppetOptions: {
+      //   launchOptions: {
+      //     args: ['--disable-dev-shm-usage']
+      //   }
+      // }
     });
     this.bot.on('scan', require("./handlers/on-scan"));
     this.bot.on('login', require("./handlers/on-login"));

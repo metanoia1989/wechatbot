@@ -14,15 +14,18 @@
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
     "express-validator": "^6.10.1",
+    "jimp": "^0.16.1",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.2.5",
     "node-schedule": "^2.0.0",
     "pino": "^6.11.3",
     "qrcode": "^1.4.4",
+    "qrcode-reader": "^1.0.4",
     "qrcode-terminal": "^0.12.0",
     "sequelize": "^6.6.2",
     "wechaty": "^0.60.3",
     "wechaty-puppet-padlocal": "^0.3.0",
+    "wechaty-puppet-simplepad": "^0.0.5",
     "wechaty-puppet-wechat": "^0.28.1"
   },
   "devDependencies": {
