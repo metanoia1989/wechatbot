@@ -25,7 +25,7 @@
     "sequelize": "^6.6.2",
     "wechaty": "^0.60.3",
     "wechaty-puppet-padlocal": "^0.3.0",
-    "wechaty-puppet-simplepad": "^0.0.5",
+    "wechaty-puppet-simplepad": "^0.0.7",
     "wechaty-puppet-wechat": "^0.28.1"
   },
   "devDependencies": {

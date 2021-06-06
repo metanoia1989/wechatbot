@@ -22,7 +22,7 @@ class Bot {
       //     args: ['--disable-dev-shm-usage']
       //   }
       // }
-    });
+    });  
     this.bot.on('scan', require("./handlers/on-scan"));
     this.bot.on('login', require("./handlers/on-login"));
     this.bot.on('logout', require("./handlers/on-logout"));
