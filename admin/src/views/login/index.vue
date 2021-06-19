@@ -50,7 +50,7 @@
       </el-button>
 
       <div class="tips">
-        <span>账号是微澜社区的管理员账号</span>
+        <!-- <span>账号是微澜社区的管理员账号</span> -->
       </div>
 
     </el-form>

@@ -1,10 +1,12 @@
-const jwt = require('jsonwebtoken');
-const secret = process.env.APP_SECRET
 
 const { DataTypes } = require('sequelize')
 const { DB } = require('../util')
 const db = new DB().getInstance()
 
+/**
+  * 微澜社区用户信息模型 
+  * @deprecated 1.1.0 用全新的admin表替代
+  */
 const UserInfo = db.define('UserInfo', {
   userid: {
     type: DataTypes.INTEGER,
@@ -65,6 +67,10 @@ UserInfo.prototype.toAuthJSON = function(){
 
 
 
+/**
+  * 微澜社区用户模型 
+  * @deprecated 1.1.0 用全新的admin表替代
+  */
 const User = db.define('User', {
   userid: {
     type: DataTypes.INTEGER,

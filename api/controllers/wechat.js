@@ -35,6 +35,11 @@ exports.loginStatus = async (req, res, next) => {
  * @param {*} next 
  */
 exports.qrcode = async (req, res, next) => {
+    var status = await Bot.getInstance().bot.logonoff()
+    if (status) {
+        return res.json(res_data(null, -1, "已登录微信号")) 
+    }
+
     var qrcode = get("qrcode")
     var url = await QRcode.toDataURL(qrcode)
     return res.json(res_data({ url })) 

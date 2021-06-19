@@ -3,6 +3,9 @@ const { DB } = require('../util')
 const db = new DB().getInstance()
 const { Op } = require('sequelize');
 
+/**
+ * 联系人表
+ */
 const WechatContact = db.define('WechatContact', {
     id: {
         type: DataTypes.INTEGER,
@@ -53,6 +56,9 @@ const WechatContact = db.define('WechatContact', {
     avatar: {
         type: DataTypes.STRING, 
     },
+    uid: {
+        type: DataTypes.INTEGER, 
+    },
     type: {
         type: DataTypes.ENUM, 
         // values: ['unknown', 'personal', 'official'],
@@ -75,6 +81,9 @@ WechatContact.prototype.types = [
     'unknown','personal','official'
 ]
 
+/**
+ * 微信群组表
+ */
 const WechatRoom = db.define('WechatRoom', {
     id: {
         type: DataTypes.INTEGER,
@@ -97,6 +106,9 @@ const WechatRoom = db.define('WechatRoom', {
         type: DataTypes.INTEGER, 
         defaultValue: 0,
     },
+    groupid: {
+        type: DataTypes.INTEGER, 
+    },
 }, {
     tableName: 'wechat_room',
     timestamps: false,
@@ -109,6 +121,9 @@ const WechatRoom = db.define('WechatRoom', {
     ],
 })
 
+/**
+ * 群组联系人关联表
+ */
 const WechatRoomContact = db.define('WechatRoomContact', {
     room_ident:{
         type: DataTypes.STRING,
@@ -124,6 +139,9 @@ const WechatRoomContact = db.define('WechatRoomContact', {
 })
 WechatRoomContact.removeAttribute('id');
 
+/**
+ * 消息表
+ */
 const WechatMessage = db.define('WechatMessage', {
     id: {
         type: DataTypes.INTEGER,
@@ -159,84 +177,9 @@ const WechatMessage = db.define('WechatMessage', {
     },
 })
 
-// 群组和微信群关联表
-const WechatToGroup = db.define('WechatToGroup', {
-    groupid:{
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    room_ident: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-}, {
-    tableName: 'wechat_to_group',
-    timestamps: false,
-})
-WechatToGroup.removeAttribute('id');
-
-
-//******************************************************************* 
-// 使用web协议的相关数据表 START 
-//******************************************************************* 
-
-// 微信群名称表
-const WechatRoomNames = db.define('WecahtRoomNames', {
-    room_name_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-    },   
-    room_name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },   
-}, {
-    tableName: 'wechat_room_names',
-    timestamps: false,
-    indexes: [
-        {
-            name: 'room_name',
-            unique: true,
-            fields: ['room_name']
-        }
-    ],
-})
-WechatRoomNames.removeAttribute('id');
-
-const WechatRoomToGroup = db.define('WechatRoomToGroup', {
-    groupid: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },   
-    groupid: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },   
-}, {
-    tableName: 'wechat_room_to_group',
-    timestamps: false,
-    indexes: [
-        {
-            name: 'unique_ident',
-            unique: true,
-            fields: ['groupid', 'room_name_id']
-        }
-    ],
-});
-WechatRoomToGroup.removeAttribute('id');
-
-WechatRoomNames.hasMany(WechatRoomToGroup, {
-    foreignKey: 'room_name_id'
-})
-WechatRoomToGroup.belongsTo(WechatRoomNames)
-
-
-//******************************************************************* 
-// 使用web协议的相关数据表 End
-//******************************************************************* 
-
-// 群欢迎语
+/**
+ * 群欢迎语
+ */
 const WechatRoomWelcome = db.define('WechatRoomWelcome', {
     id: {
         type: DataTypes.INTEGER,
@@ -250,8 +193,8 @@ const WechatRoomWelcome = db.define('WechatRoomWelcome', {
     content: {
         type: DataTypes.TEXT,
     },   
-    img_url: {
-        type: DataTypes.STRING,
+    img_id: {
+        type: DataTypes.INTEGER,
     },   
     link_url: {
         type: DataTypes.STRING,
@@ -262,8 +205,8 @@ const WechatRoomWelcome = db.define('WechatRoomWelcome', {
     link_desc: {
         type: DataTypes.STRING,
     },   
-    link_img: {
-        type: DataTypes.STRING,
+    link_img_id: {
+        type: DataTypes.INTEGER,
     },   
     status: {
         type: DataTypes.TINYINT,
@@ -297,15 +240,198 @@ WechatRoomWelcome.getWelcome = async function(group_name) {
   return item
 };
 
+/**
+ * 文件表
+ */
+const WechatFile = db.define('WechatFile', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },   
+    file_name: {
+        type: DataTypes.STRING, 
+        allowNull: false,
+    },
+    file_type: {
+        type: DataTypes.INTEGER, 
+        allowNull: false,
+    },
+    file_ext: {
+        type: DataTypes.STRING, 
+        allowNull: false,
+    },
+    md5_code: {
+        type: DataTypes.STRING, 
+        allowNull: false,
+    },
+    hash_code: {
+        type: DataTypes.STRING, 
+        allowNull: false,
+    },
+    driver: {
+        type: DataTypes.ENUM, 
+        values: ['local', 'qiniu', 'qcloud', 'alicloud'], 
+        defaultValue: 'local',
+    },
+    thumb_img: {
+        type: DataTypes.STRING, 
+    },
+    preview_img: {
+        type: DataTypes.STRING, 
+    },
+    key: {
+        type: DataTypes.STRING, 
+    },
+    file_size: {
+        type: DataTypes.INTEGER, 
+    },
+    width: {
+        type: DataTypes.INTEGER, 
+    },
+    height: {
+        type: DataTypes.INTEGER, 
+    },
+    is_horizontal: {
+        type: DataTypes.ENUM, 
+        values: [0, 1], // 0 no 1 yes 
+        defaultValue: 0,
+    },
+    thumb_size: {
+        type: DataTypes.INTEGER, 
+    },
+    preview_size: {
+        type: DataTypes.INTEGER, 
+    },
+    duration: {
+        type: DataTypes.INTEGER, 
+    },
+    is_del: {
+        type: DataTypes.ENUM, 
+        values: [0, 1], // 0 no 1 yes 
+        defaultValue: 0,
+    },
+    created_at: {
+        type: DataTypes.DATE,
+    },   
+    updated_at: {
+        type: DataTypes.DATE,
+    },   
+},{
+    tableName: 'wechat_file',
+    timestamps: true,
+    indexes: [
+        {
+            name: 'md5_code',
+            unique: true,
+            fields: ['md5_code']
+        }
+    ],
+});
+
+/**
+ * 文字素材表
+ */
+const WechatMaterial = db.define('WechatMaterial', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    title: {
+        type: DataTypes.STRING,
+    },
+    content: {
+        type: DataTypes.STRING,
+    }
+}, {
+    tableName: 'wechat_material',
+    timestamps: false,
+    indexes: [
+        {
+            name: 'title',
+            unique: true,
+            fields: ['title']
+        }
+    ],
+})
+
+
+//******************************************************************* 
+// 使用web协议的相关数据表 START 
+//******************************************************************* 
+
+/**
+ * 微信群名称表
+ * @deprecated 1.1
+ */
+const WechatRoomNames = db.define('WecahtRoomNames', {
+    room_name_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },   
+    room_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },   
+}, {
+    tableName: 'wechat_room_names',
+    timestamps: false,
+    indexes: [
+        {
+            name: 'room_name',
+            unique: true,
+            fields: ['room_name']
+        }
+    ],
+})
+WechatRoomNames.removeAttribute('id');
+
+/**
+ * 微信群与微澜分馆关联表
+ * @deprecated 1.1
+ */
+const WechatRoomToGroup = db.define('WechatRoomToGroup', {
+    groupid: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },   
+    room_name_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },   
+}, {
+    tableName: 'wechat_room_to_group',
+    timestamps: false,
+    indexes: [
+        {
+            name: 'unique_ident',
+            unique: true,
+            fields: ['groupid', 'room_name_id']
+        }
+    ],
+});
+WechatRoomToGroup.removeAttribute('id');
+
+WechatRoomNames.hasMany(WechatRoomToGroup, {
+    foreignKey: 'room_name_id'
+})
+WechatRoomToGroup.belongsTo(WechatRoomNames)
+
+
+//******************************************************************* 
+// 使用web协议的相关数据表 End
+//******************************************************************* 
+
+
 module.exports = {
     WechatContact,
     WechatRoom,
     WechatRoomContact,
     WechatMessage,
-    WechatToGroup,
-
-    WechatRoomNames,
-    WechatRoomToGroup,
-    
     WechatRoomWelcome,
+    
+    WechatFile,
+    WechatMaterial,
 }
