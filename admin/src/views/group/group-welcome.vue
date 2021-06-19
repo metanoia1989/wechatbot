@@ -23,7 +23,6 @@
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
-      :height="tableHeight"
       border
       fit
       highlight-current-row
@@ -139,12 +138,6 @@ export default {
   },
   mounted() {
     var self = this
-    /** 控制table的高度 */
-    window.onresize = function() {
-      var offsetHei = document.documentElement.clientHeight
-      var removeHeight = 320
-      self.tableHeight = offsetHei - removeHeight
-    }
   },
   methods: {
     getList() {

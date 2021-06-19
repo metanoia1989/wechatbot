@@ -1,3 +1,4 @@
+const Bot = require('../bot');
 const { WechatRoom, WechatContact } = require("../models/wechat");
 const { fetchContactType } = require("../util/wechat");
 
@@ -5,8 +6,8 @@ const { fetchContactType } = require("../util/wechat");
  * 同步所有群组数据
  * @param {Wechaty} that 
  */
-async function initAllRoomData(that) {
-    var items = await that.Room.findAll();
+async function initAllRoomData() {
+    var items = await Bot.getInstance().Room.findAll();
     try {
         var data =  items.map(room=> {
             let { payload } = room
@@ -29,9 +30,9 @@ async function initAllRoomData(that) {
  * 同步所有联系人数据
  * @param {Wechaty} that 
  */
-async function initAllContactData(that) {
-    var contacts = await that.Contact.findAll();
-    var self_id = that.userSelf().id
+async function initAllContactData() {
+    var contacts = await Bot.getInstance().Contact.findAll();
+    var self_id = Bot.getInstance().bot.userSelf().id
     try {
         var data =  contacts.map(contact => {
             let { payload } = contact
@@ -80,9 +81,9 @@ async function initAllContactData(that) {
  * 同步所有群组和好友   
  * @param {Wechaty} that 
  */
-async function initAllSyncData(that) {
-    await initAllRoomData(that); 
-    await initAllContactData(that); 
+async function initAllSyncData() {
+    await initAllRoomData(); 
+    await initAllContactData(); 
 }
 
 

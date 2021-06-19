@@ -1,11 +1,38 @@
+/** 微澜图书馆相关模型 */
 
-const { DataTypes } = require('sequelize')
-const { DB } = require('../util')
+
+const { DataTypes, Op } = require('sequelize')
+const { DB } = require('../util');
+const { WechatRoom } = require('./wechat');
 const db = new DB().getInstance()
+
+const Group = db.define('Group', {
+    groupid: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true
+    },
+    groupname: {
+        type: DataTypes.STRING,
+    },
+    photo: {
+        type: DataTypes.STRING,
+    }   
+}, {
+    tableName: 'group',
+    timestamps: false,
+})
+
+Group.processPhoto = function (photo) {
+    if (!photo) {
+      return ''  
+    } 
+    return 'http://park.sanzhi.org.cn/uploadfile/group/' + photo
+}
+
 
 /**
   * 微澜社区用户信息模型 
-  * @deprecated 1.1.0 用全新的admin表替代
   */
 const UserInfo = db.define('UserInfo', {
   userid: {
@@ -45,31 +72,15 @@ const UserInfo = db.define('UserInfo', {
   timestamps: false
 })
 
-UserInfo.prototype.generateJWT = function() {
-  var today = new Date();
-  var exp = new Date(today);
-  exp.setDate(today.getDate() + 60);
-  console.log(secret)
-  return jwt.sign({
-    id: this.userid,
-    username: this.username,
-    exp: parseInt(exp.getTime() / 1000),
-  }, secret);
-};
-
-UserInfo.prototype.toAuthJSON = function(){
-  return {
-    username: this.username,
-    token: this.generateJWT(),
-    image: this.face
-  };
-};
-
-
+UserInfo.processPhoto = function (photo) {
+    if (!photo) {
+      return ''  
+    } 
+    return 'http://park.sanzhi.org.cn/uploadfile/user/' + photo
+}
 
 /**
   * 微澜社区用户模型 
-  * @deprecated 1.1.0 用全新的admin表替代
   */
 const User = db.define('User', {
   userid: {
@@ -105,6 +116,7 @@ UserInfo.belongsTo(User, {
 })
 
 module.exports = {
-  User,
-  UserInfo
-}
+    Group,
+    User,
+    UserInfo
+} 

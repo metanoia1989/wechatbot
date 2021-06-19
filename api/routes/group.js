@@ -19,4 +19,16 @@ router.post('/deleteWelcome', auth.required,
     groupController.validate.deleteWelcome, 
     groupController.deleteWelcome)
 
+router.get('/listRoom', auth.required, 
+    groupController.validate.listRoom, 
+    groupController.listRoom)
+router.post('/syncRoom', auth.required, 
+    groupController.syncRoom)
+
+router.get('/listLibrary', auth.required, 
+    groupController.listLibrary)
+router.post('/relateRoomLibrary', auth.required, 
+    groupController.validate.relateRoomLibrary, 
+    groupController.relateRoomLibrary)
+
 module.exports = router

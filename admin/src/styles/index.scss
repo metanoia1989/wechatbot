@@ -71,7 +71,12 @@ div:focus {
 
 // 列表页上方描述
 .explain {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+
+  .title {
+    font-size: 25px;
+    font-weight: bolder;
+  }
   
   .list {
     color: rgba(0,0,0,.65);
@@ -80,4 +85,12 @@ div:focus {
 }
 .error-color {
   color: red!important;
+}
+
+.link-type {
+  color: #1890ff;
+}
+
+.filter-container {
+    padding-bottom: 10px;
 }

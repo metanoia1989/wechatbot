@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize')
 const { DB } = require('../util')
 const db = new DB().getInstance()
 const { Op } = require('sequelize');
-
+const { Group, UserInfo } = require('./wavelib');
 /**
  * 联系人表
  */
@@ -83,6 +83,12 @@ const WechatContact = db.define('WechatContact', {
 WechatContact.prototype.types = [
     'unknown','personal','official'
 ]
+UserInfo.hasOne(WechatContact, {
+    foreignKey: 'uid',
+})
+WechatContact.belongsTo(UserInfo, {
+    foreignKey: 'uid',
+})
 
 /**
  * 微信群组表
@@ -188,8 +194,8 @@ const WechatRoomWelcome = db.define('WechatRoomWelcome', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-    },   
-    group_name: {
+    },    
+    group_ident: {
         type: DataTypes.STRING,
         allowNull: false,
     },   
@@ -228,11 +234,11 @@ const WechatRoomWelcome = db.define('WechatRoomWelcome', {
     ],
 });
 
-WechatRoomWelcome.getWelcome = async function(group_name) {
+WechatRoomWelcome.getWelcomeByIdent = async function(group_ident) {
   var item = await this.findOne({
       where: { 
-        group_name: {
-          [Op.in]: [group_name, '默认欢迎语']
+        group_ident: {
+          [Op.in]: [group_ident, 'default@chatroom']
         },
         status: 1, 
       },
@@ -242,6 +248,40 @@ WechatRoomWelcome.getWelcome = async function(group_name) {
   })
   return item
 };
+WechatRoomWelcome.getWelcomeByName = async function(group_name) {
+  var item = await this.findOne({
+      where: { 
+        status: 1, 
+      },
+      include: [{
+          model: WechatRoom,
+          where: {
+            name: {
+                [Op.substring]: group_name,
+            }
+          }
+      }],
+      order: [
+        ['id', 'DESC']
+      ]
+  })
+  return item
+};
+
+Group.hasOne(WechatRoom, {
+    foreignKey: 'groupid',
+})
+WechatRoom.hasOne(WechatRoomWelcome, {
+    foreignKey: 'group_ident',
+    onDelete: 'CASCADE',
+})
+WechatRoomWelcome.belongsTo(WechatRoom, {
+    foreignKey: 'group_ident',
+})
+
+WechatRoom.belongsTo(Group, {
+    foreignKey: 'groupid',
+})
 
 /**
  * 文件表

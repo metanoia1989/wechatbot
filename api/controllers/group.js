@@ -4,9 +4,11 @@
 const Bot = require('../bot');
 const { body, validationResult, oneOf, query } = require('express-validator')
 const { res_data, delay } = require('../util/server');
-const { WechatRoomWelcome } = require('../models/wechat');
+const { WechatRoomWelcome, WechatRoom } = require('../models/wechat');
 const { pushJob } = require('../util/queue');
 const { Op } = require('sequelize');
+const { Group } = require('../models/wavelib');
+const { initAllRoomData } = require('../service/syncData');
 
 
 const welcomeOption = [
@@ -29,22 +31,32 @@ exports.validate = {
         query('keyword').optional({ nullable: true }).notEmpty(),
     ],
     saveWelcome: [
-        body('group_name', '必须指定群名称！').notEmpty().exists(),
+        body('group_ident', '必须指定群标识！').notEmpty().exists(),
         ...welcomeOption,
     ],
     updateWelcome: [
         oneOf([
             body('id', 'ID必须为整数！').exists().isInt(),
-            body('group_name', '必须指定群名称！').notEmpty().exists(),
+            body('group_ident', '必须指定群标识！').notEmpty().exists(),
         ]),
         ...welcomeOption,
     ],
     deleteWelcome: [
         oneOf([
             body('id', 'ID必须为整数！').exists().isInt(),
-            body('group_name', '必须指定群名称！').notEmpty().exists(),
+            body('group_ident', '必须指定群标识！').notEmpty().exists(),
         ]),
-    ]
+    ],
+    listRoom: [
+        query('id').optional({ nullable: true }).isInt().withMessage('ID必须为正整数！'),
+        query('page').optional({ nullable: true }).isInt().withMessage('页数必须为正整数！'),
+        query('limit').optional({ nullable: true }).isInt().withMessage('每页条数必须为正整数！'),
+        query('keyword').optional({ nullable: true }).notEmpty(),
+    ],
+    relateRoomLibrary: [
+        body('room_id', 'ID必须为整数！').exists().isInt(),
+        body('groupid', '群组id必须为整数！').exists().isInt(),
+    ],
 }
 
 /**
@@ -76,12 +88,21 @@ exports.listWelcome = async (req, res, next) => {
     }
     
     let where = {} 
+    let include = {}
     if (req.query.id) {
         where.id = req.query.id
     } else if (req.query.keyword) {
-        where.group_name = {
-            [Op.substring]: req.query.keyword
-        }
+        include = {
+          include: [{
+              model: WechatRoom,
+              attributes: [],
+              where: {
+                name: {
+                    [Op.substring]: req.query.keyword
+                }
+              }
+          }],
+        } 
     }
     
     try {
@@ -89,7 +110,7 @@ exports.listWelcome = async (req, res, next) => {
         let page = req.query.page ? parseInt(req.query.page) : 1;
         let offset = (page - 1) * limit;
         var items = await WechatRoomWelcome.findAll({
-            where, limit, offset
+            where, limit, offset, ...include
         })
         items = items.map(processWelcome)
         var total = await WechatRoomWelcome.count({ where })
@@ -105,7 +126,7 @@ exports.listWelcome = async (req, res, next) => {
  *  欢迎语详情
  *
  * @param {*} req 
- *            group_name 群组名
+ *            id 欢迎语ID
  * @param {*} res 
  * @param {*} next 
  */
@@ -116,9 +137,7 @@ exports.findWelcome = async (req, res, next) => {
     }
     
     try {
-        var data = await WechatRoomWelcome.findOne({
-            where: { id: req.query.id }
-        })
+        var data = await WechatRoomWelcome.findByPk(req.query.id)
         if (data) data = processWelcome(data)
     } catch (error) {
         return res.json(res_data(null, -1, error.toString())) 
@@ -132,7 +151,7 @@ exports.findWelcome = async (req, res, next) => {
  * 添加群欢迎语
  *
  * @param {*} req 
- *            group_name 群组名
+ *            group_ident 群组标识
  * @param {*} res 
  * @param {*} next 
  */
@@ -142,10 +161,10 @@ exports.saveWelcome = async (req, res, next) => {
         return res.json(res_data(errors, -1, errors.errors[0].msg)) 
     }
     
-    var group_name = req.body.group_name
+    var group_ident = req.body.group_ident
     
     var welcome = await WechatRoomWelcome.findOne({
-        where: { group_name }
+        where: { group_ident }
     })
 
     if (welcome) {
@@ -168,7 +187,7 @@ exports.saveWelcome = async (req, res, next) => {
  * 更新群欢迎语 
  *
  * @param {*} req 
- *            group_name 群组名
+ *            group_ident 群组标识
  * @param {*} res 
  * @param {*} next 
  */
@@ -183,8 +202,8 @@ exports.updateWelcome = async (req, res, next) => {
         where.id = req.body.id
         delete req.body.id
     } else {
-        where.group_name = req.body.group_name 
-        delete req.body.group_name
+        where.group_ident = req.body.group_ident
+        delete req.body.group_ident
     }
     try {
         if (req.body.status) {
@@ -202,7 +221,7 @@ exports.updateWelcome = async (req, res, next) => {
  * 删除群欢迎语 
  *
  * @param {*} req 
- *            group_name 群组名
+ *            group_ident 群组名
  * @param {*} res 
  * @param {*} next 
  */
@@ -220,8 +239,8 @@ exports.deleteWelcome = async (req, res, next) => {
         where.id = req.body.id
         delete req.body.id
     } else {
-        where.group_name = req.body.group_name 
-        delete req.body.group_name
+        where.group_ident = req.body.group_ident
+        delete req.body.group_ident
     }
     try {
         await WechatRoomWelcome.destroy({ where })
@@ -230,4 +249,110 @@ exports.deleteWelcome = async (req, res, next) => {
     }
 
     return res.json(res_data())
+}
+
+/**
+ * 群列表
+ *
+ * @param {*} req 
+ *            group_name 群组名
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.listRoom = async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.json(res_data(null, -1, errors.errors[0].msg)) 
+    }
+    
+    let where = {} 
+    if (req.query.id) {
+        where.id = req.query.id
+    } else if (req.query.keyword) {
+        where.name = {
+            [Op.substring]: req.query.keyword
+        } 
+    }
+
+    try {
+        let limit = req.query.limit ? parseInt(req.query.limit) : 10;
+        let page = req.query.page ? parseInt(req.query.page) : 1;
+        let offset = (page - 1) * limit;
+        var items = await WechatRoom.findAll({
+            where, limit, offset,
+            include: Group
+        })
+        var total = await WechatRoom.count({ where })
+        var data = { items, total }
+    } catch (error) {
+        return res.json(res_data(null, -1, error.toString())) 
+    }
+
+    return res.json(res_data(data))
+}
+
+/**
+ * 同步群组数据
+ *
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.syncRoom = async (req, res, next) => {
+    try {
+        await initAllRoomData()
+        return res.json(res_data())
+    } catch (error) {
+        return res.json(res_data(null, -1, error.toString())) 
+    }
+}
+
+/**
+ * 微澜分馆列表
+ *
+ * @param {*} req 
+ *            group_name 群组名
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.listLibrary = async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.json(res_data(null, -1, errors.errors[0].msg)) 
+    }
+    let where = {} 
+    if (req.query.keyword) {
+        where.groupname = {
+            [Op.substring]: req.query.keyword
+        } 
+    }
+
+    try {
+        var items = await Group.findAll({ where })
+        items = items.map((item) => {
+            item.photo = Group.processPhoto(item.photo)
+            return item
+        })
+    } catch (error) {
+        return res.json(res_data(null, -1, error.toString())) 
+    }
+
+    return res.json(res_data(items))
+}
+
+/**
+ * 关联分馆到群组
+ *
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.relateRoomLibrary = async (req, res, next) => {
+    try {
+        const { room_id: id, groupid } = req.body
+        await WechatRoom.update({ groupid }, { where: { id } })
+        return res.json(res_data())
+    } catch (error) {
+        return res.json(res_data(null, -1, error.toString())) 
+    }
 }

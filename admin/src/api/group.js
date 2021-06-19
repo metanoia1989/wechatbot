@@ -39,3 +39,34 @@ export function deleteWelcome(id) {
     data: { id } 
   })
 }
+
+export function fetchRoomList(query) {
+  return request({
+    url: '/group/listRoom',
+    method: 'get',
+    params: query
+  })
+}
+
+export function syncRoomList() {
+  return request({
+    url: '/group/syncRoom',
+    method: 'post',
+  })
+}
+
+export function fetchLibraryList(query) {
+  return request({
+    url: '/group/listLibrary',
+    method: 'get',
+    params: query
+  })
+}
+
+export function relateRoomLibrary(data) {
+  return request({
+    url: '/group/relateRoomLibrary',
+    method: 'post',
+    data,
+  })
+}
