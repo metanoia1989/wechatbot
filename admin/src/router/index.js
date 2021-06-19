@@ -79,6 +79,27 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/contact',
+    component: Layout,
+    redirect: '/contact/index',
+    name: 'Contact',
+    meta: { title: '联系人管理', icon: 'contact-manage' },
+    children: [
+      {
+        path: 'index',
+        name: 'ContactList',  
+        component: () => import('@/views/contact/contact-list'),
+        meta: { title: '联系人列表', icon: 'contact-list' }
+      },
+      {
+        path: 'daily',
+        name: 'ContactDaily',
+        component: () => import('@/views/contact/contact-daily'),
+        meta: { title: '每日资讯', icon: 'daily' }
+      }
+    ]
+  },
+  {
     path: '/group',
     component: Layout,
     redirect: '/group/index',

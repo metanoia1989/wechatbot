@@ -1,6 +1,6 @@
 const Bot = require('../bot');
 const { WechatRoom, WechatContact } = require("../models/wechat");
-const { fetchContactType } = require("../util/wechat");
+const { fetchContactType, fetchWeixin } = require("../util/wechat");
 
 /**
  * 同步所有群组数据
@@ -40,8 +40,8 @@ async function initAllContactData() {
                 payload.id = contact.id
             }
             var type = fetchContactType(payload)
-            var weixin = payload.alias
-
+            var weixin = fetchWeixin(payload)
+              
             // switch (contact.type()) {
             //     case that.Contact.Type.Personal:
             //         type = 'personal' 
@@ -73,7 +73,7 @@ async function initAllContactData() {
             updateOnDuplicate: ["weixin", "name", "friend", "alias", "avatar", "self", "start"],  // 他妈的不更新，垃圾啊 
         })
     } catch (error) {
-        console.log(`同步联系人出错: ${error.toString()}`)    
+        console.log(`同步联系人出错: ${error.toString()}`, error)    
     }
 }
 

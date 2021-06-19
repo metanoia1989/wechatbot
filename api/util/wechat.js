@@ -6,6 +6,21 @@ function fetchContactType(contactPayload) {
     return 'personal'
 }
 
+/**
+ * 提取微信号
+ * @param {Object} contactPayload 
+ * @returns string
+ */
+function fetchWeixin(contactPayload) {
+    let weixin = contactPayload.alias
+    let id = contactPayload.id
+    if (!weixin && !id.startsWith("gh_") && !id.startsWith("wxid_")) {
+        weixin = id
+    }
+    return weixin
+}
+
 module.exports = {
-    fetchContactType
+    fetchContactType,
+    fetchWeixin
 }
