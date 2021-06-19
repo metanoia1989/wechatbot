@@ -13,7 +13,7 @@
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
-    "express-validator": "^6.10.1",
+    "express-validator": "^6.12.0",
     "jimp": "^0.16.1",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.2.5",
@@ -23,12 +23,12 @@
     "qrcode-reader": "^1.0.4",
     "qrcode-terminal": "^0.12.0",
     "sequelize": "^6.6.2",
-    "wechaty": "^0.60.3",
+    "wechaty": "^0.60.12",
     "wechaty-puppet-padlocal": "^0.3.0",
-    "wechaty-puppet-simplepad": "^0.0.7",
+    "wechaty-puppet-simplepad": "0.0.10",
     "wechaty-puppet-wechat": "^0.28.1"
   },
   "devDependencies": {
-    "typescript": "^4.2.4"
+    "typescript": "^4.3.4"
   }
 }
