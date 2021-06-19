@@ -25,7 +25,8 @@ async function onLogin(user) {
   }
   await delay(3000)
   // 同步群组信息和联系人信息
-  // await initAllSyncData(this) 
+  await initAllSyncData(this) 
+  
   // await addUser(userInfo) // 全局存储登录用户信息
   // const file = await user.avatar()
   // const base = await file.toBase64()

@@ -49,7 +49,7 @@ WechatAdmin.prototype.generateJWT = function () {
     exp.setDate(today.getDate() + 60);
     console.log(secret)
     return jwt.sign({
-        id: this.userid,
+        id: this.id,
         username: this.username,
         exp: parseInt(exp.getTime() / 1000),
     }, secret);

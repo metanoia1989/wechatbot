@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo, updateAdmin } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -60,6 +60,19 @@ const actions = {
         // commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // update info
+  updateInfo({ commit }, userInfo) {
+    const { username, password } = userInfo
+    return new Promise((resolve, reject) => {
+      updateAdmin({ username: username.trim(), password: password }).then(response => {
+        commit('SET_NAME', username.trim())
+        resolve()
+      }).catch(error => {
+        console.log(error)
         reject(error)
       })
     })

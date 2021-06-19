@@ -35,6 +35,9 @@ const WechatContact = db.define('WechatContact', {
     signature: {
         type: DataTypes.STRING,
     },
+    weixin: {
+        type: DataTypes.STRING,
+    },
     alias: {
         type: DataTypes.STRING,
     },

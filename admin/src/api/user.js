@@ -21,3 +21,11 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function updateAdmin(data) {
+  return request({
+    url: '/admin/update',
+    method: 'post',
+    data
+  })
+}

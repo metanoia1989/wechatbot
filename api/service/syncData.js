@@ -1,4 +1,5 @@
-const { WechatRoom, WechatRoomContact, WechatContact } = require("../models/wechat");
+const { WechatRoom, WechatContact } = require("../models/wechat");
+const { fetchContactType } = require("../util/wechat");
 
 /**
  * 同步所有群组数据
@@ -7,20 +8,18 @@ const { WechatRoom, WechatRoomContact, WechatContact } = require("../models/wech
 async function initAllRoomData(that) {
     var items = await that.Room.findAll();
     try {
-        await WechatRoom.destroy({ truncate: true, cascade: false })
-        await WechatRoomContact.destroy({ truncate: true, cascade: false })
-        console.log(items.length)
-        items.forEach(async ({ payload }) => {
-            const room = WechatRoom.build({ 
+        var data =  items.map(room=> {
+            let { payload } = room
+            return { 
                 room_ident: payload.id,
                 name: payload.topic
-            })
-            await room.save();
-            const room_to_contacts = payload.memberIdList.map(memberId => {
-                return { room_ident: payload.id, contact_ident: memberId }
-            })
-            await WechatRoomContact.bulkCreate(room_to_contacts)
-        });
+            }
+        })
+        WechatRoom.bulkCreate(data, { 
+            fields: Object.keys(data[0]),
+            updateOnDuplicate: ["name"] 
+        })
+        
     } catch (error) {
         console.log(`同步群组出错: ${error.toString()}`)    
     }
@@ -35,21 +34,24 @@ async function initAllContactData(that) {
     var self_id = that.userSelf().id
     try {
         var data =  contacts.map(contact => {
-            const { payload } = contact
-
-            var type = 'unkonwn'
-            switch (contact.type()) {
-                case that.Contact.Type.Personal:
-                    type = 'personal' 
-                    break;
-                case that.Contact.Type.Official:
-                    type = 'official' 
-                    break;
-                default:
-                    type = 'unkonwn'
-                    break;
+            let { payload } = contact
+            if (typeof payload.id == 'undefined') {
+                payload.id = contact.id
             }
-            
+            var type = fetchContactType(payload)
+            var weixin = payload.alias
+
+            // switch (contact.type()) {
+            //     case that.Contact.Type.Personal:
+            //         type = 'personal' 
+            //         break;
+            //     case that.Contact.Type.Official:
+            //         type = 'official' 
+            //         break;
+            //     default:
+            //         type = 'unkonwn'
+            //         break;
+            // }
             var contact_ident = payload.id
             delete payload.id
             return {
@@ -59,14 +61,15 @@ async function initAllContactData(that) {
                 star: payload.star ? 1 : 0,
                 self: payload.id == self_id ? 1 : 0,
                 type: type,
-                signature: payload.signature.replace("'",""),
+                // signature: payload.signature.replace("'",""),
                 name: payload.name.replace("'",""),
+                weixin, 
             }
-        })
-        await WechatContact.destroy({ truncate: true, cascade: false })
+        })   
+
         WechatContact.bulkCreate(data, { 
             fields: Object.keys(data[0]),
-            updateOnDuplicate: ["contact_ident"],
+            updateOnDuplicate: ["weixin", "name", "friend", "alias", "avatar", "self", "start"],  // 他妈的不更新，垃圾啊 
         })
     } catch (error) {
         console.log(`同步联系人出错: ${error.toString()}`)    
