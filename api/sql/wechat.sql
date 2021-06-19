@@ -138,7 +138,7 @@ CREATE TABLE `ts_wechat_file` (
     `driver` ENUM('local', 'qiniu', 'qcloud', 'alicloud') DEFAULT 'local' COMMENT '默认驱动',
 	`thumb_img` VARCHAR(255) NULL DEFAULT NULL COMMENT '缩略图', 
 	`preview_img` VARCHAR(255) NULL DEFAULT NULL COMMENT '预览图',
-	`key` VARCHAR(100) NOT NULL COMMENT '上传云存储时的key', 
+	`key` VARCHAR(100) NULL COMMENT '上传云存储时的key', 
 	`file_size` BIGINT(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT '文件大小（单位:字节）',
     `width` INT(10) NULL COMMENT '图片宽度',
     `height` INT(10) NULL COMMENT '图片高度',

@@ -3,9 +3,8 @@
 //**************************************************************** 
 const Bot = require('../bot');
 const { body, validationResult } = require('express-validator')
-const { res_data, delay } = require('../util/server');
-const { wechatRoomToGroup, WechatRoomNames, WechatRoomToGroup } = require('../models/wechat');
-const { getToday } = require('../util/datetime');
+const { res_data } = require('../util/server');
+const { WechatRoomNames, WechatRoomToGroup } = require('../models/wechat');
 const { pushJob } = require('../util/queue');
 
 exports.validate = {

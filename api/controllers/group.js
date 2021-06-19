@@ -3,9 +3,8 @@
 //**************************************************************** 
 const Bot = require('../bot');
 const { body, validationResult, oneOf, query } = require('express-validator')
-const { res_data, delay } = require('../util/server');
+const { res_data } = require('../util/server');
 const { WechatRoomWelcome, WechatRoom } = require('../models/wechat');
-const { pushJob } = require('../util/queue');
 const { Op } = require('sequelize');
 const { Group } = require('../models/wavelib');
 const { initAllRoomData } = require('../service/syncData');

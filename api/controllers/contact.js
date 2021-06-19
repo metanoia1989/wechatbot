@@ -1,10 +1,8 @@
 
-const Bot = require('../bot');
-const { body, validationResult, oneOf, query } = require('express-validator')
-const { res_data, delay } = require('../util/server');
+const { body, validationResult, query } = require('express-validator')
+const { res_data } = require('../util/server');
 const { WechatContact } = require('../models/wechat');
 const { UserInfo } = require('../models/wavelib');
-const { pushJob } = require('../util/queue');
 const { Op } = require('sequelize');
 const { initAllContactData } = require('../service/syncData');
 

@@ -120,8 +120,27 @@ export const constantRoutes = [
       }
     ]
   },
-
-
+  {
+    path: '/material',
+    component: Layout,
+    redirect: '/material/text',
+    name: 'Material',
+    meta: { title: '素材中心', icon: 'material' },
+    children: [
+      {
+        path: 'text',
+        name: 'MaterialText',
+        component: () => import('@/views/material/material-text'),
+        meta: { title: '文本素材', icon: 'text' }
+      },
+      {
+        path: 'file',
+        name: 'MaterialFile',
+        component: () => import('@/views/material/material-file'),
+        meta: { title: '文件素材', icon: 'file' }
+      },
+    ]
+  },
   {
     path: '/project-home',
     component: Layout,
