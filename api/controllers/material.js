@@ -56,8 +56,7 @@ exports.listMaterial = async (req, res, next) => {
         let page = req.query.page ? parseInt(req.query.page) : 1;
         let offset = (page - 1) * limit;
         var items = await WechatMaterial.findAll({
-            where, limit, offset, 
-            include: UserInfo,
+            where, limit, offset,
         })
         var total = await WechatMaterial.count({ where })
         var data = { items, total }

@@ -2,10 +2,11 @@
 // 服务器工具类
 //****************************************************** 
     
+const { avatar_dir, static_dir } = require('../config')
 const Crypto = require('crypto')
 const fs = require('fs')
-const { avatar_dir, static_dir } = require('../config')
-    
+const sharp = require('sharp')
+
 /**
  * 构造响应体
  * @param {mixed} data 
@@ -239,6 +240,50 @@ function isAsync(func) {
   return func.constructor.name === "AsyncFunction";
 }
 
+function createFolder(folder) {
+  if (!fs.existsSync(folder)) {
+    fs.mkdirSync(folder, { recursive: true })
+  }
+}
+
+function fileMd5(fileOrBuffer) {
+  let buffer = fileOrBuffer 
+  if (!Buffer.isBuffer(fileOrBuffer)) {
+    buffer = fs.readFileSync(fileOrBuffer)
+  }
+  const hash = Crypto.createHash('md5')
+  hash.update(buffer, 'utf8')
+  const md5 = hash.digest('hex')
+  return md5
+}
+
+/**
+ * 根据文件mime，返回文件类型
+ */
+function detectiveTypeByFileMime(mime) {
+  // 0 图片 1 视频 2 音频 3 文本 4 其他
+  let fileTypes = ['image', 'video', 'audio', 'text', 'other']
+  let mimeMaps = {
+    'image': ['image/gif', 'image/jpeg', 'image/png', 'image/svg+xml', 'image/webp'],
+    'video': ['video/3gpp', 'video/x-msvideo', 'video/mpeg', 'video/ogg', 'video/webm'],
+    'audio': ['audio/aac', 'audio/mpeg', 'audio/ogg', 'audio/webm', 'audio/3gpp'],
+    'text': ['text/csv', 'text/html', 'text/plain'],
+  }
+  let type = 'other'
+  for (const key in mimeMaps) {
+    if (mimeMaps[key].indexOf(mime) !== -1) {
+      type = key
+    } 
+  }
+  return fileTypes.indexOf(type) 
+}
+
+async function getImageSize(path) {
+  const image = sharp(path) 
+  const { width, height } = await image.metadata()
+  return { width, height }
+}
+
 module.exports= {
     res_data,
     randomRange,
@@ -253,5 +298,9 @@ module.exports= {
     MD5,
     downloadAvatar,
     delay,
-    isAsync
+    isAsync,
+    createFolder,
+    fileMd5,
+    getImageSize,
+    detectiveTypeByFileMime,
 }

@@ -10,10 +10,12 @@ router.get('/findFile', auth.required,
     fileController.validate.findFile, 
     fileController.findFile)
 router.post('/saveFile', auth.required, 
-    fileController.validate.saveFile, 
+    fileController.validate.uploadFile, 
+    fileController.validate.duplicateCheck, 
     fileController.saveFile)
 router.post('/updateFile', auth.required, 
-    fileController.validate.updateFile, 
+    fileController.validate.uploadFile, 
+    fileController.validate.duplicateCheck, 
     fileController.updateFile)
 router.post('/deleteFile', auth.required, 
     fileController.validate.deleteFile, 

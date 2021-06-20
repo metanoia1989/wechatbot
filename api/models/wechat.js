@@ -308,10 +308,6 @@ const WechatFile = db.define('WechatFile', {
         type: DataTypes.STRING, 
         allowNull: false,
     },
-    hash_code: {
-        type: DataTypes.STRING, 
-        allowNull: false,
-    },
     driver: {
         type: DataTypes.ENUM, 
         values: ['local', 'qiniu', 'qcloud', 'alicloud'], 
@@ -363,6 +359,8 @@ const WechatFile = db.define('WechatFile', {
 },{
     tableName: 'wechat_file',
     timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
     indexes: [
         {
             name: 'md5_code',
@@ -371,6 +369,14 @@ const WechatFile = db.define('WechatFile', {
         }
     ],
 });
+
+WechatFile.getFileByMd5 = async function(md5_code) {
+  var item = await this.findOne({
+      where: { md5_code, }
+  })
+  return item
+};
+
 
 /**
  * 文字素材表
