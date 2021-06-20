@@ -22,6 +22,8 @@ router.post('/deleteWelcome', auth.required,
 router.get('/listRoom', auth.required, 
     groupController.validate.listRoom, 
     groupController.listRoom)
+router.get('/allRoom', auth.required, 
+    groupController.allRoom)
 router.post('/syncRoom', auth.required, 
     groupController.syncRoom)
 

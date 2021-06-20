@@ -157,7 +157,7 @@ COMMENT='文件表';
 
 CREATE TABLE `ts_wechat_room_welcome` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`group_indent` VARCHAR(100) NOT NULL COMMENT '群标识',
+	`room_ident` VARCHAR(100) NOT NULL COMMENT '群标识',
 	`content` TEXT NULL COMMENT '欢迎语内容' COLLATE 'utf8mb4_general_ci',
 	`img_id` INT(10) NULL COMMENT '欢迎语图片ID', 
 	`link_title` VARCHAR(50) NULL COMMENT '链接标题' COLLATE 'utf8mb4_general_ci',
@@ -166,7 +166,7 @@ CREATE TABLE `ts_wechat_room_welcome` (
 	`link_url` VARCHAR(255) NULL COMMENT '链接地址', 
 	`status` TINYINT(3) NULL DEFAULT '1' COMMENT '状态，1启用，0禁用',
 	PRIMARY KEY (`id`),
-    UNIQUE INDEX `group_indent` (`group_indent`)
+    UNIQUE INDEX `room_ident` (`room_ident`)
 )
 COMMENT='群欢迎语'
 COLLATE='utf8_general_ci'

@@ -188,3 +188,49 @@ export function isImageMime(mime) {
   } 
   return Object.values(mimes).indexOf(mime) !== -1
 }
+
+/** 获取file大小的名称 */
+export function fileSize(size) {
+  var size_int = size
+  if (typeof size === 'string' && size.constructor == String) {
+    size_int = parseInt(size)
+  }
+  var formatSize
+  if (parseInt(size_int / 1024 / 1024) > 0) {
+    formatSize = (size_int / 1024 / 1024).toFixed(2) + 'MB'
+  } else if (parseInt(size_int / 1024) > 0) {
+    formatSize = (size_int / 1024).toFixed(2) + 'kB'
+  } else {
+    formatSize = size_int + 'Byte'
+  }
+  return formatSize
+}
+
+/** 深拷贝 */
+export function objDeepCopy(source) {
+  if (typeof source === 'object') {
+    var sourceCopy = source instanceof Array ? [] : {}
+    for (var item in source) {
+      if (!source[item]) {
+        sourceCopy[item] = source[item]
+      } else {
+        sourceCopy[item] = typeof source[item] === 'object' ? objDeepCopy(source[item]) : source[item]
+      }
+    }
+    return sourceCopy
+  }
+  return source
+}
+
+export function getDateFromTimestamp(time) {
+  time = time ? time.toString() : ''
+  let times = 0
+  if (time.length === 13) {
+    times = parseInt(time)
+  } else if (time.length === 10) {
+    times = parseInt(time) * 1000
+  } else {
+    return null
+  }
+  return new Date(times) // 如果date为13位不需要乘1000
+}

@@ -34,6 +34,19 @@
           <span>{{ row.weixin }}</span>  
         </template>
       </el-table-column>
+      <el-table-column label="头像" min-width="50px" align="center">
+        <template slot-scope="{row}">
+          <el-image
+            shape="square" 
+            style="width: 50px; height: 50px"
+            fit="fill" 
+            :src="row.avatar" 
+            :preview-src-list="[row.avatar]"
+            v-if="row.avatar">
+          </el-image>
+          <span class="not-img" v-else></span>
+        </template>
+      </el-table-column>
       <el-table-column label="联系人名" min-width="100px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleBind(row)">{{ row.name }}</span>

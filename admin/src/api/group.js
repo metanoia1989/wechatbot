@@ -48,6 +48,14 @@ export function fetchRoomList(query) {
   })
 }
 
+export function fetchAllRoom(query) {
+  return request({
+    url: '/group/allRoom',
+    method: 'get',
+    params: query
+  })
+}
+
 export function syncRoomList() {
   return request({
     url: '/group/syncRoom',

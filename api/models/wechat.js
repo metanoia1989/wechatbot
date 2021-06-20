@@ -195,7 +195,7 @@ const WechatRoomWelcome = db.define('WechatRoomWelcome', {
         primaryKey: true,
         autoIncrement: true,
     },    
-    group_ident: {
+    room_ident: {
         type: DataTypes.STRING,
         allowNull: false,
     },   
@@ -227,9 +227,9 @@ const WechatRoomWelcome = db.define('WechatRoomWelcome', {
     timestamps: false,
     indexes: [
         {
-            name: 'group_name',
+            name: 'room_ident',
             unique: true,
-            fields: ['group_name']
+            fields: ['room_ident']
         }
     ],
 });
@@ -272,11 +272,11 @@ Group.hasOne(WechatRoom, {
     foreignKey: 'groupid',
 })
 WechatRoom.hasOne(WechatRoomWelcome, {
-    foreignKey: 'group_ident',
+    foreignKey: 'room_ident',
     onDelete: 'CASCADE',
 })
 WechatRoomWelcome.belongsTo(WechatRoom, {
-    foreignKey: 'group_ident',
+    foreignKey: 'room_ident',
 })
 
 WechatRoom.belongsTo(Group, {

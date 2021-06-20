@@ -16,8 +16,15 @@
         </flexbox>
         <div class="crm-create-flex">
           <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-            <el-form-item label="群名" prop="group_name">
-              <el-input v-model="temp.group_name" placeholder="请输入群名" />
+            <el-form-item label="微信群">
+              <el-select v-model="temp.group_ident" filterable placeholder="请选择">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="内容">
               <el-input v-model="temp.content" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入欢迎语内容" />
@@ -58,7 +65,7 @@
 </template>
 
 <script>
-import { fetchWelcome, updateWelcome, createWelcome } from '@/api/group'
+import { fetchWelcome, updateWelcome, createWelcome, fetchAllRoom } from '@/api/group'
 import CreateView from '../../../components/CreateView.vue'
 
 export default {
@@ -90,15 +97,16 @@ export default {
       tableKey: 0,
       temp: {
         id: undefined,
-        group_name: '',
+        group_ident: '',
         content: undefined,
-        img_url: undefined,
+        img_id: undefined,
         link_title: undefined,
         link_desc: undefined,
-        link_img: undefined,
+        link_img_id: undefined,
         link_url: undefined,
         status: true,
       },
+      options: [],
       loading: false,
     }
   },
@@ -107,6 +115,14 @@ export default {
   },
   methods: {
     getWelcome() {
+      fetchAllRoom().then(res => {
+        console.log(res.data)
+          this.options = res.data.map(item => {
+            let { room_ident, name } = item
+            return { value: room_ident, label: name }
+          })
+          console.log(this.options)
+      })
       if (this.action.type == 'update') {
         this.loading = true
         var id = this.action.id

@@ -291,6 +291,24 @@ exports.listRoom = async (req, res, next) => {
 }
 
 /**
+ * 所有群列表
+ *
+ * @param {*} req 
+ *            group_name 群组名
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.allRoom = async (req, res, next) => {
+    try {
+        var items = await WechatRoom.findAll()
+    } catch (error) {
+        return res.json(res_data(null, -1, error.toString())) 
+    }
+    return res.json(res_data(items))
+}
+
+
+/**
  * 同步群组数据
  *
  * @param {*} req 
