@@ -6,6 +6,8 @@ const auth = require('../util/auth')
 router.get('/listFile', auth.required, 
     fileController.validate.listFile, 
     fileController.listFile)
+router.get('/allFile', auth.required, 
+    fileController.allFile)
 router.get('/findFile', auth.required, 
     fileController.validate.findFile, 
     fileController.findFile)

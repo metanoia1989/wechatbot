@@ -20,11 +20,11 @@ async function dispatchFriendFilterByMsgType(that, msg) {
         if (!isOfficial) {
           console.log(`发消息人${await contact.name()}:${content}`)
           if (content.trim()) {
-            replys = await getContactTextReply(that, contact, content)
-            for (let reply of replys) {
-              await delay(1000)
-              await contactSay(contact, reply)
-            }
+            // replys = await getContactTextReply(that, contact, content)
+            // for (let reply of replys) {
+            //   await delay(1000)
+            //   await contactSay(contact, reply)
+            // }
           }
         } else {
           console.log('公众号消息')

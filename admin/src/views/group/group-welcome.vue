@@ -35,7 +35,7 @@
       </el-table-column>
       <el-table-column label="群名" min-width="100px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.group_name }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.WechatRoom.name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="内容" min-width="110px" align="left">
@@ -47,14 +47,14 @@
       </el-table-column>
       <el-table-column label="图片" min-width="50px" align="left">
         <template slot-scope="{row}"> 
-          <el-avatar shape="square" :size="100" fit="fill" :src="row.img_url" v-if="row.img_url"></el-avatar>
+          <el-avatar shape="square" :size="100" fit="fill" :src="row.img.key" v-if="row.img"></el-avatar>
           <span class="not-img" v-else>未设置</span>
         </template>
       </el-table-column>
       <el-table-column label="链接" min-width="180px" align="left">
         <template slot-scope="{row}"> 
           <a class="link-box" target="_blank" :href="row.link_url" v-if="row.link_url">
-            <el-avatar class="link-img" :size="100" shape="square" fit="fill" :src="row.link_img"></el-avatar>
+            <el-avatar class="link-img" :size="100" shape="square" fit="fill" :src="row.link_img.key"></el-avatar>
             <div class="link-right">
               <p class="link-title">{{ row.link_title }}</p>
               <p class="link-desc">{{ row.link_desc | strSlice(34) }}</p>

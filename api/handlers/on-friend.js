@@ -1,13 +1,16 @@
 const { Friendship } = require('wechaty')
-const { delay } = require('../lib')
-const { allConfig } = require('../common/configDb')
+const Bot = require('../bot')
+const { addContactToDb } = require('../service/syncData')
+const { delay } = require('../util/server')
 
 /**
  * 好友添加
  */
 async function onFriend(friendship) {
-  const config = await allConfig()
   let logMsg, hello
+  let config = {
+    autoAcceptFriend: true
+  }
   try {
     let name = friendship.contact().name()
     hello = friendship.hello()
@@ -16,17 +19,11 @@ async function onFriend(friendship) {
     if (config.autoAcceptFriend) {
       switch (friendship.type()) {
         case Friendship.Type.Receive:
-          if (config.acceptFriendKeyWords.length === 0) {
-            console.log('无认证关键词,10秒后将会自动通过好友请求')
-            await delay(10000)
-            await friendship.accept()
-          } else if (config.acceptFriendKeyWords.length > 0 && config.acceptFriendKeyWords.includes(hello)) {
-            console.log(`触发关键词${hello},10秒后自动通过好友请求`)
-            await delay(10000)
-            await friendship.accept()
-          } else {
-            console.log('未触发任何关键词，好友自动添加失败')
-          }
+          // 3秒后添加好友
+          await delay(3000)
+          await friendship.accept()
+          let contact = await Bot.getInstance().Contact.load(friendship.contact().id)
+          addContactToDb(contact)
           break
         case Friendship.Type.Confirm:
           logMsg = '已确认添加好友：' + name

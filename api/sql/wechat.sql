@@ -237,7 +237,7 @@ VALUES
 '候任馆员必读', 
 '作为本馆馆员务必了解的信息都在这个页面一网打尽啦，一定要打开看一看！',
 'http://park.sanzhi.org.cn/cache/slide/0/0/748/1.png',
-'http://park.sanzhi.org.cn/index.php?app=article&ac=show&id=1203'
+'作为本馆馆员务必了解的信息都在这个页面一网打尽啦，一定要打开看一看！'
 );
 
 

@@ -1,6 +1,7 @@
 const Bot = require('../bot');
 const { WechatRoom, WechatContact } = require("../models/wechat");
-const { fetchContactType, fetchWeixin } = require("../util/wechat");
+const { processContact } = require("../util/wechat");
+
 
 /**
  * 同步所有群组数据
@@ -32,42 +33,8 @@ async function initAllRoomData() {
  */
 async function initAllContactData() {
     var contacts = await Bot.getInstance().Contact.findAll();
-    var self_id = Bot.getInstance().bot.userSelf().id
     try {
-        var data =  contacts.map(contact => {
-            let { payload } = contact
-            if (typeof payload.id == 'undefined') {
-                payload.id = contact.id
-            }
-            var type = fetchContactType(payload)
-            var weixin = fetchWeixin(payload)
-              
-            // switch (contact.type()) {
-            //     case that.Contact.Type.Personal:
-            //         type = 'personal' 
-            //         break;
-            //     case that.Contact.Type.Official:
-            //         type = 'official' 
-            //         break;
-            //     default:
-            //         type = 'unkonwn'
-            //         break;
-            // }
-            var contact_ident = payload.id
-            delete payload.id
-            return {
-                ...payload,
-                contact_ident,
-                friend: payload.friend ? 1 : 0,
-                star: payload.star ? 1 : 0,
-                self: payload.id == self_id ? 1 : 0,
-                type: type,
-                // signature: payload.signature.replace("'",""),
-                name: payload.name.replace("'",""),
-                weixin, 
-            }
-        })   
-
+        var data =  contacts.map(processContact)   
         WechatContact.bulkCreate(data, { 
             fields: Object.keys(data[0]),
             updateOnDuplicate: ["weixin", "name", "friend", "alias", "avatar", "self", "start"],  // 他妈的不更新，垃圾啊 
@@ -86,9 +53,22 @@ async function initAllSyncData() {
     await initAllContactData(); 
 }
 
+/**
+ * 添加新的联系人数据到数据库
+ * @param {Contact} contact 
+ */
+function addContactToDb(contact) {
+    let item = processContact(contact) 
+    WechatContact.bulkCreate([item], { 
+        fields: Object.keys(item),
+        updateOnDuplicate: ["weixin", "name", "friend", "alias", "avatar", "self", "start"],  // 他妈的不更新，垃圾啊 
+    })
+}
+
 
 module.exports = {
     initAllSyncData,    
     initAllRoomData,
     initAllContactData,
+    addContactToDb,
 }

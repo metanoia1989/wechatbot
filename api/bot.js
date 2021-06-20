@@ -27,6 +27,7 @@ class Bot {
     this.bot.on('login', require("./handlers/on-login"));
     this.bot.on('logout', require("./handlers/on-logout"));
     this.bot.on('message', require("./handlers/on-message"));
+    this.bot.on('friendship', require("./handlers/on-friend"));
     this.bot.on('room-join', require("./handlers/on-roomjoin"));
     this.bot.on('room-leave', require("./handlers/on-roomleave"));
     this.bot.on('room-topic', require("./handlers/on-roomtopic"));

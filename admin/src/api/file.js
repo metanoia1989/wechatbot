@@ -9,6 +9,13 @@ export function fetchFileList(query) {
   })
 }
 
+export function fetchAllFile() {
+  return request({
+    url: '/file/allFile',
+    method: 'get',
+  })
+}
+
 export function fetchFile(id) {
   return request({
     url: '/file/findFile',

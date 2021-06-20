@@ -6,12 +6,7 @@ const { WechatFile } = require('../models/wechat');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-const appDomain = process.env.APP_DOMAIN
-
-// 文件处理函数
-function getKeyUrl(key) {
-    return appDomain + key;
-}
+const { getKeyUrl } = require('../util/wechat');
 
 // 文件上传初始化参数
 const storage = multer.diskStorage({
@@ -128,6 +123,28 @@ exports.listFile = async (req, res, next) => {
     }
     return res.json(res_data(data))
 }
+
+/**
+ * 所有文件列表
+ *
+ * @param {*} req 
+ *            group_name 群组名
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.allFile = async (req, res, next) => {
+    try {
+        var items = await WechatFile.findAll()
+        items = items.map(item => {
+            item.key = getKeyUrl(item.key)
+            return item
+        })
+    } catch (error) {
+        return res.json(res_data(null, -1, error.toString())) 
+    }
+    return res.json(res_data(items))
+}
+
 
 /**
  *  文件详情

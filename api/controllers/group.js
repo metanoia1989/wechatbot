@@ -4,18 +4,20 @@
 const Bot = require('../bot');
 const { body, validationResult, oneOf, query } = require('express-validator')
 const { res_data } = require('../util/server');
-const { WechatRoomWelcome, WechatRoom } = require('../models/wechat');
+const { WechatRoomWelcome, WechatRoom, WechatFile } = require('../models/wechat');
 const { Op } = require('sequelize');
 const { Group } = require('../models/wavelib');
 const { initAllRoomData } = require('../service/syncData');
+const { getKeyUrl } = require('./file');
+const { processWelcome } = require('../util/wechat');
 
 
 const welcomeOption = [
     body('content').optional({ nullable: true }).isLength({ min: 5 }).withMessage('欢迎语必须大于5个字符！'),
-    body('img_url').optional({ nullable: true }),
+    body('img_id').optional({ nullable: true }),
     body('link_title').optional({ nullable: true }),
     body('link_desc').optional({ nullable: true }),
-    body('link_img').optional({ nullable: true }),
+    body('link_img_id').optional({ nullable: true }),
     body('link_url').optional({ nullable: true }),
     body('status').optional({ nullable: true }).isIn([0, 1, true, false]),
 ]
@@ -30,7 +32,7 @@ exports.validate = {
         query('keyword').optional({ nullable: true }).notEmpty(),
     ],
     saveWelcome: [
-        body('group_ident', '必须指定群标识！').notEmpty().exists(),
+        body('room_ident', '必须指定群标识！').notEmpty().exists(),
         ...welcomeOption,
     ],
     updateWelcome: [
@@ -59,20 +61,6 @@ exports.validate = {
 }
 
 /**
- * 处理欢迎语
- * @param {Welcome} item 
- * @param {boolean} show 是否是展示
- */
-function processWelcome(item, show = true) {
-    if (show) {
-        item.status = item.status ? true : false;
-    } else {
-        item.status = item.status ? 1 : 0 ;
-    }
-    return item
-}
-
-/**
  * 群欢迎语列表
  *
  * @param {*} req 
@@ -83,27 +71,36 @@ function processWelcome(item, show = true) {
 exports.listWelcome = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.json(res_data(null, -1, errors.errors[0].msg)) 
+        return res.json(res_data(null, -1, errors.errors[0].msg))
     }
-    
-    let where = {} 
-    let include = {}
+
+    let where = {}
+    let include = {
+        include: [
+            WechatRoom,
+            { model: WechatFile, as: 'link_img' },
+            { model: WechatFile, as: 'img' },
+        ]
+    }
     if (req.query.id) {
         where.id = req.query.id
     } else if (req.query.keyword) {
         include = {
-          include: [{
-              model: WechatRoom,
-              attributes: [],
-              where: {
-                name: {
-                    [Op.substring]: req.query.keyword
+            include: [{
+                model: WechatRoom,
+                attributes: [],
+                where: {
+                    name: {
+                        [Op.substring]: req.query.keyword
+                    }
                 }
-              }
-          }],
-        } 
+            },
+            { model: WechatFile, as: 'link_img' },
+            { model: WechatFile, as: 'img' },
+            ],
+        }
     }
-    
+
     try {
         let limit = req.query.limit ? parseInt(req.query.limit) : 10;
         let page = req.query.page ? parseInt(req.query.page) : 1;
@@ -115,7 +112,7 @@ exports.listWelcome = async (req, res, next) => {
         var total = await WechatRoomWelcome.count({ where })
         var data = { items, total }
     } catch (error) {
-        return res.json(res_data(null, -1, error.toString())) 
+        return res.json(res_data(null, -1, error.toString()))
     }
 
     return res.json(res_data(data))
@@ -132,14 +129,14 @@ exports.listWelcome = async (req, res, next) => {
 exports.findWelcome = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.json(res_data(null, -1, errors.errors[0].msg)) 
+        return res.json(res_data(null, -1, errors.errors[0].msg))
     }
-    
+
     try {
         var data = await WechatRoomWelcome.findByPk(req.query.id)
         if (data) data = processWelcome(data)
     } catch (error) {
-        return res.json(res_data(null, -1, error.toString())) 
+        return res.json(res_data(null, -1, error.toString()))
     }
 
     return res.json(res_data(data))
@@ -157,26 +154,26 @@ exports.findWelcome = async (req, res, next) => {
 exports.saveWelcome = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.json(res_data(errors, -1, errors.errors[0].msg)) 
+        return res.json(res_data(errors, -1, errors.errors[0].msg))
     }
-    
-    var group_ident = req.body.group_ident
-    
+
+    var room_ident = req.body.room_ident
+
     var welcome = await WechatRoomWelcome.findOne({
-        where: { group_ident }
+        where: { room_ident }
     })
 
     if (welcome) {
-        return res.json(res_data(null, -1, "添加失败，此群已存在欢迎语!")) 
+        return res.json(res_data(null, -1, "添加失败，此群已存在欢迎语!"))
     }
-    
+
     try {
         if (req.body.status) {
             req.body = processWelcome(req.body, false)
         }
         await WechatRoomWelcome.create(req.body)
     } catch (error) {
-        return res.json(res_data(null, -1, error.toString())) 
+        return res.json(res_data(null, -1, error.toString()))
     }
 
     return res.json(res_data())
@@ -193,9 +190,9 @@ exports.saveWelcome = async (req, res, next) => {
 exports.updateWelcome = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.json(res_data(errors, -1, errors.errors[0].msg)) 
+        return res.json(res_data(errors, -1, errors.errors[0].msg))
     }
-    
+
     var where = {}
     if (typeof req.body.id != "undefined") {
         where.id = req.body.id
@@ -210,7 +207,7 @@ exports.updateWelcome = async (req, res, next) => {
         }
         await WechatRoomWelcome.update({ ...req.body }, { where })
     } catch (error) {
-        return res.json(res_data(null, -1, error.toString())) 
+        return res.json(res_data(null, -1, error.toString()))
     }
 
     return res.json(res_data())
@@ -227,12 +224,12 @@ exports.updateWelcome = async (req, res, next) => {
 exports.deleteWelcome = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.json(res_data(null, -1, errors.errors[0].msg)) 
+        return res.json(res_data(null, -1, errors.errors[0].msg))
     }
     if (req.body.id && req.body.id == 1) {
-        return res.json(res_data(null, -1, "默认欢迎语不允许删除")) 
+        return res.json(res_data(null, -1, "默认欢迎语不允许删除"))
     }
-    
+
     var where = {}
     if (typeof req.body.id != "undefined") {
         where.id = req.body.id
@@ -244,7 +241,7 @@ exports.deleteWelcome = async (req, res, next) => {
     try {
         await WechatRoomWelcome.destroy({ where })
     } catch (error) {
-        return res.json(res_data(null, -1, error.toString())) 
+        return res.json(res_data(null, -1, error.toString()))
     }
 
     return res.json(res_data())
@@ -261,16 +258,16 @@ exports.deleteWelcome = async (req, res, next) => {
 exports.listRoom = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.json(res_data(null, -1, errors.errors[0].msg)) 
+        return res.json(res_data(null, -1, errors.errors[0].msg))
     }
-    
-    let where = {} 
+
+    let where = {}
     if (req.query.id) {
         where.id = req.query.id
     } else if (req.query.keyword) {
         where.name = {
             [Op.substring]: req.query.keyword
-        } 
+        }
     }
 
     try {
@@ -284,7 +281,7 @@ exports.listRoom = async (req, res, next) => {
         var total = await WechatRoom.count({ where })
         var data = { items, total }
     } catch (error) {
-        return res.json(res_data(null, -1, error.toString())) 
+        return res.json(res_data(null, -1, error.toString()))
     }
 
     return res.json(res_data(data))
@@ -302,7 +299,7 @@ exports.allRoom = async (req, res, next) => {
     try {
         var items = await WechatRoom.findAll()
     } catch (error) {
-        return res.json(res_data(null, -1, error.toString())) 
+        return res.json(res_data(null, -1, error.toString()))
     }
     return res.json(res_data(items))
 }
@@ -320,7 +317,7 @@ exports.syncRoom = async (req, res, next) => {
         await initAllRoomData()
         return res.json(res_data())
     } catch (error) {
-        return res.json(res_data(null, -1, error.toString())) 
+        return res.json(res_data(null, -1, error.toString()))
     }
 }
 
@@ -335,13 +332,13 @@ exports.syncRoom = async (req, res, next) => {
 exports.listLibrary = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.json(res_data(null, -1, errors.errors[0].msg)) 
+        return res.json(res_data(null, -1, errors.errors[0].msg))
     }
-    let where = {} 
+    let where = {}
     if (req.query.keyword) {
         where.groupname = {
             [Op.substring]: req.query.keyword
-        } 
+        }
     }
 
     try {
@@ -351,7 +348,7 @@ exports.listLibrary = async (req, res, next) => {
             return item
         })
     } catch (error) {
-        return res.json(res_data(null, -1, error.toString())) 
+        return res.json(res_data(null, -1, error.toString()))
     }
 
     return res.json(res_data(items))
@@ -370,6 +367,6 @@ exports.relateRoomLibrary = async (req, res, next) => {
         await WechatRoom.update({ groupid }, { where: { id } })
         return res.json(res_data())
     } catch (error) {
-        return res.json(res_data(null, -1, error.toString())) 
+        return res.json(res_data(null, -1, error.toString()))
     }
 }
