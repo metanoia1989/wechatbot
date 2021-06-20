@@ -2,6 +2,7 @@
   <div class="dashboard-container">
     <div class="explain">
       <div class="title">群组列表</div>
+      <p class="error-color">群组必须加入到通讯录才能同步到。</p>
     </div>
     <div class="filter-container">
       <el-input v-model="listQuery.keyword" placeholder="群名" style="width: 200px;margin-right: 10px" class="filter-item" @keyup.enter.native="handleFilter" />
