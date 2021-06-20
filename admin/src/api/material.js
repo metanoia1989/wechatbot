@@ -1,72 +1,41 @@
 import request from '@/utils/request'
 
-export function fetchWelcomeList(query) {
+export function fetchMaterialList(query) {
   return request({
-    url: '/group/listWelcome',
+    url: '/material/listMaterial',
     method: 'get',
     params: query
   })
 }
 
-export function fetchWelcome(id) {
+export function fetchMaterial(id) {
   return request({
-    url: '/group/findWelcome',
+    url: '/material/findMaterial',
     method: 'get',
     params: { id }
   })
 }
 
-export function createWelcome(data) {
+export function createMaterial(data) {
   return request({
-    url: '/group/saveWelcome',
+    url: '/material/saveMaterial',
     method: 'post',
     data
   })
 }
 
-export function updateWelcome(data) {
+export function updateMaterial(data) {
   return request({
-    url: '/group/updateWelcome',
+    url: '/material/updateMaterial',
     method: 'post',
     data
   })
 }
 
-export function deleteWelcome(id) {
+export function deleteMaterial(id) {
   return request({
-    url: '/group/deleteWelcome',
+    url: '/material/deleteMaterial',
     method: 'post',
     data: { id } 
-  })
-}
-
-export function fetchRoomList(query) {
-  return request({
-    url: '/group/listRoom',
-    method: 'get',
-    params: query
-  })
-}
-
-export function syncRoomList() {
-  return request({
-    url: '/group/syncRoom',
-    method: 'post',
-  })
-}
-
-export function fetchLibraryList(query) {
-  return request({
-    url: '/group/listLibrary',
-    method: 'get',
-    params: query
-  })
-}
-
-export function relateRoomLibrary(data) {
-  return request({
-    url: '/group/relateRoomLibrary',
-    method: 'post',
-    data,
   })
 }

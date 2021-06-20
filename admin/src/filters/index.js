@@ -1,5 +1,8 @@
+import { formatTime } from '@/utils'
+
 // import parseTime, formatTime and set to filter
 export { parseTime, formatTime } from '@/utils'
+
 
 /**
  * Show plural label if time is plural number
@@ -26,6 +29,14 @@ export function timeAgo(time) {
   } else {
     return pluralize(~~(between / 86400), ' day')
   }
+}
+
+/**
+ * @param {string} date
+ */
+export function formatDate(date) {
+  let time = new Date(date).getTime() / 1000 
+  return formatTime(time)
 }
 
 /**
@@ -72,3 +83,5 @@ export function strSlice(string, length) {
   let end = string.length > length ? "..." : ""
   return string.slice(0, length) + end
 }
+
+export { humanFileSize } from '@/utils/index'

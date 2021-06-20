@@ -172,7 +172,7 @@ COMMENT='群欢迎语'
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
 
-CREATE TABLE `ts_wecaht_material` (
+CREATE TABLE `ts_wechat_material` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(190) NOT NULL COMMENT '标题',
     `content` TEXT NOT NULL COMMENT '内容',

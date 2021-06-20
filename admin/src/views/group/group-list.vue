@@ -14,7 +14,7 @@
 
     </div>
 
-    <!-- 欢迎语列表页 START -->
+    <!-- 列表项 START -->
     <el-table
       :key="tableKey"
       v-loading="listLoading"
@@ -53,7 +53,7 @@
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-    <!-- 欢迎语列表页 END -->
+    <!-- 列表项 END -->
 
     <group-lib-form
       v-if="isBind"

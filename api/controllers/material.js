@@ -83,7 +83,6 @@ exports.findMaterial = async (req, res, next) => {
     
     try {
         var data = await WechatMaterial.findByPk(req.query.id)
-        if (data) data = processMaterial(data)
     } catch (error) {
         return res.json(res_data(null, -1, error.toString())) 
     }

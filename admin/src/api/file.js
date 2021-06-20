@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 
+
 export function fetchFileList(query) {
   return request({
     url: '/file/listFile',
@@ -20,7 +21,10 @@ export function createFile(data) {
   return request({
     url: '/file/saveFile',
     method: 'post',
-    data
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data,
   })
 }
 
@@ -28,7 +32,10 @@ export function updateFile(data) {
   return request({
     url: '/file/updateFile',
     method: 'post',
-    data
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data,
   })
 }
 

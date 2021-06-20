@@ -145,7 +145,9 @@ exports.findFile = async (req, res, next) => {
 
     try {
         var data = await WechatFile.findByPk(req.query.id)
-        if (data) data = processFile(data)
+        if (data) {
+            data.key = getKeyUrl(data.key)
+        }
     } catch (error) {
         return res.json(res_data(null, -1, error.toString()))
     }
