@@ -4,7 +4,7 @@
 const Bot = require('../bot');
 const { body, validationResult } = require('express-validator')
 const { res_data } = require('../util/server');
-const { WechatRoomNames, WechatRoomToGroup } = require('../models/wechat');
+const { WechatRoom } = require('../models/wechat');
 const { pushJob } = require('../util/queue');
 
 exports.validate = {
@@ -74,22 +74,18 @@ exports.sendMsgToGroup = async (req, res, next) => {
     if (!errors.isEmpty()) {
         return res.json(res_data(null, -1, errors.errors[0].msg)) 
     }
-    var room_names = await WechatRoomNames.findAll({
-        attributes: ['room_name'],
-        include: {
-            model: WechatRoomToGroup,
-            attributes: [],
-            where: { groupid: req.body.groupid }
-        }
+    var room_names = await WechatRoom.findAll({
+        attributes: ['room_ident', 'name' ],
+        where: { groupid: req.body.groupid }
     })
     for (const key in room_names) {
         if (Object.hasOwnProperty.call(room_names, key)) {
-            const { room_name } = room_names[key];
-            var param = { topic: room_name }
-            var room = await Bot.getInstance().Room.find(param);
+            const { room_ident, name } = room_names[key];
+            // var room = await Bot.getInstance().Room.load(room_ident)
+            var room = await Bot.getInstance().Room.find({ topic: name })
             if (!room) {
                 finish = true
-                return res.json(res_data(null, -1, `群组${room_name}不存在！`))
+                return res.json(res_data(null, -1, `群组${name}不存在！`))
             }
             console.log("发送消息给：", room.topic())
             
