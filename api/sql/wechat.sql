@@ -183,6 +183,43 @@ COMMENT='文字素材表'
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB;
 
+CREATE TABLE `ts_wechat_link` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(190) NOT NULL COMMENT '标题',
+    `description` VARCHAR(190) NULL COMMENT '描述',
+    `img_url` VARCHAR(190) NOT NULL COMMENT '图片链接',
+    `link_url` VARCHAR(190) NOT NULL COMMENT '链接地址',
+	PRIMARY KEY (`id`),
+)
+COMMENT='链接表'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB;
+
+--- 关键词指令
+--- type
+--- 1 回复文本
+--- 2 回复图片
+--- 3 回复链接 包含标题、描述、链接、图片
+--- 4 回复指令响应
+CREATE TABLE `ts_wechat_keyword` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+    `keyword` VARCHAR(255) NOT NULL COMMENT '关键词',
+    `type` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '指令类型',
+    `text_id` INT(10) NULL COMMENT '关联文本素材',
+    `img_id` INT(10) NULL COMMENT '关联图片素材',
+    `link_id` INT(10) NULL COMMENT '关联链接素材',
+    `event_key` VARCHAR(255) NULL COMMENT '关联事件',
+    `access` ENUM('public', 'room', 'personal') DEFAULT 'public' COMMENT '访问状态：public 开放访问，room 仅群组访问，personal 私聊访问',
+	`status` TINYINT(3) NULL DEFAULT '1' COMMENT '状态，1启用，0禁用',
+	`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`updated_at` TIMESTAMP NULL COMMENT '更新时间',
+	PRIMARY KEY (`id`),
+    UNIQUE INDEX `keyword` (`keyword`)
+)
+COMMENT='关键词指令'
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+
 -------------------------------------------------------------------------- 
 -------------------------------------------------------------------------- 
 -- Web 协议的群组ID 和 联系人ID会变，瞬间上面的表设计都没啥卵用了
