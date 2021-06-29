@@ -32,9 +32,9 @@ COLLATE='utf8_general_ci'
 COMMENT='访问token表 给微澜社区调用';
 
 INSERT IGNORE INTO  `ts_wechat_admin` (`id`, `username`, `nickname`, `password`) 
-VALUES (1, 'admin', '管理员', 'e10adc3949ba59abbe56e057f20f883e') 
+VALUES (1, 'admin', '管理员', 'e10adc3949ba59abbe56e057f20f883e');
 
-INSERT IGNORE INTO  `ts_wechat_token` (`id`, `uid`, `type`, `token`) 
+INSERT IGNORE INTO  `ts_wechat_token` (`id`, `uid`, `type`, `token`);
 VALUES (1, 1, 'api', '8u1srcm0knyrd6w2q7l93de1fzei9f8k') 
 
 -- 联系人表
