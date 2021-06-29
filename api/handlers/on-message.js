@@ -105,6 +105,7 @@ async function dispatchRoomFilterByMsgType(that, room, msg) {
 }
 
 async function onMessage(msg) {
+  console.log("测试测试####:w")
   console.log("接收到了消息：", JSON.stringify(msg));
   const room = msg.room() // 是否为群消息
   const msgSelf = msg.self() // 是否自己发给自己的消息
