@@ -5,12 +5,18 @@ const { WechatRoomWelcome } = require('../models/wechat');
 const { pushJob } = require('../util/queue');
 
 /**
- * 群中有新人进入
+ * 群中有新人进入，触发欢迎语
  */
 async function onRoomjoin(room, inviteeList, inviter, date) {
   const nameList = inviteeList.map((c) => c.name()).join(',')
   var welcome = await WechatRoomWelcome.getWelcomeByIdent(room.id)
   var content = welcome.content ? welcome.content.replace('{{username}}', nameList) : `欢迎${nameList}加入本群！` 
+  const roomName = await room.topic()
+  // 非微澜相关的群，不发送欢迎语
+  if (roomName.indexOf("微澜") === -1) {
+    return ;
+  }
+  console.log(`群名： ${roomName} ，加入新成员： ${nameList}, 邀请人： ${inviter}`)
   room.say(content)
   pushJob(async () => {
     if (welcome.img) {
@@ -27,8 +33,6 @@ async function onRoomjoin(room, inviteeList, inviter, date) {
         room.say(linkPayload)
     }
   })
-  const roomName = await room.topic()
-  console.log(`群名： ${roomName} ，加入新成员： ${nameList}, 邀请人： ${inviter}`)
 }
 
 module.exports = onRoomjoin
