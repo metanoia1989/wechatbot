@@ -20,14 +20,9 @@ async function getMsgReply(resArray, { that, msg, name, contact, config, avatar,
 }
 
 /**
- * 微信好友文本消息事件过滤
- *
- * @param that wechaty实例
- * @param {Object} contact 发消息者信息
- * @param {string} msg 消息内容
- * @returns {number} 返回回复内容
+ * 获取私聊返回内容
  */
-async function filterFriendMsg(that, contact, msg) {
+async function getContactTextReply(that, contact, msg) {
   const config = await allConfig() // 获取配置信息
   const name = contact.name()
   const id = contact.id
@@ -40,17 +35,16 @@ async function filterFriendMsg(that, contact, msg) {
     { bool: msg.startsWith(REMINDKEY), method: 'scheduleJobMsg' },
     { bool: config.eventKeywords && config.eventKeywords.length > 0, method: 'eventMsg' },
     { bool: true, method: 'keywordsMsg' },
-    { bool: config.autoReply, method: 'robotMsg' },
   ]
   const msgArr = await getMsgReply(resArray, { that, msg, contact, name, config, avatar, id })
   return msgArr.length > 0 ? msgArr : [{ type: 1, content: '', url: '' }]
 }
 
 /**
- * 微信群文本消息事件监听
+ * 微信群文本消息事件监听，获取群回复
  * @param {*} msg 群消息内容
  * @param {*} name 发消息人昵称
- * @param {*} id 发消息人
+ * @param {*} id 发消息人ID
  * @param avatar
  * @returns {number} 返回事件类型
  * 事件说明
@@ -58,19 +52,18 @@ async function filterFriendMsg(that, contact, msg) {
  * 1 开启了好友验证 || 朋友推荐消息 || 发送的文字消息过长,大于40个字符
  * 2 初次添加好友
  */
-async function filterRoomMsg(that, msg, name, id, avatar, room) {
+async function getRoomTextReply(that, msg, name, id, avatar, room) {
   const config = await allConfig() // 获取配置信息
   const resArray = [
     { bool: msg === '', method: 'emptyMsg' },
     { bool: config.eventKeywords && config.eventKeywords.length > 0, method: 'eventMsg' },
     { bool: true, method: 'keywordsMsg' },
-    { bool: config.autoReply, method: 'robotMsg' },
   ]
   const msgArr = await getMsgReply(resArray, { that, msg, name, config, avatar, id, room })
   return msgArr.length > 0 ? msgArr : [{ type: 1, content: '', url: '' }]
 }
 
 module.exports = {
-  filterFriendMsg,
-  filterRoomMsg,
+  getContactTextReply,
+  getRoomTextReply,
 }

@@ -159,22 +159,21 @@ const WechatMessage = db.define('WechatMessage', {
     primaryKey: true,
     autoIncrement: true,
   },
-  room_ident: {
+  msg_ident: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  filename: {
-    type: DataTypes.STRING,
-    defaultValue: '',
   },
   fromId: {
     type: DataTypes.STRING,
     defaultValue: '',
   },
+  fromName: {
+    type: DataTypes.STRING,
+  },
   roomId: {
     type: DataTypes.STRING,
   },
-  toId: {
+  roomName: {
     type: DataTypes.STRING,
   },
   content: {
@@ -186,7 +185,19 @@ const WechatMessage = db.define('WechatMessage', {
   created_at: {
     type: DataTypes.DATE,
   },
-})
+}, {
+  tableName: 'wechat_message',
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: false,
+  indexes: [
+    {
+      name: 'msg_ident',
+      unique: true,
+      fields: ['msg_ident']
+    }
+  ],
+});
 
 /**
  * 群欢迎语
@@ -427,81 +438,12 @@ const WechatMaterial = db.define('WechatMaterial', {
 })
 
 
-//******************************************************************* 
-// 使用web协议的相关数据表 START 
-//******************************************************************* 
-
-/**
- * 微信群名称表
- * @deprecated 1.1
- */
-const WechatRoomNames = db.define('WecahtRoomNames', {
-  room_name_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  room_name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-}, {
-  tableName: 'wechat_room_names',
-  timestamps: false,
-  indexes: [
-    {
-      name: 'room_name',
-      unique: true,
-      fields: ['room_name']
-    }
-  ],
-})
-WechatRoomNames.removeAttribute('id');
-
-/**
- * 微信群与微澜分馆关联表
- * @deprecated 1.1
- */
-const WechatRoomToGroup = db.define('WechatRoomToGroup', {
-  groupid: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  room_name_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-}, {
-  tableName: 'wechat_room_to_group',
-  timestamps: false,
-  indexes: [
-    {
-      name: 'unique_ident',
-      unique: true,
-      fields: ['groupid', 'room_name_id']
-    }
-  ],
-});
-WechatRoomToGroup.removeAttribute('id');
-
-WechatRoomNames.hasMany(WechatRoomToGroup, {
-  foreignKey: 'room_name_id'
-})
-WechatRoomToGroup.belongsTo(WechatRoomNames)
-
-
-//******************************************************************* 
-// 使用web协议的相关数据表 End
-//******************************************************************* 
-
-
 module.exports = {
   WechatContact,
   WechatRoom,
   WechatRoomContact,
   WechatMessage,
   WechatRoomWelcome,
-
   WechatFile,
   WechatMaterial,
 }

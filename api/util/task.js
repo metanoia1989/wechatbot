@@ -1,8 +1,7 @@
 
 const { setLocalSchedule, cancelAllSchedule } = require('./schedule')
 const { delay } = require("./server")
-const { roomSay, allConfig, getEveryDayContent  } = require("../service")
-const { getScheduleList, updateSchedule } = require('../proxy/aibotk')
+const { roomSay, allConfig } = require("../service")
 
 /**
  * 群定时任务，针对群
@@ -106,6 +105,7 @@ async function initTimeSchedule(that) {
     }
   }
 }
+
 /**
  * 初始化定时任务
  * @param {}} that

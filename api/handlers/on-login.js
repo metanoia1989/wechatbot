@@ -1,6 +1,3 @@
-// const { delay, MD5 } = require('../lib')
-// const { getConfig, sendRobotInfo, sendError, putqn, setQrCode, updatePanelVersion } = require('../proxy/aibotk')
-// const { addUser } = require('../common/userDb')
 const { initAllSchedule } = require('../util/task')
 
 const { set } = require("../util/memoryCache");

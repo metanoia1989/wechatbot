@@ -1,6 +1,37 @@
+const { WechatMessage } = require('../models/wechat')
 const { contactSay, roomSay } = require('../service')
-const { getContactTextReply, getRoomTextReply } = require('../service/reply')
+const { getContactTextReply, getRoomTextReply } = require('../service/msg-reply')
+const { formatDate } = require('../util/datetime')
 const { delay } = require('../util/server')
+
+
+/**
+ * 消息入库处理，仅处理文本消息
+ * @param {*} bot bot实例
+ * @param {*} msg 消息主体
+ */
+async function msgToDatabase(bot, msg, room = { roomId: "", roomName: "" }) {
+  const type = msg.type()
+  if (type != bot.Message.Type.Text) {
+    return
+  }
+
+  const contact = msg.talker() // 发消息人
+  let contactId = contact.id || '111'
+  const contactName = contact.name()
+  let content = msg.text()
+
+  let msgRow = {
+    ...room,
+    fromId: contactId,
+    fromName: contactName,
+    msg_ident: msg.id,
+    content,
+    type: 6,
+    created_at: formatDate(await msg.date())
+  }
+  await WechatMessage.create(msgRow)
+}
 
 /**
  * 根据消息类型过滤私聊消息事件
@@ -18,6 +49,8 @@ async function dispatchFriendFilterByMsgType(that, msg) {
       case that.Message.Type.Text:
         content = msg.text()
         if (!isOfficial) {
+          await msgToDatabase(that, msg)
+
           console.log(`发消息人${await contact.name()}:${content}`)
           if (content.trim()) {
             // replys = await getContactTextReply(that, contact, content)
@@ -70,10 +103,13 @@ async function dispatchRoomFilterByMsgType(that, room, msg) {
   let replys = ''
   let contactId = contact.id || '111'
   let contactAvatar = await contact.avatar()
+  
   switch (type) {
     case that.Message.Type.Text:
       content = msg.text()
       console.log(`群名: ${roomName} 发消息人: ${contactName} 内容: ${content}`)
+      await msgToDatabase(that, msg, { roomId: room.id, roomName })
+      
       const mentionSelf = content.includes(`@${userSelfName}`)
       if (mentionSelf) {
         content = content.replace(/@[^,，：:\s@]+/g, '').trim()
@@ -105,8 +141,6 @@ async function dispatchRoomFilterByMsgType(that, room, msg) {
 }
 
 async function onMessage(msg) {
-  console.log("测试测试####:w")
-  console.log("接收到了消息：", JSON.stringify(msg));
   const room = msg.room() // 是否为群消息
   const msgSelf = msg.self() // 是否自己发给自己的消息
   if (msgSelf) return

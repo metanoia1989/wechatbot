@@ -15,8 +15,8 @@ function getDay(date) {
  * @param {*} date
  * @returns 例：2019-9-10 13:13:04 星期一
  */
-function formatDate(date) {
-  var tempDate = new Date(date)
+function formatDate(date, weekend = false) {
+  var tempDate = date instanceof Date ? date : new Date(date)
   var year = tempDate.getFullYear()
   var month = tempDate.getMonth() + 1
   var day = tempDate.getDate()
@@ -49,7 +49,11 @@ function formatDate(date) {
   if (second < 10) {
     second = '0' + second
   }
-  return year + '-' + month + '-' + day + ' ' + hour + ':' + min + ' ' + str
+  let result = `${year}-${month}-${day} ${hour}:${min}:${second}`
+  if (weekend) {
+    result = `${result} ${str}`
+  }
+  return result
 }
 
 /**
@@ -95,10 +99,39 @@ function isRealDate(str) {
 }
 
 
+/**
+ * 时间戳格式化为日期
+ * @param {*} date
+ * @returns 例：2019-9-10 13:13:04 
+ */
+function timestampToDate(date) {
+  var tempDate = new Date(date)
+  var year = tempDate.getFullYear()
+  var month = tempDate.getMonth() + 1
+  var day = tempDate.getDate()
+  var hour = tempDate.getHours()
+  var min = tempDate.getMinutes()
+  var second = tempDate.getSeconds()
+
+  if (hour < 10) {
+    hour = '0' + hour
+  }
+  if (min < 10) {
+    min = '0' + min
+  }
+  if (second < 10) {
+    second = '0' + second
+  }
+  return `${year}-${month}-${day} ${hour}:${min}:${second}`
+}
+
+
+
 module.exports = {
     getDay,
     formatDate,
     getToday,
     convertTime,
     isRealDate,
+    timestampToDate,
 }
