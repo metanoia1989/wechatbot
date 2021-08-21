@@ -33,8 +33,8 @@ async function getContactTextReply(that, contact, msg) {
     { bool: msg.includes(NEWADDFRIEND), method: 'newFriendMsg' },
     { bool: config.roomJoinKeywords && config.roomJoinKeywords.length > 0, method: 'roomInviteMsg' },
     // { bool: msg.startsWith(REMINDKEY), method: 'scheduleJobMsg' },
-    // { bool: config.eventKeywords && config.eventKeywords.length > 0, method: 'eventMsg' },
-    // { bool: true, method: 'keywordsMsg' },
+    { bool: config.eventKeywords && config.eventKeywords.length > 0, method: 'eventMsg' },
+    { bool: true, method: 'keywordsMsg' },
   ]
   const msgArr = await getMsgReply(resArray, { that, msg, contact, name, config, avatar, id })
   return msgArr.length > 0 ? msgArr : [{ type: 1, content: '', url: '' }]
