@@ -6,15 +6,19 @@ const { body, validationResult } = require('express-validator')
 const { res_data } = require('../util/server');
 const { WechatRoom } = require('../models/wechat');
 const { pushJob } = require('../util/queue');
+const { msgArr } = require('../util/lib');
+const { roomSay } = require('../service');
 
 exports.validate = {
     sendMsgToRoom: [
         body('group_name', '发送消息给微信群，必须指定微信群名称！').exists(),
         body('content', '必须指定消息内容！').exists(),
+        body('link_url').optional({ nullable: true }),
     ],
     sendMsgToGroup: [
         body('groupid', '发送消息给微澜分馆群，必须指定groupid！').exists(),
         body('content', '必须指定消息内容！').exists(),
+        body('link_url').optional({ nullable: true }),
     ],
 }
 
@@ -50,15 +54,22 @@ exports.sendMsgToRoom = async (req, res, next) => {
     if (rooms.length == 0) {
         return res.json(res_data(null, -1, "群组不存在！")) 
     }
-    console.log("测试0：", (new Date()).toLocaleString())
     rooms.forEach(room => {
-        console.log(room.topic())
         var cb = async () => {
-            await room.say(req.body.content)
+            if (typeof req.body.link_url != 'undefined') {
+                let link = {
+                    type: 4,
+                    url: req.body.link_url, 
+                    content: req.body.content,
+                    description: req.body.description ? req.body.description : '',
+                }
+                await roomSay(room, null, link)
+            } else {
+                await room.say(req.body.content)
+            }
         }
         pushJob(cb)
     })
-    console.log("测试3：", (new Date()).toLocaleString())
 
     return res.json(res_data())
 }
@@ -87,11 +98,21 @@ exports.sendMsgToGroup = async (req, res, next) => {
                 finish = true
                 return res.json(res_data(null, -1, `群组${name}不存在！`))
             }
-            console.log("发送消息给：", room.topic())
-            
+
             var cb = async () => {
-                await room.say(req.body.content)
+                if (typeof req.body.link_url != 'undefined') {
+                    let link = {
+                        type: 4,
+                        url: req.body.link_url, 
+                        content: req.body.content,
+                        description: req.body.description ? req.body.description : '',
+                    }
+                    await roomSay(room, null, link)
+                } else {
+                    await room.say(req.body.content)
+                }
             }
+            
             pushJob(cb)
         }
     }

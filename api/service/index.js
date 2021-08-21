@@ -1,4 +1,4 @@
-const { FileBox } = require('wechaty');
+const { FileBox, UrlLink } = require('wechaty');
 const { WechatKeyword } = require('../models/wechat');
 const { pushJob } = require('../util/queue')
 
@@ -56,6 +56,19 @@ async function roomSay(room, contact, msg) {
     await pushJob(async () => {
       await room.say(obj)
     })
+  } else if (msg.type === 4 && msg.url !== '') {
+    // url 链接
+    let obj = new UrlLink({
+      url: msg.url,
+      title: msg.content,
+      thumbnailUrl: msg.thumbnailUrl ? msg.thumbnailUrl : 'https://images-1251976096.cos.ap-guangzhou.myqcloud.com/wavelib/logo.jpg',
+      description: msg.description ? msg.description : '',
+    })
+    console.log('回复内容', obj)
+    contact ? await room.say('', contact) : ''
+    await pushJob(async () => {
+      await room.say(obj)
+    })
   }
 }
 
@@ -87,6 +100,18 @@ async function contactSay(contact, msg, isRoom = false) {
   } else if (msg.type === 3 && msg.url !== '') {
     // bse64文件
     let obj = FileBox.fromDataURL(msg.url, 'user-avatar.jpg')
+    await pushJob(async () => {
+      await contact.say(obj)
+    })
+  } else if (msg.type === 4 && msg.url !== '') {
+    // url 链接
+    let obj = new UrlLink({
+      url: msg.url,
+      title: msg.content,
+      thumbnailUrl: msg.thumbnailUrl ? msg.thumbnailUrl : 'https://images-1251976096.cos.ap-guangzhou.myqcloud.com/wavelib/logo.jpg',
+      description: msg.description ? msg.description : '',
+    })
+    console.log('回复内容', obj)
     await pushJob(async () => {
       await contact.say(obj)
     })
