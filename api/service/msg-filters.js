@@ -1,5 +1,6 @@
 const dispatch = require('./event-dispatch-service')
 const { addRoom } = require('../service/index')
+const { msgArr } = require('../util/lib')
 
 function emptyMsg() {
   let msgArr = [] // 返回的消息列表
@@ -20,17 +21,18 @@ function newFriendMsg({ config, name }) {
 
 async function roomInviteMsg({ that, msg, contact, config }) {
   for (const item of config.roomJoinKeywords) {
-    if (item.reg === 2 && item.keywords.includes(msg)) {
-      console.log(`精确匹配到加群关键词${msg},正在邀请用户进群`)
-      await addRoom(that, contact, item.roomName, item.replys)
-      return [{ type: 1, content: '', url: '' }]
-    } else {
-      for (let key of item.keywords) {
-        if (msg.includes(key)) {
-          console.log(`模糊匹配到加群关键词${msg},正在邀请用户进群`)
-          await addRoom(that, contact, item.roomName, item.replys)
-          return [{ type: 1, content: '', url: '' }]
+    if (msg.startsWith(item.keyword)) {
+      let room = await that.Room.find({ topic: msg })
+      if (room) {
+        console.log(`精确匹配到加群关键词${msg},正在邀请用户进群`)
+        if (await room.has(contact)) {
+          return [{ type: 1, content: `您已经加入【${msg}】！`, url: '' }]
         }
+        let replys = [{ type: 1, content: `检索群【${msg}】成功，欢迎加入！`, url: '' }]
+        let roomName = await room.topic()
+        await addRoom(that, contact, roomName, replys)
+      } else {
+        return [{ type: 1, content: `检索群【${msg}】失败，请重新输入！`, url: '' }]
       }
     }
   }
@@ -47,14 +49,19 @@ async function roomInviteMsg({ that, msg, contact, config }) {
  * @returns {String}
  */
 async function eventMsg({ that, msg, name, id, avatar, config, room }) {
+  msg = msg.trim()
+  let eventName, args;
+  if (msg.indexOf(" ") !== -1) {
+    [ eventName, ...args]= msg.split(" ")
+  } else {
+    eventName = msg
+    args = null
+  }
   for (let item of config.eventKeywords) {
-    for (let key of item.keywords) {
-      if ((item.reg === 1 && msg.includes(key)) || (item.reg === 2 && msg === key)) {
-        msg = msg.replace(key, '')
-        let res = await dispatch.dispatchEventContent(that, event, msg, name, id, avatar, room)
+      if (eventName === item.keyword) {
+        let res = await dispatch.dispatchEventContent(that, item.event, args, name, id, avatar, room)
         return res
       }
-    }
   }
   return []
 }
@@ -66,16 +73,9 @@ async function eventMsg({ that, msg, name, id, avatar, config, room }) {
 async function keywordsMsg({ msg, config }) {
   if (config.replyKeywords && config.replyKeywords.length > 0) {
     for (let item of config.replyKeywords) {
-      if (item.reg === 2 && item.keywords.includes(msg)) {
+      if (item.keyword == msg) {
         console.log(`精确匹配到关键词${msg},正在回复用户`)
-        return item.replys
-      } else if (item.reg === 1) {
-        for (let key of item.keywords) {
-          if (msg.includes(key)) {
-            console.log(`模糊匹配到关键词${msg},正在回复用户`)
-            return item.replys
-          }
-        }
+        return msgArr(1, item.reply) 
       }
     }
   } else {

@@ -78,10 +78,27 @@ function processContact(contact)  {
     }
 }
 
+/**
+ * 处理关键词
+ * @param {Welcome} item 
+ * @param {boolean} show 是否是展示
+ */
+function processKeyword(item, show = true) {
+    if (!item) return 
+    if (show) {
+        item.status = item.status ? true : false;
+    } else {
+        item.status = item.status ? 1 : 0;
+    }
+    return item
+}
+
+
 module.exports = {
     fetchContactType,
     fetchWeixin,
     processWelcome,
     getKeyUrl,
     processContact,
+    processKeyword,
 }

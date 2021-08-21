@@ -1,19 +1,30 @@
-const { FileBox } = require('wechaty')
+const { FileBox } = require('wechaty');
+const { WechatKeyword } = require('../models/wechat');
 const { pushJob } = require('../util/queue')
 
 /**
  * 配置项 Mock
  */
-function allConfig() {
-    var roomJoinKeywords = [];
-    var eventKeywords = [];
-    var replyKeywords = [];
+async function allConfig() {
+  var keywords = await WechatKeyword.findAll({
+    where: { status: 1 }
+  })
 
-    return {
-        roomJoinKeywords,        
-        eventKeywords,
-        replyKeywords,
-    };    
+  var roomJoinKeywords = keywords
+    .filter(item => item.type === 3)
+    .map(item => ({ keyword: item.keyword}))
+  var eventKeywords = keywords
+    .filter(item => item.type === 2)
+    .map(item => ({ keyword: item.keyword, event: item.event }))
+  var replyKeywords = keywords
+    .filter(item => item.type === 1)
+    .map(item => ({ keyword: item.keyword, reply: item.reply}))
+
+  return {
+    roomJoinKeywords,
+    eventKeywords,
+    replyKeywords,
+  };
 }
 
 /**
@@ -91,12 +102,15 @@ async function addRoom(that, contact, roomName, replys) {
   let room = await that.Room.find({ topic: roomName })
   if (room) {
     try {
+      await room.add(contact, true)
+      console.log("有没有走")
       for (const item of replys) {
         contactSay(contact, item)
       }
-      await room.add(contact)
     } catch (e) {
       console.error('加群报错', e)
+      let msg = { type: 1, content: `加入失败：${e.toString()}`}
+      contactSay(contact, msg)
     }
   } else {
     console.log(`不存在此群：${roomName}`)

@@ -437,6 +437,54 @@ const WechatMaterial = db.define('WechatMaterial', {
   ],
 })
 
+/**
+ * 关键词回复表
+ */
+const WechatKeyword = db.define('WechatKeyword', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  keyword: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  type: {
+    type: DataTypes.ENUM,
+    values: [1, 2, 3],  
+    defaultValue: 1,
+  },
+  reply: {
+    type: DataTypes.STRING,
+  },
+  event: {
+    type: DataTypes.STRING,
+  },
+  status: {
+    type: DataTypes.ENUM,
+    values: [0, 1],  
+    defaultValue: 1,
+  },
+  created_at: {
+    type: DataTypes.DATE,
+  },
+  updated_at: {
+    type: DataTypes.DATE,
+  },
+}, {
+  tableName: 'wechat_keyword',
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
+  indexes: [
+    {
+      name: 'title',
+      unique: true,
+      fields: ['title']
+    }
+  ],
+})
 
 module.exports = {
   WechatContact,
@@ -446,4 +494,5 @@ module.exports = {
   WechatRoomWelcome,
   WechatFile,
   WechatMaterial,
+  WechatKeyword,
 }

@@ -195,72 +195,22 @@ COMMENT='链接表'
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB;
 
---- 关键词指令
---- type
---- 1 回复文本
---- 2 回复图片
---- 3 回复链接 包含标题、描述、链接、图片
---- 4 回复指令响应
+--- 关键词回复表，用 tab 来展示不同类型的关键词
 CREATE TABLE `ts_wechat_keyword` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
-    `keyword` VARCHAR(255) NOT NULL COMMENT '关键词',
-    `type` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '指令类型',
-    `text_id` INT(10) NULL COMMENT '关联文本素材',
-    `img_id` INT(10) NULL COMMENT '关联图片素材',
-    `link_id` INT(10) NULL COMMENT '关联链接素材',
-    `event_key` VARCHAR(255) NULL COMMENT '关联事件',
-    `access` ENUM('public', 'room', 'personal') DEFAULT 'public' COMMENT '访问状态：public 开放访问，room 仅群组访问，personal 私聊访问',
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`keyword` VARCHAR(255) NOT NULL COMMENT '关键词',
+	`type` TINYINT(1) DEFAULT 1 COMMENT '关键词类型  1 普通关键词 2 事件关键词 3 入群关键词',
+	`reply` VARCHAR(255) NULL COMMENT '普通回复内容',
+	`event` VARCHAR(255) NULL COMMENT '事件类型',
 	`status` TINYINT(3) NULL DEFAULT '1' COMMENT '状态，1启用，0禁用',
 	`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 	`updated_at` TIMESTAMP NULL COMMENT '更新时间',
 	PRIMARY KEY (`id`),
-    UNIQUE INDEX `keyword` (`keyword`)
+	UNIQUE INDEX `keyword` (`keyword`)
 )
-COMMENT='关键词指令'
+ENGINE=InnoDB
 COLLATE='utf8_general_ci'
-ENGINE=InnoDB;
-
--------------------------------------------------------------------------- 
--------------------------------------------------------------------------- 
--- Web 协议的群组ID 和 联系人ID会变，瞬间上面的表设计都没啥卵用了
--- 设计两张表，微澜的微信群表【人工手动维护】，微信群与微澜分馆关联表【也是人力维护】
--- 然后发送消息可以通过群名，可以通过微澜分馆ID 
--------------------------------------------------------------------------- 
--------------------------------------------------------------------------- 
---- 微澜分馆与群组关联表，群组表也必须是InnoDB引擎，否则将会建表失败。 
--- CREATE TABLE `ts_wechat_to_group` (
---     `groupid` INT(10) NOT NULL COMMENT '微澜分馆ID', 
---     `room_ident` VARCHAR(255) NOT NULL COMMENT '微信群组标识', 
---     UNIQUE INDEX `group_to_room` (`groupid`, `room_ident`),
---     CONSTRAINT `fk_group`
---     FOREIGN KEY (`groupid`) 
---         REFERENCES `ts_group`(`groupid`) ON DELETE CASCADE
--- )
--- ENGINE=InnoDB
--- COLLATE='utf8_general_ci'
--- COMMENT='微澜分馆与微信群组关联表';
-
--- CREATE TABLE `ts_wechat_room_names` (
---     `room_name_id` INT(10) NOT NULL AUTO_INCREMENT COMMENT '微信群ID', 
---     `room_name` VARCHAR(191) NOT NULL COMMENT '微信群名称，必须保证唯一' COLLATE 'utf8mb4_general_ci',
---     PRIMARY KEY (`room_name_id`),
---     UNIQUE INDEX `room_name` (`room_name`)
--- )
--- ENGINE=InnoDB
--- COLLATE='utf8_general_ci'
--- COMMENT='微澜的微信群组名称表 给Web协议使用';
-
--- CREATE TABLE `ts_wechat_room_to_group` (
---     `groupid` INT(10) NOT NULL COMMENT '微澜分馆ID', 
---     `room_name_id` INT(10) NOT NULL COMMENT '微澜微信群的ID', 
---     UNIQUE INDEX `unique_ident` (`groupid`, `room_name_id`),
---     CONSTRAINT `fk_wechat_name`
---     FOREIGN KEY (`room_name_id`) 
---         REFERENCES `ts_wechat_room_names`(`room_name_id`) ON DELETE CASCADE
--- )
--- ENGINE=InnoDB
--- COLLATE='utf8_general_ci'
--- COMMENT='微澜分馆与微信群关联表 给Web协议使用';
+COMMENT='关键词回复表';
 
 
 INSERT INTO `ts_wechat_room_welcome` 

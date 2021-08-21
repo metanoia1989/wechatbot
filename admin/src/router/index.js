@@ -79,6 +79,17 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/keyword',
+    component: Layout,
+    redirect: '/keyword/index',
+    children: [{
+      path: 'index',
+      name: 'KeywordList',
+      component: () => import('@/views/keyword/keyword-list'),
+      meta: { title: '关键词回复', icon: 'keyword-list' }
+    }]
+  },
+  {
     path: '/contact',
     component: Layout,
     redirect: '/contact/index',

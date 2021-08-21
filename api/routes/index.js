@@ -7,5 +7,6 @@ router.use('/group', require('./group'));
 router.use('/contact', require('./contact'));
 router.use('/material', require('./material'));
 router.use('/file', require('./file'));
+router.use('/keyword', require('./keyword'));
 
 module.exports = router;
