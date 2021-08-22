@@ -40,7 +40,7 @@ async function LibBorrowData(groupname) {
     if (!group) {
         return null
     }
-    let url = `http://park.sanzhi.org.cn/index.php?app=yidi&ac=api&api=index&libraryid=${group.groupid}`
+    let url = `http://park.sanzhi.org.cn/index.php?app=yidi&ac=api&api=index&libraryid=${group.libraryid}`
     let res = await axios.get(url)
     if (res.data.status != 1) {
         return res.data.msg

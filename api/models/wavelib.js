@@ -15,6 +15,9 @@ const Group = db.define('Group', {
     groupname: {
         type: DataTypes.STRING,
     },
+    libraryid: {
+      type: DataTypes.INTEGER,
+  },
     photo: {
         type: DataTypes.STRING,
     }   
