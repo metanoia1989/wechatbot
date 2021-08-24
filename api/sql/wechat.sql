@@ -212,6 +212,20 @@ ENGINE=InnoDB
 COLLATE='utf8_general_ci'
 COMMENT='关键词回复表';
 
+--- 好友欢迎语表
+CREATE TABLE `ts_wechat_friend_welcome` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(255) NOT NULL COMMENT '名称',
+	`content` text COMMENT '欢迎语内容',
+	`status` TINYINT(3) NULL DEFAULT '1' COMMENT '状态，1启用，0禁用',
+	`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `name` (`name`)
+)
+ENGINE=InnoDB
+COLLATE='utf8_general_ci'
+COMMENT='好友欢迎语表';
+
 
 INSERT INTO `ts_wechat_room_welcome` 
 (`group_name`, `content`, `link_title`, `link_desc`, `link_img`, `link_url`)
@@ -234,3 +248,30 @@ INSERT INTO `ts_wechat_keyword` (`id`, `keyword`, `type`, `reply`, `event`, `sta
 	(3, '微澜', 3, NULL, NULL, 1, '2021-08-21 04:03:20', '2021-08-21 17:23:55'),
 	(7, '善哉', 1, '善哉，善哉！', NULL, 1, '2021-08-21 18:05:41', '2021-08-21 18:05:41'),
 	(8, '指令帮助', 1, '小新支持以下指令：\n募捐数据 <分馆名称>   ➡️ 查阅分馆在联劝网上的募捐数据\n借阅数据 <分馆名称>   ➡️ 查阅分馆在益迪云图上的借阅数据\n如果有更多的需求，请向小新反馈哦！', NULL, 1, '2021-08-21 20:28:56', '2021-08-21 20:30:04');
+
+INSERT INTO `ts_wechat_friend_welcome` (`name`, `content`) VALUES
+('默认好友欢迎语', '您好，亲爱的伙伴，我是小新，欢迎您成为新公民计划和微澜图书馆伙伴，持续关注我们的工作。
+ 
+如果您已经报名志愿者或者对我们进行任何形式的月捐（分馆或总馆馆员，馆东、新公民计划机构月捐），需要入群，可以按照报名过程提示给“小澜”（微信：weilanzhushou）发送口令。
+ 
+了解微澜图书馆方式：
+1、微澜社区：http://wvlb.cc/duty （各分馆小组，微澜的日常服务记录，日志，微澜的运营）
+2、微澜地图：http://park.sanzhi.org.cn/index.php?app=group&ac=map
+3、加入微澜图书馆：http://park.sanzhi.org.cn/index.php?app=user&ac=welcome
+ 
+参与和支持我们的方式：
+1、新公民计划月捐：http://wvlb.cc/monthlygiving
+2、腾讯公益捐赠：http://wvlb.cc/givingtowavelib0（单次捐或者给微澜总馆月捐）
+3、图书捐赠：http://wvlb.cc/givingbook（书已有确定目录）
+4、组织和企业合作方式：http://wvlb.cc/bc 
+  
+其他入口：新公民计划和微澜图书馆公众号
+ 
+如果您对议题本身感兴趣，想参与议题讨论或者研究，传播，也可以留言告诉小新。
+小新朋友圈可见我们的部分工作动态和日常，欢迎了解；
+也欢迎通过微博/豆瓣/视频号 @新公民计划与我们互动，让更多朋友了解和加入我们。
+如果您有任何疑问或者需要咨询的问题，欢迎留言给小新，我们将由人工进行解答。
+ 
+其他联系方式：
+媒体采访和传播合作：廖细雄 13671310237
+捐赠和企业合作：吴丽丽  微信：WLily2177')

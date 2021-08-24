@@ -1,5 +1,7 @@
 const { Friendship } = require('wechaty')
 const Bot = require('../bot')
+const { WechatFriendWelcome } = require('../models/wechat')
+const { contactSay } = require('../service')
 const { addContactToDb } = require('../service/syncData')
 const { delay } = require('../util/server')
 
@@ -23,7 +25,15 @@ async function onFriend(friendship) {
           await delay(3000)
           await friendship.accept()
           let contact = await Bot.getInstance().Contact.load(friendship.contact().id)
-          addContactToDb(contact)
+          let welcome = await WechatFriendWelcome.findOne({ where: { 
+            status: 1, name: '默认好友欢迎语'
+          }})
+          if (welcome) {
+            await contactSay(contact, { type: 1, content: welcome.content})
+          } else {
+            await contactSay(contact, { type: 1, content: "hello，我是小新"})
+          }
+          await addContactToDb(contact)
           break
         case Friendship.Type.Confirm:
           logMsg = '已确认添加好友：' + name
