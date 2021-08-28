@@ -24,6 +24,10 @@ async function onFriend(friendship) {
           // 3秒后添加好友
           await delay(3000)
           await friendship.accept()
+          await addContactToDb(contact)
+          break
+        case Friendship.Type.Confirm:
+          logMsg = '已确认添加好友：' + name
           let contact = await Bot.getInstance().Contact.load(friendship.contact().id)
           let welcome = await WechatFriendWelcome.findOne({ where: { 
             status: 1, name: '默认好友欢迎语'
@@ -33,10 +37,6 @@ async function onFriend(friendship) {
           } else {
             await contactSay(contact, { type: 1, content: "hello，我是小新"})
           }
-          await addContactToDb(contact)
-          break
-        case Friendship.Type.Confirm:
-          logMsg = '已确认添加好友：' + name
           console.log(logMsg)
           break
       }
