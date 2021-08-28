@@ -17,5 +17,5 @@ process.on('unhandledRejection', error => {
     logger.error(error)
 });
 
-Bot.getInstance()
+// Bot.getInstance()
 start_app_server()

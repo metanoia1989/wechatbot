@@ -98,9 +98,15 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'ContactList',  
+        name: 'ContactList',
         component: () => import('@/views/contact/contact-list'),
         meta: { title: '联系人列表', icon: 'contact-list' }
+      },
+      {
+        path: 'welcome',
+        name: 'ContactWelcome',
+        component: () => import('@/views/contact/contact-welcome'),
+        meta: { title: '好友欢迎语', icon: 'friend-welcome' }
       },
       {
         path: 'daily',

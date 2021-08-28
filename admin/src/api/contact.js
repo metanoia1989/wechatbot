@@ -14,3 +14,19 @@ export function syncContactList() {
     method: 'post',
   })
 }
+
+export function fetchWelcome(id) {
+  return request({
+    url: '/contact/findWelcome',
+    method: 'get',
+    params: { id }
+  })
+}
+
+export function updateWelcome(data) {
+  return request({
+    url: '/contact/updateWelcome',
+    method: 'post',
+    data
+  })
+}
