@@ -4,6 +4,7 @@ const db = new DB().getInstance()
 const { Op } = require('sequelize');
 const { Group, UserInfo } = require('./wavelib');
 const { processWelcome } = require('../util/wechat');
+const { WechatRoom, WechatKeyword } = require('./wechat-common')
 
 /**
  * 联系人表
@@ -80,7 +81,7 @@ const WechatContact = db.define('WechatContact', {
       fields: ['contact_ident']
     }
   ],
-})  
+})
 
 WechatContact.prototype.types = [
   'unknown', 'personal', 'official'
@@ -90,46 +91,6 @@ UserInfo.hasOne(WechatContact, {
 })
 WechatContact.belongsTo(UserInfo, {
   foreignKey: 'uid',
-})
-
-/**
- * 微信群组表
- */
-const WechatRoom = db.define('WechatRoom', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-  room_ident: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  name: {
-    type: DataTypes.STRING,
-    defaultValue: '',
-  },
-  owner: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-  },
-  manage: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-  },
-  groupid: {
-    type: DataTypes.INTEGER,
-  },
-}, {
-  tableName: 'wechat_room',
-  timestamps: false,
-  indexes: [
-    {
-      name: 'room_ident',
-      unique: true,
-      fields: ['room_ident']
-    }
-  ],
 })
 
 /**
@@ -265,7 +226,7 @@ WechatRoomWelcome.getWelcomeByIdent = async function (room_ident) {
     ]
   })
 
-  return processWelcome(item) 
+  return processWelcome(item)
 };
 WechatRoomWelcome.getWelcomeByName = async function (group_name) {
   var item = await this.findOne({
@@ -287,7 +248,7 @@ WechatRoomWelcome.getWelcomeByName = async function (group_name) {
       ['id', 'DESC']
     ]
   })
-  return processWelcome(item) 
+  return processWelcome(item)
 };
 
 WechatRoom.hasOne(WechatRoomWelcome, {
@@ -356,7 +317,7 @@ const WechatFile = db.define('WechatFile', {
   },
   is_horizontal: {
     type: DataTypes.ENUM,
-    values: [0, 1], // 0 no 1 yes 
+    values: [0, 1], // 0 no 1 yes
     defaultValue: 0,
   },
   thumb_size: {
@@ -370,7 +331,7 @@ const WechatFile = db.define('WechatFile', {
   },
   is_del: {
     type: DataTypes.ENUM,
-    values: [0, 1], // 0 no 1 yes 
+    values: [0, 1], // 0 no 1 yes
     defaultValue: 0,
   },
   created_at: {
@@ -437,54 +398,6 @@ const WechatMaterial = db.define('WechatMaterial', {
   ],
 })
 
-/**
- * 关键词回复表
- */
-const WechatKeyword = db.define('WechatKeyword', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  keyword: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  type: {
-    type: DataTypes.ENUM,
-    values: [1, 2, 3],  
-    defaultValue: 1,
-  },
-  reply: {
-    type: DataTypes.STRING,
-  },
-  event: {
-    type: DataTypes.STRING,
-  },
-  status: {
-    type: DataTypes.ENUM,
-    values: [0, 1],  
-    defaultValue: 1,
-  },
-  created_at: {
-    type: DataTypes.DATE,
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-  },
-}, {
-  tableName: 'wechat_keyword',
-  timestamps: true,
-  createdAt: 'created_at',
-  updatedAt: 'updated_at',
-  indexes: [
-    {
-      name: 'title',
-      unique: true,
-      fields: ['title']
-    }
-  ],
-})
 
 /**
  * 关键词回复表
@@ -504,7 +417,7 @@ const WechatFriendWelcome = db.define('WechatFriendWelcome', {
   },
   status: {
     type: DataTypes.ENUM,
-    values: [0, 1],  
+    values: [0, 1],
     defaultValue: 1,
   },
   created_at: {
@@ -524,15 +437,13 @@ const WechatFriendWelcome = db.define('WechatFriendWelcome', {
   ],
 })
 
-
 module.exports = {
   WechatContact,
-  WechatRoom,
   WechatRoomContact,
   WechatMessage,
   WechatRoomWelcome,
   WechatFile,
   WechatMaterial,
-  WechatKeyword,
   WechatFriendWelcome,
+  WechatRoom,
 }

@@ -3,7 +3,6 @@
 
 const { DataTypes, Op } = require('sequelize')
 const { DB } = require('../util');
-const { WechatRoom } = require('./wechat');
 const db = new DB().getInstance()
 
 const Group = db.define('Group', {
@@ -20,7 +19,7 @@ const Group = db.define('Group', {
   },
     photo: {
         type: DataTypes.STRING,
-    }   
+    }
 }, {
     tableName: 'group',
     timestamps: false,
@@ -28,14 +27,14 @@ const Group = db.define('Group', {
 
 Group.processPhoto = function (photo) {
     if (!photo) {
-      return ''  
-    } 
+      return ''
+    }
     return 'http://park.sanzhi.org.cn/uploadfile/group/' + photo
 }
 
 
 /**
-  * 微澜社区用户信息模型 
+  * 微澜社区用户信息模型
   */
 const UserInfo = db.define('UserInfo', {
   userid: {
@@ -77,13 +76,13 @@ const UserInfo = db.define('UserInfo', {
 
 UserInfo.processPhoto = function (photo) {
     if (!photo) {
-      return ''  
-    } 
+      return ''
+    }
     return 'http://park.sanzhi.org.cn/uploadfile/user/' + photo
 }
 
 /**
-  * 微澜社区用户模型 
+  * 微澜社区用户模型
   */
 const User = db.define('User', {
   userid: {
@@ -122,4 +121,4 @@ module.exports = {
     Group,
     User,
     UserInfo
-} 
+}

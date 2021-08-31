@@ -1,6 +1,6 @@
 const Bot = require("../bot")
-const { WechatContact } = require("../models/wechat")
 const axios = require('axios')
+const { contactSay } = require("../service")
 
 function fetchContactType(contactPayload) {
     let id = contactPayload.id
@@ -111,9 +111,10 @@ async function addContactToRoom(room, contact) {
     reason: "直接入群",
   }
   let res = await axios.post(url, params)
-  console.log("邀请入群的API响应", res.data)
+  console.log("邀请入群的API响应", needInvate, params, res.data)
   if (res.data.code != 0) {
-    throw new Error(res.data.msg)
+    contactSay(contact, { type: 1, content: "加入失败：" + res.data.msg  })
+    // throw new Error(res.data.msg)
   }
 }
 

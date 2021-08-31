@@ -1,5 +1,5 @@
 const { FileBox, UrlLink } = require('wechaty');
-const { WechatKeyword } = require('../models/wechat');
+const { WechatKeyword } = require('../models/wechat-common');
 const { pushJob } = require('../util/queue')
 
 /**
