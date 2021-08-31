@@ -1,17 +1,18 @@
 const Bot = require("../bot")
 const { WechatContact } = require("../models/wechat")
+const axios = require('axios')
 
 function fetchContactType(contactPayload) {
-    let id = contactPayload.id 
+    let id = contactPayload.id
     if (id.startsWith("gh_")) {
         return 'official'
-    } 
+    }
     return 'personal'
 }
 
 /**
  * 提取微信号
- * @param {Object} contactPayload 
+ * @param {Object} contactPayload
  * @returns string
  */
 function fetchWeixin(contactPayload) {
@@ -25,11 +26,11 @@ function fetchWeixin(contactPayload) {
 
 /**
  * 处理欢迎语
- * @param {Welcome} item 
+ * @param {Welcome} item
  * @param {boolean} show 是否是展示
  */
 function processWelcome(item, show = true) {
-    if (!item) return 
+    if (!item) return
     if (item.link_img) {
         item.link_img.key = getKeyUrl(item.link_img.key)
     }
@@ -51,8 +52,8 @@ function getKeyUrl(key) {
 }
 
 /**
- * 处理联系人数据，方便入库 
- * @param {Contact} contact 
+ * 处理联系人数据，方便入库
+ * @param {Contact} contact
  * @returns Ocontact => { }
  */
 function processContact(contact)  {
@@ -74,17 +75,17 @@ function processContact(contact)  {
         type: type,
         // signature: payload.signature.replace("'",""),
         name: payload.name.replace("'",""),
-        weixin, 
+        weixin,
     }
 }
 
 /**
  * 处理关键词
- * @param {Welcome} item 
+ * @param {Welcome} item
  * @param {boolean} show 是否是展示
  */
 function processKeyword(item, show = true) {
-    if (!item) return 
+    if (!item) return
     if (show) {
         item.status = item.status ? true : false;
     } else {
@@ -93,6 +94,28 @@ function processKeyword(item, show = true) {
     return item
 }
 
+/**
+ * 发送入群邀请（群成员>39），直接将成员加入群
+ */
+async function addContactToRoom(room, contact) {
+  let token = process.env.SIMPLEPAD_TOKEN
+  let needInvate = (await room.memberAll()).length > 39
+  let endpoint = needInvate ? 'inviteChatRoomMember' : 'addChatRoomMember'
+  let url = `http://121.199.64.183:8877/api/v1/chatroom/${endpoint}?token=${token}`
+  let params = needInvate ? {
+    chatroom: room.id, // 群号
+    userName: contact.id, // 被邀请人ID
+  } : {
+    chatroom: room.id,
+    memberList: [contact.id],
+    reason: "直接入群",
+  }
+  let res = await axios.post(url, params)
+  console.log("邀请入群的API响应", res.data)
+  if (res.data.code != 0) {
+    throw new Error(res.data.msg)
+  }
+}
 
 module.exports = {
     fetchContactType,
@@ -101,4 +124,6 @@ module.exports = {
     getKeyUrl,
     processContact,
     processKeyword,
+    addContactToRoom,
 }
+

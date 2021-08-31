@@ -1,6 +1,8 @@
 const dispatch = require('./event-dispatch-service')
 const { addRoom } = require('../service/index')
 const { msgArr } = require('../util/lib')
+const { addContactToRoom } = require('../util/wechat')
+const { pushJob } = require('../util/queue')
 
 function emptyMsg() {
   let msgArr = [] // 返回的消息列表
@@ -25,12 +27,19 @@ async function roomInviteMsg({ that, msg, contact, config }) {
       let room = await that.Room.find({ topic: msg })
       if (room) {
         console.log(`精确匹配到加群关键词${msg},正在邀请用户进群`)
+        await room.sync()
         if (await room.has(contact)) {
           return [{ type: 1, content: `您已经加入【${msg}】！`, url: '' }]
         }
         let replys = [{ type: 1, content: `检索群【${msg}】成功，欢迎加入！`, url: '' }]
         let roomName = await room.topic()
-        await addRoom(that, contact, roomName, replys)
+        // await addRoom(that, contact, roomName, replys)
+        setTimeout(() => {
+          pushJob(() => {
+            addContactToRoom(room, contact)
+          })
+        }, 1500)
+        return replys;
       } else {
         return [{ type: 1, content: `检索群【${msg}】失败，请重新输入！`, url: '' }]
       }
@@ -75,7 +84,7 @@ async function keywordsMsg({ msg, config }) {
     for (let item of config.replyKeywords) {
       if (item.keyword == msg) {
         console.log(`精确匹配到关键词${msg},正在回复用户`)
-        return msgArr(1, item.reply) 
+        return msgArr(1, item.reply)
       }
     }
   } else {
