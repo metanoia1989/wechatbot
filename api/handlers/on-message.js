@@ -103,13 +103,13 @@ async function dispatchRoomFilterByMsgType(that, room, msg) {
   let replys = ''
   let contactId = contact.id || '111'
   let contactAvatar = await contact.avatar()
-  
+
   switch (type) {
     case that.Message.Type.Text:
       content = msg.text()
       console.log(`群名: ${roomName} 发消息人: ${contactName} 内容: ${content}`)
       await msgToDatabase(that, msg, { roomId: room.id, roomName })
-      
+
       const mentionSelf = content.includes(`@${userSelfName}`)
       if (mentionSelf) {
         content = content.replace(/@[^,，：:\s@]+/g, '').trim()

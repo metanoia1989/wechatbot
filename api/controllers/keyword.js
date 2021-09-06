@@ -1,10 +1,10 @@
-//**************************************************************** 
+//****************************************************************
 // restapi，传入参数，借助微信bot来向组和个人推送消息
-//**************************************************************** 
+//****************************************************************
 const Bot = require('../bot');
 const { body, validationResult, oneOf, query } = require('express-validator')
 const { res_data } = require('../util/server');
-const { WechatKeyword } = require('../models/wechat');
+const { WechatKeyword } = require('../models/wechat-common');
 const { Op } = require('sequelize');
 const { processKeyword } = require('../util/wechat');
 
@@ -47,10 +47,10 @@ exports.validate = {
 /**
  * 关键词列表
  *
- * @param {*} req 
+ * @param {*} req
  *            keyword_name 组名
- * @param {*} res 
- * @param {*} next 
+ * @param {*} res
+ * @param {*} next
  */
 exports.listKeyword = async (req, res, next) => {
     const errors = validationResult(req)
@@ -72,7 +72,7 @@ exports.listKeyword = async (req, res, next) => {
         let page = req.query.page ? parseInt(req.query.page) : 1;
         let offset = (page - 1) * limit;
         var items = await WechatKeyword.findAll({
-            where, limit, offset, 
+            where, limit, offset,
         })
         items = items.map(processKeyword)
         var total = await WechatKeyword.count({ where })
@@ -87,10 +87,10 @@ exports.listKeyword = async (req, res, next) => {
 /**
  *  关键词详情
  *
- * @param {*} req 
+ * @param {*} req
  *            id 关键词ID
- * @param {*} res 
- * @param {*} next 
+ * @param {*} res
+ * @param {*} next
  */
 exports.findKeyword = async (req, res, next) => {
     const errors = validationResult(req)
@@ -112,10 +112,10 @@ exports.findKeyword = async (req, res, next) => {
 /**
  * 添加关键词
  *
- * @param {*} req 
+ * @param {*} req
  *            keyword_ident 组标识
- * @param {*} res 
- * @param {*} next 
+ * @param {*} res
+ * @param {*} next
  */
 exports.saveKeyword = async (req, res, next) => {
     const errors = validationResult(req)
@@ -143,12 +143,12 @@ exports.saveKeyword = async (req, res, next) => {
 }
 
 /**
- * 更新关键词 
+ * 更新关键词
  *
- * @param {*} req 
+ * @param {*} req
  *            keyword 关键词
- * @param {*} res 
- * @param {*} next 
+ * @param {*} res
+ * @param {*} next
  */
 exports.updateKeyword = async (req, res, next) => {
     const errors = validationResult(req)
@@ -174,12 +174,12 @@ exports.updateKeyword = async (req, res, next) => {
 }
 
 /**
- * 删除关键词 
+ * 删除关键词
  *
- * @param {*} req 
+ * @param {*} req
  *            keyword_ident 组名
- * @param {*} res 
- * @param {*} next 
+ * @param {*} res
+ * @param {*} next
  */
 exports.deleteKeyword = async (req, res, next) => {
     const errors = validationResult(req)

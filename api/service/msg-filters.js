@@ -24,7 +24,8 @@ function newFriendMsg({ config, name }) {
 async function roomInviteMsg({ that, msg, contact, config }) {
   for (const item of config.roomJoinKeywords) {
     if (msg.startsWith(item.keyword)) {
-      let room = await that.Room.find({ topic: msg })
+      let roomName = item.reply ? item.reply : msg
+      let room = await that.Room.find({ topic: roomName})
       if (room) {
         console.log(`精确匹配到加群关键词${msg},正在邀请用户进群`)
         await room.sync()
