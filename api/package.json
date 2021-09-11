@@ -29,7 +29,7 @@
     "sharp": "^0.28.3",
     "wechaty": "^0.60.12",
     "wechaty-puppet-padlocal": "^0.3.0",
-    "wechaty-puppet-simplepad": "latest",
+    "wechaty-puppet-simplepad": "0.1.4",
     "wechaty-puppet-wechat": "^0.28.1"
   },
   "devDependencies": {
