@@ -6,6 +6,7 @@ require('dotenv').config({ path: __dirname+'/.env' })
 const { Logger, DB } = require('./util')
 const logger = new Logger().getInstance()
 const db = new DB().getInstance()
+const { redisCilent } = require('./util/redis')
 
 // 启动微信bot和express服务
 const Bot = require('./bot')

@@ -251,6 +251,21 @@ WechatRoomWelcome.getWelcomeByName = async function (group_name) {
   return processWelcome(item)
 };
 
+WechatRoomWelcome.upsert = async function(values, condition) {
+  var item = await this.findOne({ where: condition })
+  if (!item) {
+    console.log({
+      ...values,
+      ...condition
+    })
+    return await this.create(Object.assign({}, {
+      ...values,
+      ...condition,
+    }))
+  }
+  item.update(values)
+}
+
 WechatRoom.hasOne(WechatRoomWelcome, {
   foreignKey: 'room_ident',
   onDelete: 'CASCADE',

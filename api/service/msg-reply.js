@@ -23,7 +23,7 @@ async function getMsgReply(resArray, { that, msg, name, contact, config, avatar,
  * 获取私聊返回内容
  */
 async function getContactTextReply(that, contact, msg) {
-  const config = await allConfig() // 获取配置信息
+  const config = await allConfig('personal') // 获取配置信息
   const name = contact.name()
   const id = contact.id
   const avatar = await contact.avatar()
@@ -53,7 +53,7 @@ async function getContactTextReply(that, contact, msg) {
  * 2 初次添加好友
  */
 async function getRoomTextReply(that, msg, name, id, avatar, room) {
-  const config = await allConfig() // 获取配置信息
+  const config = await allConfig('group') // 获取配置信息
   const resArray = [
     { bool: msg === '', method: 'emptyMsg' },
     { bool: config.eventKeywords && config.eventKeywords.length > 0, method: 'eventMsg' },

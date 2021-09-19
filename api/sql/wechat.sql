@@ -212,6 +212,12 @@ ENGINE=InnoDB
 COLLATE='utf8_general_ci'
 COMMENT='关键词回复表';
 
+--- 关键词回复添加生效范围
+ALTER TABLE `ts_wechat_keyword`
+ADD COLUMN `scope` ENUM('all', 'group', 'personal')
+DEFAULT 'all' COMMENT '生效范围 all 全部 group 仅群组 personal 仅个人'
+AFTER `event`;
+
 --- 好友欢迎语表
 CREATE TABLE `ts_wechat_friend_welcome` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -228,18 +234,9 @@ COMMENT='好友欢迎语表';
 
 
 INSERT INTO `ts_wechat_room_welcome`
-(`group_name`, `content`, `link_title`, `link_desc`, `link_img`, `link_url`)
+(`room_Ident`, `content`, `link_title`, `link_desc`, `link_img`, `link_url`)
 VALUES
-('默认欢迎语',
-'欢迎新伙伴@{{username}}加入本馆，让我们携手为小读者打开一片新天地。
-进群后请修改群昵称，与你报名所使用的称呼一致。
-下面是本馆新馆员务必了解的一些信息，请点开链接查看，按照页面提示做相应操作。
-如果有什么问题，欢迎在群内提问。',
-'候任馆员必读',
-'作为本馆馆员务必了解的信息都在这个页面一网打尽啦，一定要打开看一看！',
-'http://park.sanzhi.org.cn/cache/slide/0/0/748/1.png',
-'作为本馆馆员务必了解的信息都在这个页面一网打尽啦，一定要打开看一看！'
-);
+('default@chatroom', '欢迎 @{{username}}加入本馆，欢迎向大家做一个简单的自我介绍，以及您有意愿可以参与的对本馆的贡献。');
 
 --- 插入默认关键词
 INSERT INTO `ts_wechat_keyword` (`id`, `keyword`, `type`, `reply`, `event`, `status`, `created_at`, `updated_at`) VALUES

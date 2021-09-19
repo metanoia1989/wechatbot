@@ -3,6 +3,7 @@
     <div class="explain">
       <div class="title">关键词</div>
       <p class="">关键词分为文本回复关键词、事件关键词和加群关键词。</p>
+      <p class="error-color">关键词会被缓存一小时，添加或者更新请清除缓存。</p>
     </div>
 
     <div class="filter-container">
@@ -12,6 +13,9 @@
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
+      </el-button>
+      <el-button class="filter-item el-button--danger" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleClearCache">
+        清除缓存
       </el-button>
     </div>
 
@@ -36,7 +40,7 @@
         </template>
       </el-table-column>
       <el-table-column label="类型" min-width="50px" align="left">
-        <template slot-scope="{row}"> 
+        <template slot-scope="{row}">
           <span class="">{{ types[row.type] }}</span>
         </template>
       </el-table-column>
@@ -48,8 +52,13 @@
         </template>
       </el-table-column>
       <el-table-column label="事件" min-width="70px" align="left">
-        <template slot-scope="{row}"> 
+        <template slot-scope="{row}">
           <p class="link-desc">{{ row.event ? events[row.event] : '' }}</p>
+        </template>
+      </el-table-column>
+      <el-table-column label="范围" min-width="70px" align="left">
+        <template slot-scope="{row}">
+          <p class="link-desc">{{ row.scope ? scopes[row.scope] : '-' }}</p>
         </template>
       </el-table-column>
       <el-table-column label="状态" class-name="status-col" align="center" width="70px">
@@ -63,9 +72,9 @@
         </template>
       </el-table-column>
       <!-- <el-table-column label="创建时间" min-width="180px" align="left">
-        <template slot-scope="{row}"> 
+        <template slot-scope="{row}">
           <p class="link-desc">{{ row.created_at }}</p>
-        </template> 
+        </template>
       </el-table-column> -->
       <el-table-column label="动作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
@@ -89,10 +98,11 @@
     />
   </div>
 </template>
-  
+
 <script>
 import { mapGetters } from 'vuex'
 import { fetchKeywordList, updateKeyword, deleteKeyword } from '@/api/keyword'
+import { clearRedisCache } from '@/api/wechat'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import KeywordForm from './components/keyword-form'
@@ -128,6 +138,7 @@ export default {
       tableHeight: document.documentElement.clientHeight - 320, // 表的高度
       types: settings.keywordTypes,
       events: settings.keywordEventList,
+      scopes: settings.keywordScopes,
     }
   },
   created() {
@@ -191,6 +202,30 @@ export default {
               this.$notify({
                 title: '成功',
                 message: '删除成功！',
+                type: 'success',
+                duration: 2000
+              })
+              this.list.splice(index, 1)
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消操作'
+            })
+          })
+    },
+    handleClearCache(row, index) {
+        this.$confirm('确定要所有缓存吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+          .then(() => {
+            clearRedisCache().then(() => {
+              this.$notify({
+                title: '成功',
+                message: '清除成功！',
                 type: 'success',
                 duration: 2000
               })

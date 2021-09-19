@@ -1,30 +1,47 @@
 const { FileBox, UrlLink } = require('wechaty');
 const { WechatKeyword } = require('../models/wechat-common');
-const { pushJob } = require('../util/queue')
+const { pushJob } = require('../util/queue');
+const { redisClient } = require('../util/redis');
 
 /**
  * 配置项 Mock
  */
-async function allConfig() {
+async function allConfig(scope = 'all') {
+  var key = `wechatbot:keywords-${scope}`
+  var res = await redisClient.get(key)
+  if(res) return JSON.parse(res)
+
   var keywords = await WechatKeyword.findAll({
     where: { status: 1 }
   })
 
+  var filters = {
+    'all': _ => true,
+    'group': item => item.scope == 'group' || item.scope == 'all',
+    'personal': item => item.scope == 'personal' || item.scope == 'all',
+  };
+  var filter = filters[scope]
+
   var roomJoinKeywords = keywords
     .filter(item => item.type === 3)
-    .map(item => ({ keyword: item.keyword}))
+    .filter(filter)
+
   var eventKeywords = keywords
     .filter(item => item.type === 2)
-    .map(item => ({ keyword: item.keyword, event: item.event }))
+    .filter(filter)
+
   var replyKeywords = keywords
     .filter(item => item.type === 1)
-    .map(item => ({ keyword: item.keyword, reply: item.reply}))
+    .filter(filter)
 
-  return {
+  res = {
     roomJoinKeywords,
     eventKeywords,
     replyKeywords,
   };
+
+  await redisClient.set(key, JSON.stringify(res), 'EX', 60 * 60)
+  return res
 }
 
 /**

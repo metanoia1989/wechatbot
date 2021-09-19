@@ -30,10 +30,10 @@ async function roomInviteMsg({ that, msg, contact, config }) {
         console.log(`精确匹配到加群关键词${msg},正在邀请用户进群`)
         await room.sync()
         if (await room.has(contact)) {
-          return [{ type: 1, content: `您已经加入【${msg}】！`, url: '' }]
+          return [{ type: 1, content: `您已经加入【${roomName}】！`, url: '' }]
         }
-        let replys = [{ type: 1, content: `检索群【${msg}】成功，欢迎加入！`, url: '' }]
-        let roomName = await room.topic()
+        let replys = [{ type: 1, content: `检索群【${roomName}】成功，欢迎加入！`, url: '' }]
+        // let roomName = await room.topic()
         // await addRoom(that, contact, roomName, replys)
         setTimeout(() => {
           pushJob(() => {

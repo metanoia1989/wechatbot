@@ -1,3 +1,4 @@
+const { WechatRoomWelcome } = require('../models/wechat')
 const { msgArr } = require('../util/lib')
 const { LibDonateData, LibBorrowData } = require('../util/wavelib')
 
@@ -7,6 +8,7 @@ const { LibDonateData, LibBorrowData } = require('../util/wavelib')
 const msgEventList = {
   "query-lib-donate": "查询分馆募捐数据",
   "query-lib-borrow": "查询借阅数据" ,
+  "set-group-welcome": "设置群组欢迎语" ,
 }
 
 /**
@@ -22,13 +24,30 @@ async function dispatchEventContent(that, eName, args, name, id, avatar, room) {
   let content = '',
     type = 1,
     url = ''
-  
+
   switch (eName) {
     case "query-lib-donate": // "查询分馆募捐数据",
       content = await LibDonateData(args[0])
       break
     case "query-lib-borrow": // "查询借阅数据" ,
       content = await LibBorrowData(args[0])
+      break
+    case "set-group-welcome": // "设置群组欢迎语" ,
+        console.log(room.id, args)
+      if (!room) {
+        content = "此操作只允许在群组中使用！"
+        break;
+      }
+      if (!args[0]) {
+        content = "设置失败，欢迎语为空！"
+        break;
+      }
+      await WechatRoomWelcome.upsert({
+        content: args[0]
+      }, {
+        room_ident: room.id
+      })
+      content = "设置群欢迎语成功"
       break
     case "fetch-room-invite": // "获取微澜群组邀请",
     default:

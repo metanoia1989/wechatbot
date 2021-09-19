@@ -7,7 +7,7 @@ const schedule = require('./schedule')
 // const task = require('./task')
 
 module.exports = {
-    Logger, 
+    Logger,
     DB,
     auth,
     datetime,

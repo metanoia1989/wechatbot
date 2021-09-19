@@ -66,6 +66,11 @@ const WechatKeyword = db.define('WechatKeyword', {
   event: {
     type: DataTypes.STRING,
   },
+  scope: {
+    type: DataTypes.ENUM,
+    values: ['all', 'group', 'personal'],
+    defaultValue: 'all',
+  },
   status: {
     type: DataTypes.ENUM,
     values: [0, 1],

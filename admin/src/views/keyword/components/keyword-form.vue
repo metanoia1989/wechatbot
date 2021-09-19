@@ -1,6 +1,6 @@
 <template>
-    <create-view 
-      v-loading="loading" 
+    <create-view
+      v-loading="loading"
       :body-style="{ height: '100%'}"
     >
     <flexbox
@@ -39,6 +39,11 @@
                 </el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="生效范围">
+              <el-radio-group v-model="temp.scope">
+                <el-radio v-for="(item, i) in scopes" :key="i" :label="i">{{item}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
             <el-form-item label="状态" prop="status">
               <el-switch v-model="temp.status" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
             </el-form-item>
@@ -51,11 +56,11 @@
             取消
           </el-button>
           <el-button class="handle-button" type="primary" @click="action.type ==='create' ? createData() : updateData()">
-            确认  
+            确认
           </el-button>
         </div>
 
-    </flexbox> 
+    </flexbox>
     </create-view>
 </template>
 
@@ -84,7 +89,7 @@ export default {
   data() {
     return {
       textMap: {
-        update: '编辑关键词',      
+        update: '编辑关键词',
         create: '创建关键词'
       },
       rules: {
@@ -102,10 +107,11 @@ export default {
       },
       loading: false,
       types: settings.keywordTypes,
+      scopes: settings.keywordScopes,
       events: settings.keywordEventList,
     }
   },
-  created() {   
+  created() {
     this.getKeyword()
   },
   methods: {
@@ -114,7 +120,7 @@ export default {
         this.loading = true
         var id = this.action.id
         fetchKeyword(id).then(res => {
-          this.temp = res.data 
+          this.temp = res.data
           this.loading = false
         }).catch(() => {
           this.loading = false
@@ -202,3 +208,4 @@ export default {
 }
 
 </style>
+

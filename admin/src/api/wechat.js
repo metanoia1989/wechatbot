@@ -13,3 +13,12 @@ export function loginStatus() {
     method: 'get',
   })
 }
+
+
+export function clearRedisCache() {
+  return request({
+    url: '/wechat/clearRedisCache',
+    method: 'post',
+  })
+}
+
