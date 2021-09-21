@@ -67,9 +67,9 @@ async function roomSay(room, contact, msg) {
       await room.say(obj)
     })
   } else if (msg.type === 3 && msg.url !== '') {
-    // bse64文件
-    let obj = FileBox.fromDataURL(msg.url, 'room-avatar.jpg')
-    contact ? await room.say('', contact) : ''
+    // stream，因为不支持 base64
+    let obj = FileBox.fromFile(msg.url, 'room-avatar.jpg')
+    contact ? await room.say(msg.content, contact) : ''
     await pushJob(async () => {
       await room.say(obj)
     })
@@ -115,8 +115,8 @@ async function contactSay(contact, msg, isRoom = false) {
       await contact.say(obj)
     })
   } else if (msg.type === 3 && msg.url !== '') {
-    // bse64文件
-    let obj = FileBox.fromDataURL(msg.url, 'user-avatar.jpg')
+    // stream，因为不支持 base64
+    let obj = FileBox.fromFile(msg.url, 'room-avatar.jpg')
     await pushJob(async () => {
       await contact.say(obj)
     })

@@ -62,7 +62,8 @@ async function eventMsg({ that, msg, name, id, avatar, config, room }) {
   msg = msg.trim()
   let eventName, args;
   if (msg.indexOf(" ") !== -1) {
-    [ eventName, ...args]= msg.split(" ")
+    [ eventName, ...args]= msg.split(/ +/)
+
   } else {
     eventName = msg
     args = null

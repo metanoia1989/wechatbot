@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "axios": "0.18.1",
+    "chart.js": "^3.5.1",
+    "chartjs-node-canvas": "^3.2.0",
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "errorhandler": "^1.5.1",

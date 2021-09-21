@@ -57,6 +57,21 @@ function formatDate(date, weekend = false) {
 }
 
 /**
+ * 格式化日期
+ * @param {*} date
+ * @returns 例：2019-9-10
+ */
+function formatDateWithoutTime(date, split="/") {
+  var tempDate = date instanceof Date ? date : new Date(date)
+  var year = tempDate.getFullYear()
+  var month = tempDate.getMonth() + 1
+  var day = tempDate.getDate()
+  let result = [year, month, day].join(split)
+  return result
+}
+
+
+/**
  * 获取今天日期
  * @returns 2019-7-19
  */
@@ -102,7 +117,7 @@ function isRealDate(str) {
 /**
  * 时间戳格式化为日期
  * @param {*} date
- * @returns 例：2019-9-10 13:13:04 
+ * @returns 例：2019-9-10 13:13:04
  */
 function timestampToDate(date) {
   var tempDate = new Date(date)
@@ -130,8 +145,10 @@ function timestampToDate(date) {
 module.exports = {
     getDay,
     formatDate,
+    formatDateWithoutTime,
     getToday,
     convertTime,
     isRealDate,
     timestampToDate,
 }
+

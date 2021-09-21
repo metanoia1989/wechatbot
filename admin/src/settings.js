@@ -32,6 +32,7 @@ module.exports = {
     "query-lib-borrow": "查询借阅数据" ,
     "fetch-room-invite": "获取微澜群组邀请",
     "set-group-welcome": "设置群组欢迎语",
+    "reting-record-stats": "借阅统计图表",
   }
 
 }
