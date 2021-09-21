@@ -15,9 +15,9 @@ COPY package.json .
 RUN npm config set registry http://registry.npm.taobao.org
 
 RUN apt-get install -y fonts-arkpandora  fonts-liberation fonts-liberation2
-CMD npm install && npm install -g node-gyp
+RUN npm install && npm install -g node-gyp
 WORKDIR /bot/node_modules/canvas
-CMD node-gyp rebuild
+RUN node-gyp rebuild
 WORKDIR /bot
 
 CMD npm install && node index.js
