@@ -49,7 +49,6 @@ async function generateChart(name, data) {
   };
 
   const image = await chartJSNodeCanvas.renderToBuffer(configuration);
-  await promisify(fs.writeFile)('./chart.png', image)
   const filePath = path.join(path.dirname(__dirname), 'public/uploads')
   const fileName = path.join(filePath, `${name}.png`)
   await promisify(fs.writeFile)(fileName, image)
