@@ -1,6 +1,6 @@
 const { Group } = require('../models/wavelib')
 const { WechatRoomWelcome } = require('../models/wechat')
-const { formatDateWithoutTime } = require('../util/datetime')
+const { formatDateWithoutTime, getToday } = require('../util/datetime')
 const { generateChart } = require('../util/generateChart')
 const { msgArr } = require('../util/lib')
 const { LibDonateData, LibBorrowData, fetchRentingRecord } = require('../util/wavelib')
@@ -13,6 +13,7 @@ const msgEventList = {
   "query-lib-borrow": "借阅数据" ,
   "set-group-welcome": "设置欢迎语" ,
   "reting-record-stats": "借阅统计" ,
+  "the-day-all-rent-stats": "当日所有借阅统计" ,
 }
 
 /**
@@ -98,7 +99,26 @@ async function dispatchEventContent(that, eName, args, name, id, avatar, room) {
       }
       type = 3
       break
+    case "the-day-all-rent-stats": // "当日所有分馆借阅数据",
+      try {
+        var data = await fetchTheDayAllRentingRecord()
+        if (!data) {
+          content = `当日暂无借阅统计`
+          break;
+        }
+        let name = `${getToday()}当日借阅统计`;
+        url = await generateChart(name, data)
+        content = `当日借阅统计如下`
+      } catch (error) {
+        content = `查询失败${error.toString()}`
+        break;
+      }
+      type = 3
+      break
+
+      break
     case "fetch-room-invite": // "获取微澜群组邀请",
+      break
     default:
       break
   }

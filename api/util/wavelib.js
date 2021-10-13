@@ -6,6 +6,7 @@ const axios = require('axios')
 const { Group } = require("../models/wavelib")
 const { getToday } = require('./datetime');
 const { redisClient } = require('./redis');
+const { Op } = require('sequelize');
 const YDURL = 'https://yidivip.com/api/v2';
 
 /**
@@ -110,9 +111,51 @@ async function fetchRentingRecord(libraryid, start, end) {
   return data
 }
 
+/**
+ * 获取当天所有分馆的借阅数据
+ *
+ * @param {String} date
+ * @returns Array
+ */
+async function fetchTheDayAllRentingRecord(date = null) {
+    if (!date) date = getToday()
+    let key = `yidi_data:the_day_${date}_rent_data`
+    let data = await redisClient.get(key)
+    if (data) {
+      return JSON.parse(data)
+    }
+
+    let groups = await Group.findAll({ where: {
+        libraryid: { [Op.ne]: 0 }
+      }
+    })
+    data = await Promise.all(groups.map(async ({ groupname, libraryid }) => {
+      let url = `${YDURL}/statics/rentingrecord_range?unit=day&libraryid=${libraryid}`
+        + `&start=${date}&end=${date}`
+      let token = await fetchYidiToken()
+      let res = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      let rent = res.data.rentTrend
+      if (rent) {
+        rent = rent.pop().num
+      }
+      return { groupname, num: rent }
+    }))
+
+    data = data.filter(item => item.num != null)
+    if (data) {
+      await redisClient.set(key, JSON.stringify(data), 'ex', 3600)
+    }
+    return data
+}
+
 module.exports = {
     LibDonateData,
     LibBorrowData,
     fetchRentingRecord,
+    fetchTheDayAllRentingRecord,
 }
 
