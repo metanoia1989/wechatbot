@@ -75,7 +75,7 @@ function formatDateWithoutTime(date, split="/") {
  * 获取今天日期
  * @returns 2019-7-19
  */
-function getToday() {
+function getToday(split='-') {
   const date = new Date()
   let year = date.getFullYear()
   let month = date.getMonth() + 1
@@ -83,7 +83,41 @@ function getToday() {
   if (month < 10) {
     month = `0${month}`
   }
-  return year + '-' + month + '-' + day + ' '
+  return [year, month, day].join(split)
+}
+
+/**
+ * 获取今天日期
+ * @returns 2019-7-19
+ */
+function getTomorrow(split='-') {
+  let today = new Date()
+  let tomorrow = new Date()
+  tomorrow.setDate(today.getDate() + 1)
+  return convertToDate(split)
+}
+
+function getAddOneDay(date, split='-') {
+  let day = new Date(date)
+  let tomorrow = new Date()
+  tomorrow.setDate(day.getDate() + 1)
+  return convertToDate(tomorrow, split)
+}
+
+
+/**
+ * 转换为日期
+ * @param {*} date
+ */
+function convertToDate(d, split = '-') {
+  const date = new Date(d)
+  let year = date.getFullYear()
+  let month = date.getMonth() + 1
+  let day = date.getDate()
+  if (month < 10) {
+    month = `0${month}`
+  }
+  return [year, month, day].join(split)
 }
 
 /**
@@ -153,5 +187,7 @@ module.exports = {
     convertTime,
     isRealDate,
     timestampToDate,
+    getTomorrow,
+    getAddOneDay,
 }
 

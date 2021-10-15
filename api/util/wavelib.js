@@ -4,7 +4,7 @@
 
 const axios = require('axios')
 const { Group } = require("../models/wavelib")
-const { getToday } = require('./datetime');
+const { getToday, getAddOneDay } = require('./datetime');
 const { redisClient } = require('./redis');
 const { Op } = require('sequelize');
 const YDURL = 'https://yidivip.com/api/v2';
@@ -118,7 +118,8 @@ async function fetchRentingRecord(libraryid, start, end) {
  * @returns Array
  */
 async function fetchTheDayAllRentingRecord(date = null) {
-    if (!date) date = getToday()
+    if (!date) date = getToday('/')
+    let end = getAddOneDay(date, '/')
     let key = `yidi_data:the_day_${date}_rent_data`
     let data = await redisClient.get(key)
     if (data) {
@@ -129,9 +130,11 @@ async function fetchTheDayAllRentingRecord(date = null) {
         libraryid: { [Op.ne]: 0 }
       }
     })
+    console.log("分馆数", groups.length)
     data = await Promise.all(groups.map(async ({ groupname, libraryid }) => {
       let url = `${YDURL}/statics/rentingrecord_range?unit=day&libraryid=${libraryid}`
-        + `&start=${date}&end=${date}`
+        + `&start=${date}&end=${end}`
+      console.log(`开始请求分馆${groupname}的数据`, url)
       let token = await fetchYidiToken()
       let res = await axios.get(url, {
         headers: {
@@ -141,12 +144,21 @@ async function fetchTheDayAllRentingRecord(date = null) {
       let rent = res.data.rentTrend
       if (rent) {
         rent = rent.pop().num
+        console.log(`${groupname} 借阅数据为`, rent)
       }
       return { groupname, num: rent }
     }))
 
     data = data.filter(item => item.num != null)
-    if (data) {
+    if (data && data.length > 0) {
+      data.sort(function (a, b) {
+        let [_1, a_name, a_num ] = a.groupname.match(/(.*?)(\d+)/)
+        let [_2, b_name, b_num ] = b.groupname.match(/(.*?)(\d+)/)
+        if (a_name == b_name) {
+          return a_num < b_num
+        }
+        return a_name.localeCompare(b_name, "zh")
+      })
       await redisClient.set(key, JSON.stringify(data), 'ex', 3600)
     }
     return data

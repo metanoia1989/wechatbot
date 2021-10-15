@@ -1,60 +1,41 @@
+
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 const { promisify } = require('util')
 const fs = require('fs');
 const path = require('path');
 
 /**
- * 生成图表图片文件
- * @param {Object} data
- *  date 日期
- *  num 数量
+ * 测试chart生成
  */
-async function generateChart(name, data) {
-  const width = 600; //px
-  const height = 600; //px
-  const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
-
-  const plugin = {
-    id: 'custom_canvas_background_color',
-    beforeDraw: (chart) => {
-      const ctx = chart.canvas.getContext('2d');
-      ctx.save();
-      ctx.globalCompositeOperation = 'destination-over';
-      ctx.fillStyle = 'white';
-      ctx.fillRect(0, 0, chart.width, chart.height);
-      ctx.restore();
-    }
-  };
-
-  const configuration = {
-    type: 'line',
-    data: {
-      datasets: [{
-        label: name,
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgb(255, 99, 132)',
-        data: data,
-      }]
-    },
-    options: {
-      parsing: {
-        xAxisKey: 'date',
-        yAxisKey: 'num',
-      },
-      layout: {
-        padding: 20
-      }
-    },
-    plugins: [plugin]
-  };
-
-  const image = await chartJSNodeCanvas.renderToBuffer(configuration);
-  const filePath = path.join(path.dirname(__dirname), 'public/uploads')
-  const fileName = path.join(filePath, `${name}.png`)
-  await promisify(fs.writeFile)(fileName, image)
-  return fileName
-}
-
+var data = [
+   { groupname: '北京2馆', num: '72' },
+  { groupname: '北京9馆', num: '3' },
+  { groupname: '北京3馆', num: '83' },
+  { groupname: '北京6馆', num: '28' },
+  { groupname: '北京4馆', num: '69' },
+  { groupname: '北京5馆', num: '80' },
+  { groupname: '北京11馆', num: '88' },
+  { groupname: '北京13馆', num: '191' },
+  { groupname: '北京15馆', num: '81' },
+  { groupname: '北京18馆', num: '55' },
+  { groupname: '北京20馆', num: '179' },
+  { groupname: '北京21馆', num: '63' },
+  { groupname: '广州1馆', num: '186' },
+  { groupname: '北京28馆', num: '179' },
+  { groupname: '广州16馆', num: '193' },
+  { groupname: '广州7馆', num: '115' },
+  { groupname: '广州8馆', num: '318' },
+  { groupname: '广州11馆', num: '2' },
+  { groupname: '广州15馆', num: '22' },
+  { groupname: '佛山1馆', num: '3' },
+  { groupname: '北京29馆', num: '140' },
+  { groupname: '深圳1馆', num: '47' },
+  { groupname: '上海1馆', num: '48' },
+  { groupname: '上海2馆', num: '500' },
+  { groupname: '上海3馆', num: '33' },
+  { groupname: '北京30馆', num: '63' },
+  { groupname: '广州20馆', num: '173' }
+]
 /**
  * 当日借阅统计图表生成
  *
@@ -140,9 +121,8 @@ async function generateTheDayRentChart(name, data) {
   return fileName
 }
 
-
-module.exports = {
-  generateChart,
-  generateTheDayRentChart
+async function main(){
+  await generateTheDayRentChart('test', data)
 }
 
+main().catch(error => console.error(error))

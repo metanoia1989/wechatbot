@@ -1,9 +1,9 @@
 const { Group } = require('../models/wavelib')
 const { WechatRoomWelcome } = require('../models/wechat')
 const { formatDateWithoutTime, getToday } = require('../util/datetime')
-const { generateChart } = require('../util/generateChart')
+const { generateChart, generateTheDayRentChart } = require('../util/generateChart')
 const { msgArr } = require('../util/lib')
-const { LibDonateData, LibBorrowData, fetchRentingRecord } = require('../util/wavelib')
+const { LibDonateData, LibBorrowData, fetchRentingRecord, fetchTheDayAllRentingRecord } = require('../util/wavelib')
 
 /**
  * 自定义事件列表，用于关键词回复
@@ -29,6 +29,8 @@ async function dispatchEventContent(that, eName, args, name, id, avatar, room) {
   let content = '',
     type = 1,
     url = ''
+
+  eName = "the-day-all-rent-stats"
 
   switch (eName) {
     case "query-lib-donate": // "查询分馆募捐数据",
@@ -102,14 +104,15 @@ async function dispatchEventContent(that, eName, args, name, id, avatar, room) {
     case "the-day-all-rent-stats": // "当日所有分馆借阅数据",
       try {
         var data = await fetchTheDayAllRentingRecord()
-        if (!data) {
+        if (!data || data.length == 0) {
           content = `当日暂无借阅统计`
           break;
         }
         let name = `${getToday()}当日借阅统计`;
-        url = await generateChart(name, data)
+        url = await generateTheDayRentChart(name, data)
         content = `当日借阅统计如下`
       } catch (error) {
+        console.log(error)
         content = `查询失败${error.toString()}`
         break;
       }
