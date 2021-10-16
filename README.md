@@ -32,6 +32,7 @@ $ docker run \
     --add-host host.docker.internal:host-gateway \
     bot
 $ docker logs -f bot # 查看日志即可扫码
+# 后续更新只需要重新git拉取代码，然后重启容器即可   
 ```
 
 后台管理部署
@@ -59,7 +60,7 @@ $ yarn run build:prod
 * [ ] OAuth2的appid与appsecret，提供开放的接口，提供给社区服务调用。或者生成用户token，根据token来提供相关的机器人使用。        
 * [ ] openapi 文档生成，参考 wechaty的openapi.yml文件怎么写。   
 * [ ] 定时任务功能  
-* [ ] 关键词回复，触发关键词时将会回复，群里需要@能触发 
+* [x] 关键词回复，触发关键词时将会回复，群里需要@能触发 
 
 
 

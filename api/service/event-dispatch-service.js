@@ -30,8 +30,6 @@ async function dispatchEventContent(that, eName, args, name, id, avatar, room) {
     type = 1,
     url = ''
 
-  eName = "the-day-all-rent-stats"
-
   switch (eName) {
     case "query-lib-donate": // "查询分馆募捐数据",
       content = await LibDonateData(args[0])
