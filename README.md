@@ -33,6 +33,9 @@ $ docker run \
     bot
 $ docker logs -f bot # 查看日志即可扫码
 # 后续更新只需要重新git拉取代码，然后重启容器即可   
+
+# 设置容器自启，删除容器后重新构建时使用
+$ docker update --restart=always bot
 ```
 
 后台管理部署
