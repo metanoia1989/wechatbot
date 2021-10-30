@@ -2,12 +2,17 @@ const Bot = require('./bot')
 const express = require('express')
 const cors = require('cors')
 const errorhandler = require('errorhandler')
+const expressJSDocSwagger = require('express-jsdoc-swagger');
+const apiDocsOptions = require('./util/api-docs')
 
 const { res_data } = require('./util/server')
 
 const app_debug = process.env.APP_DEBUG ? true : false
 
 const app = express()
+
+// 生成API文档
+expressJSDocSwagger(app)(apiDocsOptions)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))

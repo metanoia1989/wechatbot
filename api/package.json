@@ -16,6 +16,7 @@
     "dotenv": "^9.0.2",
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
+    "express-jsdoc-swagger": "^1.6.6",
     "express-jwt": "^6.0.0",
     "express-validator": "^6.12.0",
     "ioredis": "^4.27.9",

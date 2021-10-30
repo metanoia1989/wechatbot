@@ -38,6 +38,8 @@ $ docker logs -f bot # 查看日志即可扫码
 $ docker update --restart=always bot
 ```
 
+OPENAPI 文档访问：<http://localhost:8999/api-docs>      
+
 后台管理部署
 ```sh
 $ cd admin
@@ -47,11 +49,36 @@ $ yarn run build:prod
 # 访问 http://xxxxxx/bot-admin  
 ```
 
+机器人本地调试方法
+===============
+
+使用 simplepad 付费协议，微信登陆在人家的服务器上，会把消息转发给运行 wechaty 的客户端上。
+如果同时运行两个客户端，只有一个客户端能够接收到消息。所以本地调试时，需要停止服务器上的wechaty服务。
+
+或者本地调试使用 web 协议，web协议虽然不稳定容易掉线，但是本地调试绰绰有余了。  
+
+本地调试需要修改两处代码，后续可以设置一个调试模式的环境变量，然后根据这个flag来切换不同的协议。
+
+```js
+// api/bot.js
+// 新建 Wechaty 实例时，取消 puppet，则协议默认为 web协议
+this.bot = new Wechaty({
+    name,
+    // puppet,
+});
+
+// api/handlers/on-scan.js
+// simplepad 协议的登陆跟其他协议有区别，切换导出的方法
+// module.exports = onSimplePadScan
+module.exports = onScan
+```
+
+这样就可以使用web协议来测试了，建议使用【小号】来调试，避免微信风控影响到自己的微信号。
 
 开发事项
 ========
 
-目前 bot-api 开发了消息发送的功能，后台管理进度为零。   
+消息发送API暂未进行权限验证，后续需要添加，避免被恶意调用。 
 
 * [x] bot登陆页面，查看登陆状态，登陆后记录登陆时间（直接存缓存就行了），记录登陆记录   
     * ts_wechat_admin表用户登陆 
@@ -61,7 +88,7 @@ $ yarn run build:prod
 * [x] 将微信群与微澜分馆绑定，当分馆有消息时，推送消息入群。
 * [x] 监听各种事件消息，设计相关数据表，入库。新群组和新好友以及新消息需要入库。后续padlocal才有意义。   
 * [ ] OAuth2的appid与appsecret，提供开放的接口，提供给社区服务调用。或者生成用户token，根据token来提供相关的机器人使用。        
-* [ ] openapi 文档生成，参考 wechaty的openapi.yml文件怎么写。   
+* [x] openapi 文档生成，使用 `express-jsdoc-swagger` 这个库
 * [ ] 定时任务功能  
 * [x] 关键词回复，触发关键词时将会回复，群里需要@能触发 
 
