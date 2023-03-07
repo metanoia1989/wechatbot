@@ -4,14 +4,15 @@
   "version": "1.1.0",
   "main": "index.js",
   "license": "GPL3",
+  "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon -i '*.json' index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon -i '*.json' src/index.js"
   },
   "dependencies": {
     "axios": "0.18.1",
-    "chart.js": "^3.5.1",
-    "chartjs-node-canvas": "^3.2.0",
+    "chart.js": "^3.9.1",
+    "chartjs-node-canvas": "^4.1.6",
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "errorhandler": "^1.5.1",
@@ -31,12 +32,11 @@
     "qrcode-terminal": "^0.12.0",
     "sequelize": "^6.6.2",
     "sharp": "^0.28.3",
-    "wechaty": "^0.60.12",
-    "wechaty-puppet-padlocal": "^0.3.0",
-    "wechaty-puppet-simplepad": "0.1.4",
-    "wechaty-puppet-wechat": "^0.28.1"
+    "wechaty": "^1.20.2",
+    "@666666/wechaty-puppet-padlocal": "^1.20.4"
   },
   "devDependencies": {
+    "node-pre-gyp": "^0.17.0",
     "nodemon": "^2.0.12",
     "typescript": "^4.3.4"
   }

@@ -1,0 +1,10 @@
+import * as express from "express";
+import * as keywordController from "../controllers/keyword.js";
+import auth from "../util/auth.js";
+const router = express.Router();
+router.get('/listKeyword', auth.required, keywordController.validate.listKeyword, keywordController.listKeyword);
+router.get('/findKeyword', auth.required, keywordController.validate.findKeyword, keywordController.findKeyword);
+router.post('/saveKeyword', auth.required, keywordController.validate.saveKeyword, keywordController.saveKeyword);
+router.post('/updateKeyword', auth.required, keywordController.validate.updateKeyword, keywordController.updateKeyword);
+router.post('/deleteKeyword', auth.required, keywordController.validate.deleteKeyword, keywordController.deleteKeyword);
+export default router;

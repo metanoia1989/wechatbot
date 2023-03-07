@@ -1,0 +1,11 @@
+import * as express from "express";
+import * as fileController from "../controllers/file.js";
+import auth from "../util/auth.js";
+const router = express.Router();
+router.get('/listFile', auth.required, fileController.validate.listFile, fileController.listFile);
+router.get('/allFile', auth.required, fileController.allFile);
+router.get('/findFile', auth.required, fileController.validate.findFile, fileController.findFile);
+router.post('/saveFile', auth.required, fileController.validate.uploadFile, fileController.validate.duplicateCheck, fileController.saveFile);
+router.post('/updateFile', auth.required, fileController.validate.uploadFile, fileController.validate.duplicateCheck, fileController.updateFile);
+router.post('/deleteFile', auth.required, fileController.validate.deleteFile, fileController.deleteFile);
+export default router;
