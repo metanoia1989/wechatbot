@@ -1,6 +1,5 @@
 import { FileBox } from "file-box";
 import path from "path";
-import * as wechaty from "wechaty";
 import { WechatRoomWelcome } from "../models/wechat.js";
 import { pushJob } from "../util/queue.js";
 import Bot from "../bot.js";

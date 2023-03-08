@@ -18,8 +18,8 @@ WORKDIR /bot
 COPY package.json .
 RUN npm config set registry http://registry.npm.taobao.org
 
-RUN npm install canvas --canvas_binary_host_mirror=https://npm.taobao.org/mirrors/node-canvas-prebuilt/
+RUN npm install chartjs-node-canvas chart.js --canvas_binary_host_mirror=https://npm.taobao.org/mirrors/node-canvas-prebuilt/
 RUN npm install
 WORKDIR /bot
 
-CMD npm install --canvas_binary_host_mirror=https://npm.taobao.org/mirrors/node-canvas-prebuilt/ && node index.js
+CMD npm install --canvas_binary_host_mirror=https://npm.taobao.org/mirrors/node-canvas-prebuilt/ && node src/index.js

@@ -11,17 +11,28 @@ import onRoomtopic from "./handlers/on-roomtopic.js";
 import config from "./config.js";
 
 class Bot {
-    constructor(name = 'wechat-puppet-wechat') {
+    constructor(name = 'wechat-bot') {
         if (this.instance) {
             return this.instance;
         }
-        const puppet = new PuppetPadlocal({
-            token: config.PADLOCAL_TOKEN,
-        });
+        // Padlocal协议的 puppet
+        // const puppet = new PuppetPadlocal({
+        //     token: config.PADLOCAL_TOKEN,
+        // });
+
+        const puppet = 'wechaty-puppet-service'
         this.bot = WechatyBuilder.build({
-            name,
             puppet,
+            // workpro 的配置option START
+            puppetOptions: {
+                token: config.WORKPRO_TOKEN,
+                tls: {
+                    disable: true,
+                },
+            },
+            // workpro 的配置option END
         });
+        console.log('hello');
         this.bot.on('scan', onScan);
         this.bot.on('login', onLogin);
         this.bot.on('logout', onLogout);
@@ -32,7 +43,10 @@ class Bot {
         this.bot.on('room-topic', onRoomtopic);
         this.bot.start()
             .then(this.onStart)
-            .catch((e) => log.error(e));
+            .catch((e) => {
+                console.log('bot start error', e)
+                log.error(e);
+            });
     }
     /**
      * 单例模式，保证实例化一次
@@ -54,7 +68,7 @@ class Bot {
                         }
                         return target.bot[prop];
                         // // 不在Bot中的方法，则是向this.bot请求，检测 bot 是否登录
-                        // if (target.bot.logonoff()) {
+                        // if (target.bot.isLoggedIn) {
                         // } else {
                         //   throw new Error("小助手未登录，无法调用！")
                         // }

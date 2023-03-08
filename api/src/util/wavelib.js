@@ -1,10 +1,15 @@
-import * as axios from "axios";
+import axios from "axios";
 import { Group } from "../models/wavelib.js";
 import { getToday, getAddOneDay } from "./datetime.js";
 import { redisClient } from "./redis.js";
 import { Op } from "sequelize";
 import config from "../config.js";
-const YDURL = 'https://yidivip.com/api/v2';
+const YDURL = 'https://yuntu.yidivip.com/api';
+
+//***************************
+// 这个功能好像没啥人用，废弃   
+//***************************
+
 /**
  * 获取联劝网月捐数据
  * @param {string} groupName 分馆名称
@@ -15,6 +20,7 @@ async function LibDonateData(groupname) {
         return null;
     }
     let url = `http://park.sanzhi.org.cn/index.php?app=donate&ac=api&api=index&groupid=${group.groupid}`;
+    console.log(url)
     let res = await axios.get(url);
     if (res.data.status != 1) {
         return res.data.msg;
@@ -39,6 +45,7 @@ async function LibBorrowData(groupname) {
         return null;
     }
     let url = `http://park.sanzhi.org.cn/index.php?app=yidi&ac=api&api=index&libraryid=${group.libraryid}`;
+    console.log(url)
     let res = await axios.get(url);
     if (res.data.status != 1) {
         return res.data.msg;
@@ -59,21 +66,29 @@ async function LibBorrowData(groupname) {
  *
  * @returns string
  */
-async function fetchYidiToken() {
+export async function fetchYidiToken() {
     let key = 'yidi_data:yidi_token';
     let token = await redisClient.get(key);
     if (token) {
         return token;
     }
-    let url = `${YDURL}/account/login/admin`;
+    let url = `${YDURL}/pub/login`;
     let res = await axios.post(url, {
         username: config.YIDI_USERNAME,
         password: config.YIDI_PASSWORD,
     });
+    let tmp_token = res.data.data.token;
+    let admin_id = res.data.data.admins[0].id;
+    url = `${YDURL}/pub/login/admin`;
+    res = await axios.post(url, {
+        admin_id, token: tmp_token,
+    });
     token = res.data.data.token;
+
     await redisClient.set(key, token, 'ex', 1500);
     return token;
 }
+
 /**
  * 获取分馆的益迪借阅数据
  *
@@ -88,12 +103,12 @@ async function fetchRentingRecord(libraryid, start, end) {
     if (data) {
         return JSON.parse(data);
     }
-    let url = `${YDURL}/statics/rentingrecord_range?unit=day&libraryid=${libraryid}`
+    let url = `${YDURL}/statics/rentingrecord_range?unit=day&library_id=${libraryid}`
         + `&start=${start}&end=${end}`;
     let token = await fetchYidiToken();
     let res = await axios.get(url, {
         headers: {
-            Authorization: `Bearer ${token}`
+            'X-Token': token,
         }
     });
     data = res.data.rentTrend;
@@ -123,13 +138,13 @@ async function fetchTheDayAllRentingRecord(date = null) {
     });
     console.log("分馆数", groups.length);
     data = await Promise.all(groups.map(async ({ groupname, libraryid }) => {
-        let url = `${YDURL}/statics/rentingrecord_range?unit=day&libraryid=${libraryid}`
+        let url = `${YDURL}/statics/rentingrecord_range?unit=day&library_id=${libraryid}`
             + `&start=${date}&end=${end}`;
         console.log(`开始请求分馆${groupname}的数据`, url);
         let token = await fetchYidiToken();
         let res = await axios.get(url, {
             headers: {
-                Authorization: `Bearer ${token}`
+                'X-Token': token,
             }
         });
         let rent = res.data.rentTrend;

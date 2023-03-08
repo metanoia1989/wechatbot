@@ -25,6 +25,7 @@ export default {
     APP_DOMAIN: process.env.APP_DOMAIN,
 
     PADLOCAL_TOKEN: process.env.PADLOCAL_TOKEN,
+    WORKPRO_TOKEN: process.env.WORKPRO_TOKEN,
 
     DB_TYPE: process.env.DB_TYPE,
     DB_HOSTNAME: process.env.DB_HOSTNAME,

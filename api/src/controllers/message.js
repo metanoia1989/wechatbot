@@ -29,14 +29,18 @@ export const sendMsgToRoom = async (req, res, next) => {
         topic = new RegExp(`${req.body.group_name}`);
     }
     var param = { topic: topic };
+    console.log('参数1', param)
     if (typeof req.body.send_all != 'undefined' && req.body.send_all == 1) {
         // 发送给所有匹配的微信群
+        console.log('room.findAll')
         var rooms = await Bot.getInstance().Room.findAll(param);
     }
     else {
+        console.log('room.find')
         var room = await Bot.getInstance().Room.find(param);
         var rooms = room ? [room] : [];
     }
+
     if (rooms.length == 0) {
         return res.json(res_data(null, -1, "群组不存在！"));
     }
@@ -47,6 +51,7 @@ export const sendMsgToRoom = async (req, res, next) => {
                     type: 4,
                     url: req.body.link_url,
                     content: req.body.content,
+                    thumbnailUrl: req.body.thumbnailUrl ? req.body.thumbnailUrl : '',
                     description: req.body.description ? req.body.description : '',
                 };
                 await roomSay(room, null, link);

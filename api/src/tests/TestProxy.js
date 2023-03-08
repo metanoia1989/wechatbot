@@ -31,7 +31,7 @@ class Bot {
                     if (!(prop in target) && (prop in target.bot)) {
                         console.log("请求属性代理类不存在，但bot中存在", prop);
                         // 不在Bot中的方法，则是向this.bot请求，检测 bot 是否登录
-                        if (target.bot.logonoff()) {
+                        if (target.bot.isLoggedIn) {
                             // 访问的是函数，需要重新绑定this
                             if (typeof target.bot[prop] === 'function') {
                                 return new Proxy(target.bot[prop], {

@@ -8,14 +8,16 @@ import { LibDonateData, LibBorrowData, fetchRentingRecord, fetchTheDayAllRenting
  * 自定义事件列表，用于关键词回复
  */
 const msgEventList = {
-    "query-lib-donate": "馆募捐数据",
+    "query-lib-donate": "分馆募捐数据",
     "query-lib-borrow": "借阅数据",
     "set-group-welcome": "设置欢迎语",
     "reting-record-stats": "借阅统计",
     "the-day-all-rent-stats": "当日所有借阅统计",
 };
+
 /**
  * 根据事件名称分配不同的api处理，并获取返回内容
+ * @deprecated 已废弃，基本上没有用到，放弃     
  * @param {string} eName 事件名称
  * @param {mixed} args 参数
  * @param name
@@ -23,7 +25,7 @@ const msgEventList = {
  * @param avatar
  * @returns {string} 内容
  */
-async function dispatchEventContent(that, eName, args, name, id, avatar, room) {
+async function dispatchEventContentOld(that, eName, args, name, id, avatar, room) {
     let content = '', type = 1, url = '';
     switch (eName) {
         case "query-lib-donate": // "查询分馆募捐数据",
@@ -90,7 +92,8 @@ async function dispatchEventContent(that, eName, args, name, id, avatar, room) {
                 content = `查询失败${error.toString()}`;
                 break;
             }
-            type = 3;
+            content = '此关键词已停用';
+            type = 1;
             break;
         case "the-day-all-rent-stats": // "当日所有分馆借阅数据",
             try {
@@ -108,8 +111,8 @@ async function dispatchEventContent(that, eName, args, name, id, avatar, room) {
                 content = `查询失败${error.toString()}`;
                 break;
             }
-            type = 3;
-            break;
+            content = '此关键词已停用';
+            type = 1;
             break;
         case "fetch-room-invite": // "获取微澜群组邀请",
             break;
@@ -118,6 +121,12 @@ async function dispatchEventContent(that, eName, args, name, id, avatar, room) {
     }
     return msgArr(type, content, url);
 }
+
+async function dispatchEventContent(that, eName, args, name, id, avatar, room) {
+    let content = '此关键词已停用', type = 1, url = '';
+    return msgArr(type, content, url);
+}
+
 export { dispatchEventContent };
 export { msgEventList };
 export default {

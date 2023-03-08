@@ -1,6 +1,8 @@
+import Bot from "../bot.js";
 import { WechatMessage } from "../models/wechat.js";
 import { contactSay, roomSay } from "../service/index.js";
 import { getContactTextReply, getRoomTextReply } from "../service/msg-reply.js";
+import { initAllSyncData } from "../service/syncData.js";
 import { formatDate } from "../util/datetime.js";
 import { delay } from "../util/server.js";
 /**
@@ -93,7 +95,7 @@ async function dispatchRoomFilterByMsgType(that, room, msg) {
     const contactName = contact.name();
     const roomName = await room.topic();
     const type = msg.type();
-    const userSelfName = that.userSelf().name();
+    const userSelfName = that.currentUser.name();
     let content = '';
     let replys = '';
     let contactId = contact.id || '111';
@@ -133,6 +135,9 @@ async function dispatchRoomFilterByMsgType(that, room, msg) {
     }
 }
 async function onMessage(msg) {
+    // 测试同步群组和联系人
+    // initAllSyncData()
+
     const room = msg.room(); // 是否为群消息
     const msgSelf = msg.self(); // 是否自己发给自己的消息
     if (msgSelf)

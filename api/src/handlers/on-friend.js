@@ -1,10 +1,9 @@
-import * as wechaty from "wechaty";
 import Bot from "../bot.js";
 import { WechatFriendWelcome } from "../models/wechat.js";
 import { contactSay } from "../service/index.js";
 import { addContactToDb } from "../service/syncData.js";
 import { delay } from "../util/server.js";
-const { Friendship } = wechaty;
+
 /**
  * 好友添加
  */
@@ -20,13 +19,13 @@ async function onFriend(friendship) {
         console.log(logMsg);
         if (config.autoAcceptFriend) {
             switch (friendship.type()) {
-                case Friendship.Type.Receive:
+                case Bot.getInstance().Friendship.Type.Receive:
                     // 3秒后添加好友
                     await delay(3000);
                     await friendship.accept();
-                    await addContactToDb(contact);
+                    await addContactToDb(friendship.contact());
                     break;
-                case Friendship.Type.Confirm:
+                case Bot.getInstance().Friendship.Type.Confirm:
                     logMsg = '已确认添加好友：' + name;
                     let contact = await Bot.getInstance().Contact.load(friendship.contact().id);
                     let welcome = await WechatFriendWelcome.findOne({ where: {

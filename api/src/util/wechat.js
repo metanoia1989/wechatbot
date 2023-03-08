@@ -1,5 +1,5 @@
 import Bot from "../bot.js";
-import * as axios from "axios";
+import axios from "axios";
 import { contactSay } from "../service/index.js";
 import config from "../config.js";
 function fetchContactType(contactPayload) {
@@ -63,7 +63,7 @@ function processContact(contact) {
     var weixin = fetchWeixin(payload);
     var contact_ident = payload.id;
     delete payload.id;
-    var self_id = Bot.getInstance().bot.userSelf().id;
+    var self_id = Bot.getInstance().bot.currentUser.id;
     return {
         ...payload,
         contact_ident,
