@@ -52,28 +52,22 @@ $ yarn run build:prod
 机器人本地调试方法
 ===============
 
-使用 simplepad 付费协议，微信登陆在人家的服务器上，会把消息转发给运行 wechaty 的客户端上。
-如果同时运行两个客户端，只有一个客户端能够接收到消息。所以本地调试时，需要停止服务器上的wechaty服务。
+simplepad 付费协议已不可用，使用了一下 padlocal 协议，容易自动登出，然后客服没回应。
 
-或者本地调试使用 web 协议，web协议虽然不稳定容易掉线，但是本地调试绰绰有余了。  
-
-本地调试需要修改两处代码，后续可以设置一个调试模式的环境变量，然后根据这个flag来切换不同的协议。
+暂时用 workpro 协议来进行调试开发，如果要换回padlocal协议，进行以下步骤处理。 
 
 ```js
-// api/bot.js
-// 新建 Wechaty 实例时，取消 puppet，则协议默认为 web协议
-this.bot = new Wechaty({
-    name,
-    // puppet,
+// api/src/bot.js
+// Padlocal协议的 puppet
+const puppet = new PuppetPadlocal({
+    token: config.PADLOCAL_TOKEN,
 });
 
-// api/handlers/on-scan.js
-// simplepad 协议的登陆跟其他协议有区别，切换导出的方法
-// module.exports = onSimplePadScan
-module.exports = onScan
+this.bot = WechatyBuilder.build({
+    puppet,
+});
 ```
 
-这样就可以使用web协议来测试了，建议使用【小号】来调试，避免微信风控影响到自己的微信号。
 
 开发事项
 ========
@@ -103,8 +97,7 @@ web协议，已知的问题有：
 3. 发送消息@群好友是无效的
 4. 发送图片有限制，好像超过100张，无法发送
 
-目前使用的 simplepad 协议，同步群组需要将群组加入通讯录。   
-simplepad 注册地址 http://121.199.64.183:8866/user    
+simplepad 协议，同步群组需要将群组加入通讯录。   
 
 
 
