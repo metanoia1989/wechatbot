@@ -6,19 +6,19 @@ import { redisClient } from "../util/redis.js";
 const { get } = memoryCache;
 
 export const self = async (req, res, next) => {
-    var user = Bot.getInstance().bot.currentUser;
+    var user = Bot.getInstance().currentUser;
     await user.sync();
     downloadAvatar(user);
     return res.json(res_data(user.payload));
 };
 
 export const loginStatus = async (req, res, next) => {
-    var status = await Bot.getInstance().bot.isLoggedIn;
+    var status = await Bot.getInstance().isLoggedIn;
     return res.json(res_data({ status }));
 };
 
 export const qrcode = async (req, res, next) => {
-    var status = await Bot.getInstance().bot.isLoggedIn;
+    var status = await Bot.getInstance().isLoggedIn;
     if (status) {
         return res.json(res_data(null, -1, "已登录微信号"));
     }

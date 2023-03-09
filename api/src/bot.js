@@ -54,28 +54,31 @@ class Bot {
      * @returns this
      */
     static getInstance() {
+        // if (!this.instance) {
+        //     this.instance = new Proxy(new Bot(), {
+        //         get(target, prop, receiver) {
+        //             if (!(prop in target) && (prop in target.bot)) {
+        //                 // 访问的是函数，需要重新绑定this
+        //                 if (typeof target.bot[prop] === 'function') {
+        //                     return new Proxy(target.bot[prop], {
+        //                         apply(target, thisArg, args) {
+        //                             target.apply(thisArg.bot, args);
+        //                         }
+        //                     });
+        //                 }
+        //                 return target.bot[prop];
+        //                 // // 不在Bot中的方法，则是向this.bot请求，检测 bot 是否登录
+        //                 // if (target.bot.isLoggedIn) {
+        //                 // } else {
+        //                 //   throw new Error("小助手未登录，无法调用！")
+        //                 // }
+        //             }
+        //             return target[prop];
+        //         }
+        //     });
+        // }
         if (!this.instance) {
-            this.instance = new Proxy(new Bot(), {
-                get(target, prop, receiver) {
-                    if (!(prop in target) && (prop in target.bot)) {
-                        // 访问的是函数，需要重新绑定this
-                        if (typeof target.bot[prop] === 'function') {
-                            return new Proxy(target.bot[prop], {
-                                apply(target, thisArg, args) {
-                                    target.apply(thisArg.bot, args);
-                                }
-                            });
-                        }
-                        return target.bot[prop];
-                        // // 不在Bot中的方法，则是向this.bot请求，检测 bot 是否登录
-                        // if (target.bot.isLoggedIn) {
-                        // } else {
-                        //   throw new Error("小助手未登录，无法调用！")
-                        // }
-                    }
-                    return target[prop];
-                }
-            });
+            this.instance = (new Bot()).bot
         }
         return this.instance;
     }

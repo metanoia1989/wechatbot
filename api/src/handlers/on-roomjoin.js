@@ -29,7 +29,7 @@ async function onRoomjoin(room, inviteeList, inviter, date) {
                 room.say(file);
             }
             if (welcome.link_title && welcome.link_img && welcome.link_url) {
-                const linkPayload = new Bot.getInstance().UrlLink({
+                const linkPayload = new (Bot.getInstance()).UrlLink({
                     title: welcome.link_title,
                     description: welcome.link_desc || '',
                     thumbnailUrl: welcome.link_img.key,

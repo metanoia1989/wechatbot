@@ -63,7 +63,7 @@ function processContact(contact) {
     var weixin = fetchWeixin(payload);
     var contact_ident = payload.id;
     delete payload.id;
-    var self_id = Bot.getInstance().bot.currentUser.id;
+    var self_id = Bot.getInstance().currentUser.id;
     return {
         ...payload,
         contact_ident,

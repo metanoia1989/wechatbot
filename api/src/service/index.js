@@ -71,7 +71,7 @@ async function roomSay(room, contact, msg) {
     }
     else if (msg.type === 4 && msg.url !== '') {
         // url 链接
-        let obj = new Bot.getInstance().UrlLink({
+        let obj = new (Bot.getInstance()).UrlLink({
             url: msg.url,
             title: msg.content,
             thumbnailUrl: msg.thumbnailUrl ? msg.thumbnailUrl : 'https://images-1251976096.cos.ap-guangzhou.myqcloud.com/wavelib/logo.jpg',
@@ -120,7 +120,7 @@ async function contactSay(contact, msg, isRoom = false) {
     }
     else if (msg.type === 4 && msg.url !== '') {
         // url 链接
-        let obj = new Bot.getInstance().UrlLink({
+        let obj = new (Bot.getInstance()).UrlLink({
             url: msg.url,
             title: msg.content,
             thumbnailUrl: msg.thumbnailUrl ? msg.thumbnailUrl : 'https://images-1251976096.cos.ap-guangzhou.myqcloud.com/wavelib/logo.jpg',
