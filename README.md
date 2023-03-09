@@ -19,8 +19,21 @@ restapi express + wechaty
 
 bot 部署，进入 api 目录
 ```sh
+# 本地打包 docker 镜像 
 $ cd api
-$ docker build -t bot .
+$ docker build -t bot:1.0.0 .
+
+# 推送镜像到阿里云
+$ docker login --username=<用户名> registry.cn-guangzhou.aliyuncs.com
+$ docker tag bot:1.0.0 registry.cn-guangzhou.aliyuncs.com/<用户名>/bot:1.0.0
+$ docker push registry.cn-guangzhou.aliyuncs.com/<用户名>/bot:1.0.0
+
+# 在服务器上拉取
+$ docker login --username=<用户名> registry.cn-guangzhou.aliyuncs.com
+$ docker pull registry.cn-guangzhou.aliyuncs.com/<用户名>/bot:1.0.0
+
+# 拉取完毕后运行镜像
+$ cd <项目目录>/api
 $ cp .example.env .env # 然后修改相应的配置项
 DB_HOSTNAME=host.docker.internal  # 这一样来访问host的数据库
 $ docker run \
@@ -30,7 +43,7 @@ $ docker run \
     -v $(pwd):/bot \
     --name bot \
     --add-host host.docker.internal:host-gateway \
-    bot
+    registry.cn-guangzhou.aliyuncs.com/<用户名>/bot:1.0.0
 $ docker logs -f bot # 查看日志即可扫码
 # 后续更新只需要重新git拉取代码，然后重启容器即可   
 
