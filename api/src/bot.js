@@ -16,20 +16,20 @@ class Bot {
             return this.instance;
         }
         // Padlocal协议的 puppet
-        const puppet = new PuppetPadlocal({
-            token: config.PADLOCAL_TOKEN,
-        });
+        // const puppet = new PuppetPadlocal({
+        //     token: config.PADLOCAL_TOKEN,
+        // });
 
-        // const puppet = 'wechaty-puppet-service'
+        const puppet = 'wechaty-puppet-service'
         this.bot = WechatyBuilder.build({
             puppet,
             // workpro 的配置option START
-            // puppetOptions: {
-            //     token: config.WORKPRO_TOKEN,
-            //     tls: {
-            //         disable: true,
-            //     },
-            // },
+            puppetOptions: {
+                token: config.WORKPRO_TOKEN,
+                tls: {
+                    disable: true,
+                },
+            },
             // workpro 的配置option END
         });
         console.log('hello');
